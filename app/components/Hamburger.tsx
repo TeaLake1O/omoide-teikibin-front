@@ -1,5 +1,7 @@
 "use client";
+import { API_URL } from "@/config";
 import Image from "next/image";
+import { useMemo, useState } from "react";
 import Loader from "./Loader";
 type Props = {
     iconUrl: string | null;
@@ -7,6 +9,13 @@ type Props = {
 };
 
 export default function Hamburger(props: Props) {
+    const [loadedImage, setLoadedImage] = useState<boolean>(false);
+
+    const src = useMemo(() => {
+        if (!props.iconUrl) return null;
+        return props.iconUrl.replace(API_URL, "");
+    }, [props.iconUrl]);
+
     return (
         <div className="w-12 h-12 ml-2 rounded-full bg-orange-100 flex items-center md:hidden">
             <button
@@ -15,17 +24,18 @@ export default function Hamburger(props: Props) {
                         active:scale-96
                         "
             >
-                {props.iconUrl ? (
+                {!src || !loadedImage ? <Loader /> : null}
+                {src ? (
                     <Image
-                        src={props.iconUrl.replace("http://localhost:8000", "")}
+                        src={src}
                         alt="icon"
                         width={128}
                         height={128}
                         className="w-12 h-12 rounded-full"
+                        onLoad={() => setLoadedImage(true)}
+                        onError={() => setLoadedImage(false)}
                     />
-                ) : (
-                    <Loader />
-                )}
+                ) : null}
             </button>
         </div>
     );
