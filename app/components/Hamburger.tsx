@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Loader from "./der";
+import Loader from "./Loader";
 type Props = {
     iconUrl: string | null;
     toggleHamburger: () => void;

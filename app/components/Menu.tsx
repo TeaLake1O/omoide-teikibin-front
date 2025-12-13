@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Me } from "../../types/userInf";
-import Loader from "./der";
+import Loader from "./Loader";
 
 type Props = {
     user: Me | null;
