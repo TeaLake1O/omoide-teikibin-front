@@ -58,8 +58,8 @@ export default function RootLayout({
     return (
         <html lang="ja">
             <body
-                className="w-screen h-screen overflow-hidden bg-orange-100 md:grid
-                    md:grid-cols-[minmax(160px,1fr)_minmax(320px,600px)_minmax(225px,1.8fr)]"
+                className="w-screen h-screen overflow-hidden
+                bg-orange-100 md:grid md:grid-cols-[minmax(160px,1fr)_minmax(320px,600px)_minmax(225px,1.8fr)]"
             >
                 <div
                     className={
