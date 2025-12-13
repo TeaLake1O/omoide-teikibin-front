@@ -1,10 +1,10 @@
 "use client";
 import { LOGIN_URL } from "@/config";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUserInfoLayout from "@/hooks/useCurrentUserInfoLayout";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LoadingScreen } from "./_share/components/LoadingScreen";
 import Hamburger from "./components/Hamburger";
-import { LoadingScreen } from "./components/LoadingScreen";
 import Menu from "./components/Menu";
 import "./globals.css";
 
@@ -14,7 +14,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     //カスタムフック、共通レイアウトのデータを取得する
-    const { status, me, message, isLoading } = useCurrentUser();
+    const { status, me, message, isLoading, refresh } =
+        useCurrentUserInfoLayout();
     if (message) console.log(message);
     //timer用
     const [minDelayDone, setMinDelayDone] = useState(false);

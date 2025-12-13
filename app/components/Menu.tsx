@@ -1,12 +1,13 @@
-import Image from "next/image";
-import { Me } from "../../types/userInf";
-import Loader from "./Loader";
+"use client";
+
+import { Me } from "../../types/CurrentUserInfoLayout";
+import UserIcon from "../_share/components/UserIcon";
 
 type Props = {
     user: Me | null;
 };
 
-export default function menu(props: Props) {
+export default function Menu(props: Props) {
     return (
         <div className="flex flex-col">
             <div className="h-24 w-full grid grid-cols-2">
@@ -16,25 +17,8 @@ export default function menu(props: Props) {
                         : "Loading..."}
                 </span>
                 <div className="w-16 h-16 rounded-full bg-orange-100 grid items-center">
-                    <button
-                        className="w-full h-full bg-orange-100 flex items-center justify-center rounded-full duration-200
-                        active:scale-94
-                        "
-                    >
-                        {props.user && props.user.icon_url ? (
-                            <Image
-                                src={props.user.icon_url.replace(
-                                    "http://localhost:8000",
-                                    ""
-                                )}
-                                alt="icon"
-                                width={128}
-                                height={128}
-                                className="w-16 h-16 rounded-full"
-                            />
-                        ) : (
-                            <Loader />
-                        )}
+                    <button className="w-full h-full bg-orange-100 flex items-center justify-center duration-200 active:scale-94">
+                        <UserIcon iconUrl={props.user?.icon_url ?? null} />
                     </button>
                 </div>
             </div>

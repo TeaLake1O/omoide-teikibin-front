@@ -1,11 +1,11 @@
 "use client";
 
+import { FetchResult } from "@/app/_share/types/fetch";
 import { API_URL } from "@/config";
-import { FetchResult } from "@/types/fetch";
+import { Me } from "@/types/CurrentUserInfoLayout";
 import { CurrentUserResult } from "@/types/hook";
-import { Me } from "@/types/userInf";
 import useSWRImmutable from "swr/immutable";
-import fetcher from "../util/fetcher";
+import fetcher from "../app/_share/util/fetcher";
 
 export default function useCurrentUser(): CurrentUserResult {
     const { data, error, isLoading, mutate } = useSWRImmutable<FetchResult<Me>>(
