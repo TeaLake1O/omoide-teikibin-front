@@ -1,9 +1,9 @@
 "use client";
+import Hamburger from "@/app/components/Hamburger";
 import { LOGIN_URL } from "@/config";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Hamburger from "./components/Hamburger";
 import { LoadingScreen } from "./components/LoadingScreen";
 import Menu from "./components/Menu";
 import "./globals.css";
