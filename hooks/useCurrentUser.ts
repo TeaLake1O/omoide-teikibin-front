@@ -9,7 +9,7 @@ import fetcher from "../util/fetcher";
 
 export default function useCurrentUser(): CurrentUserResult {
     const { data, error, isLoading, mutate } = useSWRImmutable<FetchResult<Me>>(
-        `${API_URL}/accounts/api/layout/`,
+        `${API_URL}/accounts/api/layout`,
         fetcher
     );
     const isError = !!error || data?.status === "error";
