@@ -1,5 +1,6 @@
 "use client";
 
+import { API_URL } from "@/config";
 import { FetchResult } from "@/types/fetch";
 import { CurrentUserResult } from "@/types/hook";
 import { Me } from "@/types/userInf";
@@ -8,7 +9,7 @@ import fetcher from "../util/fetcher";
 
 export default function useCurrentUser(): CurrentUserResult {
     const { data, error, isLoading, mutate } = useSWRImmutable<FetchResult<Me>>(
-        "http://localhost:8000/accounts/api/layout/",
+        `${API_URL}/accounts/api/layout/`,
         fetcher
     );
     const isError = !!error || data?.status === "error";
