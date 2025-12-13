@@ -1,17 +1,19 @@
 "use client";
 import Image from "next/image";
-import Loader from "./loader";
-type HamburgerProps = {
+import Loader from "./Loader";
+type Props = {
     iconUrl: string | null;
     toggleHamburger: () => void;
 };
 
-export default function Hamburger(props: HamburgerProps) {
+export default function Hamburger(props: Props) {
     return (
-        <div className="w-18 h-full rounded-full bg-orange-100 flex items-center">
+        <div className="w-12 h-12 ml-2 rounded-full bg-orange-100 flex items-center md:hidden">
             <button
                 onClick={props.toggleHamburger}
-                className="w-full h-full bg-orange-100 flex items-center justify-center hover:bg-orange-200 active:bg-orange-100 rounded-full duration-200"
+                className="w-full h-full flex items-center justify-center rounded-full duration-200
+                        active:scale-96
+                        "
             >
                 {props.iconUrl ? (
                     <Image
@@ -19,7 +21,7 @@ export default function Hamburger(props: HamburgerProps) {
                         alt="icon"
                         width={128}
                         height={128}
-                        className="w-16 h-16 rounded-full"
+                        className="w-12 h-12 rounded-full"
                     />
                 ) : (
                     <Loader />
