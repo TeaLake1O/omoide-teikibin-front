@@ -7,7 +7,6 @@ import { LoadingScreen } from "./_share/components/LoadingScreen";
 import Menu from "./components/Menu";
 import "./globals.css";
 
-import Script from "next/script";
 import { LayoutUIProvider } from "./components/LayoutUI";
 
 export default function RootLayout({
@@ -97,10 +96,6 @@ export default function RootLayout({
                     notification
                 </div>
             </body>
-            <Script
-                src="https://unpkg.com/react-scan/dist/auto.global.js"
-                strategy="afterInteractive"
-            />
         </html>
     );
 }
