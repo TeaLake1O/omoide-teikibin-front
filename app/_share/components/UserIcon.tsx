@@ -1,6 +1,5 @@
 "use client";
 
-import { API_URL } from "@/config";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import Loader from "./Loader";
@@ -14,7 +13,6 @@ export default function UserIcon(props: Props) {
 
     const src = useMemo(() => {
         if (!props.iconUrl) return null;
-        console.log(API_URL, props.iconUrl);
         return props.iconUrl;
     }, [props.iconUrl]);
 
@@ -36,6 +34,7 @@ export default function UserIcon(props: Props) {
                     height={128}
                     className="w-full h-full rounded-full"
                     onLoad={() => setLoadedImage(true)}
+                    priority
                     //onLoad={() => setTimeout(() => setLoadedImage(true), 5000)}
                     onError={() => setLoadedImage(false)}
                 />

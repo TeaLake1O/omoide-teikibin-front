@@ -1,13 +1,14 @@
 "use client";
 
-import UserIcon from "../_share/components/UserIcon";
+import React from "react";
+import UserIcon from "../../_share/components/UserIcon";
 
 type Props = {
     iconUrl: string | null;
     toggleHamburger: () => void;
 };
 //ハンバーガーメニューのボタン、アイコンを表示する
-export default function Hamburger(props: Props) {
+function HamburgerComponent(props: Props) {
     return (
         <div className="w-12 h-12 ml-2 rounded-full bg-orange-100 flex items-center md:hidden">
             <button
@@ -19,3 +20,5 @@ export default function Hamburger(props: Props) {
         </div>
     );
 }
+const Hamburger = React.memo(HamburgerComponent);
+export default Hamburger;

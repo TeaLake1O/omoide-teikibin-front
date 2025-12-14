@@ -2,11 +2,13 @@
 import { LOGIN_URL } from "@/config";
 import useCurrentUserInfoLayout from "@/hooks/useCurrentUserInfoLayout";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { LoadingScreen } from "./_share/components/LoadingScreen";
-import Hamburger from "./components/Hamburger";
 import Menu from "./components/Menu";
 import "./globals.css";
+
+import Script from "next/script";
+import { LayoutUIProvider } from "./components/LayoutUI";
 
 export default function RootLayout({
     children,
@@ -14,8 +16,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     //カスタムフック、共通レイアウトのデータを取得する
-    const { status, me, message, isLoading, refresh } =
-        useCurrentUserInfoLayout();
+    const { status, me, message, isLoading } = useCurrentUserInfoLayout();
     if (message) console.log(message);
     //timer用
     const [minDelayDone, setMinDelayDone] = useState(false);
@@ -23,10 +24,10 @@ export default function RootLayout({
     //トグル用のrefと関数
     const [hamburger, setHamburger] = useState(false);
 
-    const toggleHamburger = () => {
+    const toggleHamburger = useCallback(() => {
         //アローで書かないと連打で古い値を掴むことがあるらしい
         setHamburger((prev) => !prev);
-    };
+    }, []);
 
     //ログインしていなかったらログインページへリダイレクト
     const router = useRouter();
@@ -60,7 +61,7 @@ export default function RootLayout({
         <html lang="ja">
             <body
                 className="w-screen h-screen overflow-hidden
-                bg-orange-100 md:grid md:grid-cols-[minmax(160px,1fr)_minmax(320px,600px)_minmax(225px,1.8fr)]"
+                bg-orange-100 md:grid md:grid-cols-[minmax(160px,1fr)_minmax(450px,650px)_minmax(250px,1.8fr)]"
             >
                 <div
                     className={
@@ -79,22 +80,27 @@ export default function RootLayout({
                 >
                     <Menu user={me} />
                 </aside>
-                <div className="w-full h-screen bg-orange-100 border-r border-orange-200 grid grid-rows-[auto_1fr_auto]">
-                    <header className="w-full h-16 border-b border-orange-200 flex items-center ">
-                        <Hamburger
-                            iconUrl={me?.icon_url ?? null}
-                            toggleHamburger={toggleHamburger}
-                        />
-                    </header>
-                    <main className="w-full overflow-y-auto no-scrollbar">
-                        {children}
-                    </main>
-                    <div className="w-full bottom-0 h-16 border-orange-200 border-t md:hidden"></div>
+                <div className="w-full h-screen bg-orange-100 border-r border-orange-200 grid grid-rows-[1fr_auto] ">
+                    <div className="w-full h-full">
+                        <LayoutUIProvider
+                            value={{
+                                toggleHamburger,
+                                me: me,
+                            }}
+                        >
+                            {children}
+                        </LayoutUIProvider>
+                    </div>
+                    <div className="w-full left-0 right-0 bottom-0 h-16 bg-orange-100 border-orange-200 border-t fixed md:hidden"></div>
                 </div>
                 <div className="hidden md:block md:top-0 md:h-screen">
-                    hello
+                    notification
                 </div>
             </body>
+            <Script
+                src="https://unpkg.com/react-scan/dist/auto.global.js"
+                strategy="afterInteractive"
+            />
         </html>
     );
 }

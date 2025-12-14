@@ -1,8 +1,19 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
+import { useIsMdUp } from "./useIsMdUp";
+
+type Props = {
+    limit?: number;
+    jitter?: number;
+    targetRef: RefObject<HTMLElement | null>;
+};
 
 //下スクロール検知でboolを返すトグル、limitはしきい値、jitterは無視するスクロール量
-export default function useScrollToggle(limit = 80, jitter = 5) {
+export default function useScrollToggle(props: Props) {
+    const isMdUp = useIsMdUp();
+
+    const { limit = 80, jitter = 5 } = props;
+
     const [isDown, setIsDown] = useState(false);
 
     const currentY = useRef(0);
@@ -12,7 +23,13 @@ export default function useScrollToggle(limit = 80, jitter = 5) {
     const ticking = useRef(false);
 
     useEffect(() => {
-        currentY.current = window.scrollY;
+        if (isMdUp) return;
+
+        const el = props.targetRef.current;
+
+        if (!el) return;
+
+        currentY.current = el.scrollTop;
 
         const onScroll = () => {
             if (ticking.current) return;
@@ -20,7 +37,7 @@ export default function useScrollToggle(limit = 80, jitter = 5) {
             ticking.current = true;
 
             requestAnimationFrame(() => {
-                const y = window.scrollY;
+                const y = el.scrollTop;
                 const diff = y - currentY.current;
 
                 if (diff > jitter) {
@@ -39,14 +56,16 @@ export default function useScrollToggle(limit = 80, jitter = 5) {
                     down.current = 0;
                 }
                 currentY.current = y;
+                ticking.current = false;
             });
         };
 
-        window.addEventListener("scroll", onScroll);
-        return () => {
-            window.removeEventListener("scroll", onScroll);
-        };
-    }, [limit, jitter]);
+        el.addEventListener("scroll", onScroll);
 
-    return isDown;
+        return () => {
+            el.removeEventListener("scroll", onScroll);
+        };
+    }, [limit, jitter, props.targetRef, isMdUp]);
+
+    return isMdUp ? false : isDown;
 }

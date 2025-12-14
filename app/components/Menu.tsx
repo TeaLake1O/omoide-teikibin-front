@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Me } from "../../types/CurrentUserInfoLayout";
 import UserIcon from "../_share/components/UserIcon";
 
@@ -7,7 +8,7 @@ type Props = {
     user: Me | null;
 };
 
-export default function Menu(props: Props) {
+function menuComponent(props: Props) {
     return (
         <div className="flex flex-col">
             <div className="h-24 w-full grid grid-cols-2">
@@ -32,3 +33,5 @@ export default function Menu(props: Props) {
         </div>
     );
 }
+const Menu = React.memo(menuComponent);
+export default Menu;
