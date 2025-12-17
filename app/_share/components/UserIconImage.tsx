@@ -1,42 +1,39 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
-import Loader from "./Loader";
+import { useState } from "react";
+import ImagePlaceHolder from "./ImagePlaceHolder";
 
 type Props = {
     iconUrl: string | null;
 };
 
 export default function UserIcon(props: Props) {
-    const [loadedImage, setLoadedImage] = useState<boolean>(false);
-
-    const src = useMemo(() => {
-        if (!props.iconUrl) return null;
-        return props.iconUrl;
-    }, [props.iconUrl]);
-
     const isDev = process.env.NODE_ENV !== "production";
+    const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+    const src = props.iconUrl;
+    const loaded = loadedSrc === src;
 
     return (
         <div className="relative w-full h-full">
-            {!src || !loadedImage ? (
+            {!src || !loaded ? (
                 <div className="absolute inset-0">
-                    <Loader />
+                    <ImagePlaceHolder />
                 </div>
             ) : null}
             {src ? (
                 <Image
                     unoptimized={isDev}
+                    draggable={false}
                     src={src}
                     alt="icon"
                     width={128}
                     height={128}
-                    className="w-full h-full rounded-full aspect-square"
-                    onLoad={() => setLoadedImage(true)}
+                    className="absolute inset-0 rounded-full aspect-square"
+                    onLoadingComplete={() => setLoadedSrc(src)}
                     priority
                     //onLoad={() => setTimeout(() => setLoadedImage(true), 5000)}
-                    onError={() => setLoadedImage(false)}
+                    onError={() => setLoadedSrc(null)}
                 />
             ) : null}
         </div>

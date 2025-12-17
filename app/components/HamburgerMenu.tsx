@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Me } from "../../types/CurrentUserInfoLayout";
-import UserIcon from "../_share/components/UserIcon";
+import UserIcon from "../_share/components/UserIconImage";
 
 type Props = {
     user: Me | null;

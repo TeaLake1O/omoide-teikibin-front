@@ -5,6 +5,13 @@ body {
     padding: 0;
 }
 
+.absolute-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 @keyframes wave {
     0%,
     100% {

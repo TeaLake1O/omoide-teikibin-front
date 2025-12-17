@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ImageIcon from "../_share/components/IconImage";
 
 export default function Menubar() {
     const path = usePathname();
@@ -29,7 +29,7 @@ export default function Menubar() {
             src: "/img/notifsicon.png",
             alt: "notification",
             href: "/home",
-            scale: "w-[60%]",
+            scale: "w-[50%]",
         },
         {
             src: "/img/friendicon.png",
@@ -51,16 +51,10 @@ export default function Menubar() {
                         className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
                     transition-colors flex items-center justify-center"
                     >
-                        <Image
+                        <ImageIcon
                             src={item.src}
                             alt={item.alt}
-                            width={64}
-                            height={64}
-                            draggable={false}
-                            className={
-                                item.scale +
-                                " aspect-auto pointer-events-none select-none"
-                            }
+                            scale={item.scale}
                         />
                     </div>
                 </Link>

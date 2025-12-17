@@ -76,7 +76,7 @@ export default function RootLayout({
                     className={
                         (hamburger ? "translate-x-0" : "-translate-x-full") +
                         " md:block md:h-screen md:translate-x-0 md:w-auto md:static fixed bg-orange-100" +
-                        " border-r border-orange-200 transition-transform duration-300 z-40 left-0 inset-y-0 w-[50%]"
+                        " border-r border-orange-200 transition-transform duration-300 z-40 left-0 inset-y-0 w-[60%]"
                     }
                 >
                     <Menu user={me} />

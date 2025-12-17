@@ -1,8 +1,8 @@
 "use client";
 import { Me } from "@/types/CurrentUserInfoLayout";
-import Image from "next/image";
 import Link from "next/link";
-import UserIcon from "./UserIcon";
+import IconImage from "./IconImage";
+import UserIcon from "./UserIconImage";
 
 type Props = {
     toggleHamburger: () => void;
@@ -36,12 +36,10 @@ export default function Header(props: Props) {
             </div>
             <div className="h-10 aspect-square flex items-center justify-center">
                 <Link href="/home" className="w-full h-full">
-                    <Image
+                    <IconImage
                         src="/img/omoide-teikibin-Logo-transparent.png"
-                        alt="icon"
-                        width={64}
-                        height={64}
-                        className="w-[90%] h-[90%] aspect-square"
+                        alt="appicon"
+                        scale="w-[90%]"
                     />
                 </Link>
             </div>
