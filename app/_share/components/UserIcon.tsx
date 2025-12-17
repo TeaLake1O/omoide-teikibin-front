@@ -32,7 +32,7 @@ export default function UserIcon(props: Props) {
                     alt="icon"
                     width={128}
                     height={128}
-                    className="w-full h-full rounded-full"
+                    className="w-full h-full rounded-full aspect-square"
                     onLoad={() => setLoadedImage(true)}
                     priority
                     //onLoad={() => setTimeout(() => setLoadedImage(true), 5000)}

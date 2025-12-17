@@ -4,10 +4,12 @@ import useCurrentUserInfoLayout from "@/hooks/useCurrentUserInfoLayout";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { LoadingScreen } from "./_share/components/LoadingScreen";
-import Menu from "./components/Menu";
+import Menu from "./components/HamburgerMenu";
 import "./globals.css";
 
+import Script from "next/script";
 import { LayoutUIProvider } from "./components/LayoutUI";
+import Menubar from "./components/Menubar";
 
 export default function RootLayout({
     children,
@@ -90,12 +92,18 @@ export default function RootLayout({
                             {children}
                         </LayoutUIProvider>
                     </div>
-                    <div className="w-full left-0 right-0 bottom-0 h-16 bg-orange-100 border-orange-200 border-t fixed md:hidden"></div>
+                    <div className="w-full left-0 right-0 bottom-0 h-16 bg-orange-100 border-orange-200 border-t fixed md:hidden">
+                        <Menubar />
+                    </div>
                 </div>
                 <div className="hidden md:block md:top-0 md:h-screen">
                     notification
                 </div>
             </body>
+            <Script
+                src="https://unpkg.com/react-scan/dist/auto.global.js"
+                strategy="afterInteractive"
+            />
         </html>
     );
 }

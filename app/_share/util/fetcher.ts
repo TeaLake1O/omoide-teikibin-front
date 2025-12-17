@@ -29,6 +29,6 @@ export default async function fetcher<T = unknown>(
         status: "login",
         httpStatus: res.status,
         resData: body,
-        message: "成功",
+        message: "ログイン",
     };
 }
