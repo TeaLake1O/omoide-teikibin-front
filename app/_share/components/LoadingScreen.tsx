@@ -19,7 +19,8 @@ export function LoadingScreen() {
                         <div
                             key={i}
                             className={`w-[4px] h-16 bg-orange-500 rounded-[5px] 
-                                animate-[wave_1s_ease-in-out_infinite] [animation-delay:-${delay}]`}
+                                animate-[wave_1s_ease-in-out_infinite]`}
+                            style={{ animationDelay: `-${delay}` }}
                         ></div>
                     );
                 })}
