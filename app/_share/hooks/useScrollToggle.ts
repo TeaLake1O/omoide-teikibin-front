@@ -1,11 +1,11 @@
 "use client";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useIsMdUp } from "./useIsMdUp";
 
 type Props = {
     limit?: number;
     jitter?: number;
-    targetRef: RefObject<HTMLElement | null>;
+    targetRef: HTMLElement | null;
 };
 
 //下スクロール検知でboolを返すトグル、limitはしきい値、jitterは無視するスクロール量
@@ -21,11 +21,10 @@ export default function useScrollToggle(props: Props) {
     const up = useRef(0);
     //rAFが連続で呼ばれるのを防ぐようのフラグ
     const ticking = useRef(false);
-
     useEffect(() => {
-        if (isMdUp) return;
+        if (isMdUp || props.targetRef === null) return;
 
-        const el = props.targetRef.current;
+        const el = props.targetRef;
 
         if (!el) return;
 

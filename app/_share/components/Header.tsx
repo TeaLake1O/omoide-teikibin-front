@@ -8,6 +8,7 @@ type Props = {
     toggleHamburger: () => void;
     me: Me | null;
     isDown: boolean;
+    page: string;
 };
 
 export default function Header(props: Props) {
@@ -32,14 +33,14 @@ export default function Header(props: Props) {
                 </button>
             </div>
             <div className="flex-1 flex justify-center">
-                <span className="font-medium">タイトル</span>
+                <span className="font-medium">{props.page}</span>
             </div>
-            <div className="h-10 aspect-square flex items-center justify-center">
+            <div className="h-12 aspect-square flex items-center justify-center">
                 <Link href="/home" className="w-full h-full">
                     <IconImage
                         src="/img/omoide-teikibin-Logo-transparent.png"
                         alt="appicon"
-                        scale="w-[90%]"
+                        scale="w-[80%]"
                     />
                 </Link>
             </div>

@@ -8,6 +8,8 @@ import Menu from "./components/HamburgerMenu";
 import "./globals.css";
 
 import Script from "next/script";
+import Header from "./_share/components/Header";
+import useScrollToggle from "./_share/hooks/useScrollToggle";
 import { LayoutUIProvider } from "./components/LayoutUI";
 import Menubar from "./components/Menubar";
 
@@ -17,13 +19,15 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     //カスタムフック、共通レイアウトのデータを取得する
-    const { status, me, message, isLoading } = useCurrentUserInfoLayout();
-    if (message) console.log(message);
+    const { status, me, isLoading } = useCurrentUserInfoLayout();
     //timer用
     const [minDelayDone, setMinDelayDone] = useState(false);
 
     //トグル用のrefと関数
     const [hamburger, setHamburger] = useState(false);
+
+    const [mainRef, setMainRef] = useState<HTMLElement | null>(null);
+    const isDown = useScrollToggle({ targetRef: mainRef });
 
     const toggleHamburger = useCallback(() => {
         //アローで書かないと連打で古い値を掴むことがあるらしい
@@ -83,14 +87,25 @@ export default function RootLayout({
                 </aside>
                 <div className="w-full h-screen bg-orange-100 border-r border-orange-200 grid grid-rows-[1fr_auto] ">
                     <div className="w-full h-full">
-                        <LayoutUIProvider
-                            value={{
-                                toggleHamburger,
-                                me: me,
-                            }}
+                        <Header
+                            toggleHamburger={toggleHamburger}
+                            me={me}
+                            isDown={isDown}
+                            page="Home"
+                        />
+                        <main
+                            className="p-6 h-screen overflow-y-auto no-scrollbar "
+                            ref={setMainRef}
                         >
-                            {children}
-                        </LayoutUIProvider>
+                            <LayoutUIProvider
+                                value={{
+                                    toggleHamburger,
+                                    me: me,
+                                }}
+                            >
+                                {children}
+                            </LayoutUIProvider>
+                        </main>
                     </div>
                     <div className="w-full left-0 right-0 bottom-0 h-16 bg-orange-100 border-orange-200 border-t fixed md:hidden">
                         <Menubar />
@@ -99,11 +114,8 @@ export default function RootLayout({
                 <div className="hidden md:block md:top-0 md:h-screen">
                     notification
                 </div>
+                <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
             </body>
-            <Script
-                src="https://unpkg.com/react-scan/dist/auto.global.js"
-                strategy="afterInteractive"
-            />
         </html>
     );
 }

@@ -8,6 +8,7 @@ import useSWRImmutable from "swr/immutable";
 import fetcher from "../app/_share/util/fetcher";
 
 export default function useCurrentUser(): CurrentUserResult {
+    console.log("useCurrentUserInfoLayout called");
     const { data, error, isLoading, mutate } = useSWRImmutable<FetchResult<Me>>(
         `${API_URL}/accounts/api/layout`,
         fetcher
