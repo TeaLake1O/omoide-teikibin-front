@@ -33,7 +33,6 @@ export default function UserIcon(props: Props) {
                     onLoadingComplete={() => setLoadedSrc(src)}
                     priority
                     //onLoad={() => setTimeout(() => setLoadedImage(true), 5000)}
-                    onError={() => setLoadedSrc(null)}
                 />
             ) : null}
         </div>

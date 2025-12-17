@@ -1,17 +1,18 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ImageIcon from "../_share/components/IconImage";
+import { useLayoutUI } from "./LayoutUI";
 
 export default function Menubar() {
     const path = usePathname();
 
-    const [activePage, setActivePage] = useState<string>(path);
+    const { optimisticUrl, setOptimisticUrl } = useLayoutUI();
 
     useEffect(() => {
-        setActivePage(path);
-    }, [path]);
+        setOptimisticUrl(path);
+    }, [path, setOptimisticUrl]);
     //mapでまわすよう
     const items = [
         {
@@ -52,11 +53,11 @@ export default function Menubar() {
                     key={item.alt}
                     className={`w-full h-full flex items-center justify-center 
                         group ${
-                            activePage === item.href ? "bg-orange-200" : ""
+                            optimisticUrl === item.href ? "bg-orange-200" : ""
                         }`}
                     onContextMenu={(e) => e.preventDefault()}
                     href={item.href}
-                    onClick={() => setActivePage(item.href)}
+                    onClick={() => setOptimisticUrl(item.href)}
                 >
                     <div
                         className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300

@@ -1,8 +1,8 @@
 "use client";
 import { LOGIN_URL } from "@/config";
 import useCurrentUserInfoLayout from "@/hooks/useCurrentUserInfoLayout";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { LoadingScreen } from "./_share/components/LoadingScreen";
 import Menu from "./components/HamburgerMenu";
 import "./globals.css";
@@ -10,6 +10,7 @@ import "./globals.css";
 import Script from "next/script";
 import Header from "./_share/components/Header";
 import useScrollToggle from "./_share/hooks/useScrollToggle";
+import { LayoutUI } from "./_share/types/LayoutUI";
 import { LayoutUIProvider } from "./components/LayoutUI";
 import Menubar from "./components/Menubar";
 
@@ -26,13 +27,30 @@ export default function RootLayout({
     //トグル用のrefと関数
     const [hamburger, setHamburger] = useState(false);
 
+    //スクロールでヘッダーを下げるときに使うstateとhook
     const [mainRef, setMainRef] = useState<HTMLElement | null>(null);
     const isDown = useScrollToggle({ targetRef: mainRef });
 
+    const path = usePathname();
+
+    //ハンバーガー開閉用のフラグをトグルするコールバック
     const toggleHamburger = useCallback(() => {
         //アローで書かないと連打で古い値を掴むことがあるらしい
         setHamburger((prev) => !prev);
     }, []);
+
+    const [optimisticUrl, setOptimisticUrl] = useState<string | null>(null);
+
+    //Layoutで使う共通のデータ
+    const LayoutContextValue = useMemo(
+        (): LayoutUI => ({
+            toggleHamburger,
+            me,
+            optimisticUrl,
+            setOptimisticUrl,
+        }),
+        [toggleHamburger, me, optimisticUrl]
+    );
 
     //ログインしていなかったらログインページへリダイレクト
     const router = useRouter();
@@ -86,35 +104,32 @@ export default function RootLayout({
                     <Menu user={me} />
                 </aside>
                 <div className="w-full h-screen bg-orange-100 border-r border-orange-200 grid grid-rows-[1fr_auto] ">
-                    <div className="w-full h-full">
-                        <Header
-                            toggleHamburger={toggleHamburger}
-                            me={me}
-                            isDown={isDown}
-                            page="Home"
-                        />
-                        <main
-                            className="p-6 h-screen overflow-y-auto no-scrollbar "
-                            ref={setMainRef}
-                        >
-                            <LayoutUIProvider
-                                value={{
-                                    toggleHamburger,
-                                    me: me,
-                                }}
+                    <LayoutUIProvider value={LayoutContextValue}>
+                        <div className="w-full h-full">
+                            <Header isDown={isDown} me={me} />
+
+                            <main
+                                className="p-6 h-screen overflow-y-auto no-scrollbar "
+                                ref={setMainRef}
                             >
                                 {children}
-                            </LayoutUIProvider>
-                        </main>
-                    </div>
-                    <div className="w-full left-0 right-0 bottom-0 h-16 bg-orange-100 border-orange-200 border-t fixed md:hidden">
-                        <Menubar />
-                    </div>
+                            </main>
+                        </div>
+                        <div
+                            className={`w-full left-0 right-0 bottom-0 h-16 border-orange-200 transition-opacity duration-200 
+                                bg-orange-100 border-t fixed md:hidden
+                            ${isDown ? " opacity-70" : " opacity-100"}`}
+                        >
+                            <Menubar />
+                        </div>
+                    </LayoutUIProvider>
                 </div>
                 <div className="hidden md:block md:top-0 md:h-screen">
                     notification
                 </div>
-                <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+                {
+                    <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+                }
             </body>
         </html>
     );

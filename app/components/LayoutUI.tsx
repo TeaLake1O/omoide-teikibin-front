@@ -1,11 +1,7 @@
 "use client";
-import { Me } from "@/types/CurrentUserInfoLayout";
 import React, { createContext, useContext } from "react";
 
-type LayoutUI = {
-    toggleHamburger: () => void;
-    me: Me | null;
-};
+import { LayoutUI } from "../_share/types/LayoutUI";
 
 const LayoutUIContext = createContext<LayoutUI | null>(null);
 

@@ -21,6 +21,7 @@ export default function useScrollToggle(props: Props) {
     const up = useRef(0);
     //rAFが連続で呼ばれるのを防ぐようのフラグ
     const ticking = useRef(false);
+
     useEffect(() => {
         if (isMdUp || props.targetRef === null) return;
 
