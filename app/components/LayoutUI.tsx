@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext } from "react";
 
-import { LayoutUI } from "../_share/types/LayoutUI";
+import { LayoutUI } from "../../types/LayoutUI";
 
 const LayoutUIContext = createContext<LayoutUI | null>(null);
 

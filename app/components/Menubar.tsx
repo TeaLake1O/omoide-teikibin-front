@@ -39,12 +39,6 @@ export default function Menubar() {
             href: "/friend",
             scale: "w-[70%]",
         },
-        {
-            src: "/img/notifsicon.png",
-            alt: "notification",
-            href: "/notification",
-            scale: "w-[50%]",
-        },
     ];
     return (
         <nav className="grid grid-cols-5 w-full h-full">
@@ -71,6 +65,29 @@ export default function Menubar() {
                     </div>
                 </Link>
             ))}
+            <button
+                className={`w-full h-full flex items-center justify-center 
+                        group ${
+                            optimisticUrl === "/notification"
+                                ? "bg-orange-200"
+                                : ""
+                        }`}
+                onContextMenu={(e) => e.preventDefault()}
+                onClick={() => {
+                    console.log("hello");
+                }}
+            >
+                <div
+                    className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
+                    transition-colors flex items-center justify-center"
+                >
+                    <ImageIcon
+                        src="/img/notifsicon.png"
+                        alt="notification"
+                        scale="w-[50%]"
+                    />
+                </div>
+            </button>
         </nav>
     );
 }

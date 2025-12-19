@@ -1,16 +1,15 @@
 "use client";
 
 import { FetchResult } from "@/app/_share/types/fetch";
-import { API_URL } from "@/config";
+import { DJANGO_URL } from "@/config";
 import { Me } from "@/types/CurrentUserInfoLayout";
 import { CurrentUserResult } from "@/types/hook";
 import useSWRImmutable from "swr/immutable";
 import fetcher from "../app/_share/util/fetcher";
 
 export default function useCurrentUser(): CurrentUserResult {
-    console.log("useCurrentUserInfoLayout called");
     const { data, error, isLoading, mutate } = useSWRImmutable<FetchResult<Me>>(
-        `${API_URL}/accounts/api/layout`,
+        `${DJANGO_URL}/accounts/api/layout`,
         fetcher
     );
     const isError = !!error || data?.status === "error";
