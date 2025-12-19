@@ -10,5 +10,9 @@ export default async function logout() {
         headers: csrfToken ? { "X-CSRFToken": csrfToken } : {},
     });
 
+    const text = await res.text().catch(() => "");
+    console.log("status", res.status);
+    console.log("body", text.slice(0, 800));
+
     if (!res.ok) throw new Error("POST failed");
 }
