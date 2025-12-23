@@ -1,7 +1,7 @@
 "use client";
 import { FetchResult } from "@/app/_share/types/fetch";
 
-export default async function fetcher<T = unknown>(
+export async function fetcher<T = unknown>(
     url: string
 ): Promise<FetchResult<T>> {
     const res = await fetch(url, {

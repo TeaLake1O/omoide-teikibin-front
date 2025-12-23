@@ -1,4 +1,4 @@
-import { Me } from "@/types/CurrentUserInfoLayout";
+import { Me } from "@/types/userInfo";
 import { Dispatch } from "react";
 
 export type LayoutUI = {

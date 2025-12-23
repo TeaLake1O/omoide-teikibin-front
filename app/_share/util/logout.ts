@@ -1,3 +1,5 @@
+"use client";
+
 import { DJANGO_URL } from "@/config";
 import getCookie from "./getCookie";
 
@@ -9,10 +11,6 @@ export default async function logout() {
         credentials: "include",
         headers: csrfToken ? { "X-CSRFToken": csrfToken } : {},
     });
-
-    const text = await res.text().catch(() => "");
-    console.log("status", res.status);
-    console.log("body", text.slice(0, 800));
 
     if (!res.ok) throw new Error("POST failed");
 }

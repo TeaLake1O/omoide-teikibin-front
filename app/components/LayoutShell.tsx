@@ -1,0 +1,141 @@
+"use client";
+
+import { LOGIN_URL } from "@/config";
+import useCurrentUserInfoLayout from "@/hooks/useLayoutData";
+import { LayoutUI } from "@/types/LayoutUI";
+import { Me } from "@/types/userInfo";
+import { useRouter } from "next/navigation";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import Header from "../_share/components/Header";
+import { LoadingScreen } from "../_share/components/LoadingScreen";
+import useScrollToggle from "../_share/hooks/useScrollToggle";
+import Menu from "./HamburgerMenu";
+import { LayoutUIProvider } from "./LayoutUI";
+import Menubar from "./Menubar";
+
+type Props = {
+    children: ReactNode;
+    initialMe: Me | null;
+};
+
+export default function LayoutShell(props: Props) {
+    //カスタムフック、共通レイアウトのデータを取得する
+    const { status, me, isLoading } = useCurrentUserInfoLayout();
+
+    const effectiveMe = me ?? props.initialMe;
+
+    //timer用
+    const [minDelayDone, setMinDelayDone] = useState(false);
+
+    //トグル用のrefと関数
+    const [hamburger, setHamburger] = useState(false);
+
+    //スクロールでヘッダーを下げるときに使うstateとhook
+    const [mainRef, setMainRef] = useState<HTMLElement | null>(null);
+    const isDown = useScrollToggle({ targetRef: mainRef });
+
+    //ハンバーガー開閉用のフラグをトグルするコールバック
+    const toggleHamburger = useCallback(() => {
+        //アローで書かないと連打で古い値を掴むことがあるらしい
+        setHamburger((prev) => !prev);
+    }, []);
+
+    const [optimisticUrl, setOptimisticUrl] = useState<string | null>(null);
+
+    //Layoutで使う共通のデータ
+    const LayoutContextValue = useMemo(
+        (): LayoutUI => ({
+            toggleHamburger,
+            me: effectiveMe,
+            optimisticUrl,
+            setOptimisticUrl,
+        }),
+        [toggleHamburger, effectiveMe, optimisticUrl]
+    );
+
+    //ログインしていなかったらログインページへリダイレクト
+    const router = useRouter();
+    useEffect(() => {
+        if (status === "guest" || status === "noPermission") {
+            router.push(LOGIN_URL);
+        }
+    }, [router, status]);
+
+    //最低1秒はローディング画面を表示する
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setMinDelayDone(true);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    //isLoadingならローディング画面を表示
+    if (isLoading || !minDelayDone) {
+        return (
+            <>
+                <LoadingScreen />;
+            </>
+        );
+    }
+
+    return (
+        <>
+            <div id="modal-root" />
+            <div
+                className="h-full md:grid 
+                md:grid-cols-[minmax(160px,1fr)_minmax(450px,650px)_minmax(240px,1.8fr)] 
+                2xl:grid-cols-[1fr_minmax(200px,1fr)_minmax(450px,650px)_minmax(300px,1.8fr)_1fr]"
+            >
+                <LayoutUIProvider value={LayoutContextValue}>
+                    <div className="hidden 2xl:block" />
+                    <div
+                        className={
+                            hamburger
+                                ? "block inset-0 bg-black/50 fixed z-30 md:hidden"
+                                : "hidden"
+                        }
+                        onClick={toggleHamburger}
+                    ></div>
+                    <aside
+                        className={
+                            (hamburger
+                                ? "translate-x-0"
+                                : "-translate-x-full") +
+                            " md:block md:h-full md:translate-x-0 md:w-auto md:static fixed bg-orange-100" +
+                            " border-r border-orange-200 transition-transform duration-300 z-40 left-0 inset-y-0 w-[60%]"
+                        }
+                    >
+                        <Menu user={effectiveMe} />
+                    </aside>
+                    <div className="w-full h-full bg-orange-100 border-r border-orange-200 flex flex-col min-h-0">
+                        <div className="w-full h-full flex flex-col">
+                            <Header isDown={isDown} me={effectiveMe} />
+
+                            <main
+                                className="p-6 no-scrollbar pb-16 md:pb-3 flex-1 overflow-y-auto min-h-0"
+                                ref={setMainRef}
+                            >
+                                {props.children}
+                            </main>
+                        </div>
+                        <div
+                            className={`w-full left-0 right-0 bottom-0 h-16 border-orange-200 transition-opacity duration-200 
+                                bg-orange-100 border-t fixed md:hidden
+                            ${isDown ? " opacity-70" : " opacity-100"}`}
+                        >
+                            <Menubar />
+                        </div>
+                    </div>
+                    <div className="hidden md:block md:top-0 md:h-full">
+                        notification
+                    </div>
+                    <div className="hidden 2xl:block" />
+                </LayoutUIProvider>
+            </div>
+            {
+                //<Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+            }
+        </>
+    );
+}

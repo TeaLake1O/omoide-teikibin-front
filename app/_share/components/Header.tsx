@@ -1,6 +1,6 @@
 "use client";
 import { useLayoutUI } from "@/app/components/LayoutUI";
-import { Me } from "@/types/CurrentUserInfoLayout";
+import { Me } from "@/types/userInfo";
 import Link from "next/link";
 import IconImage from "./IconImage";
 import UserIcon from "./UserIconImage";

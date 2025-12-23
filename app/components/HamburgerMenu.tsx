@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
-import { Me } from "../../types/CurrentUserInfoLayout";
+import { Me } from "../../types/userInfo";
 import IconImage from "../_share/components/IconImage";
 import LogoutButton from "../_share/components/LogoutButton";
 import UserIcon from "../_share/components/UserIconImage";
@@ -44,14 +44,14 @@ const menuNav: MenuNav[] = [
         mdHidden: true,
     },
     {
-        src: "/img/homeicon.png",
+        src: "/img/accountsicon.png",
         alt: "mypage",
         menuName: "マイページ",
         href: "/mypage",
         mdHidden: false,
     },
     {
-        src: "/img/homeicon.png",
+        src: "/img/settingsicon.png",
         alt: "setting",
         menuName: "設定",
         href: "/settings",
@@ -85,7 +85,7 @@ function MenuComponent(props: Props) {
                     </button>
                 </div>
             </div>
-            <div className="h-20 w-full border-b border-t border-orange-300 ">
+            <div className="h-20 w-full ">
                 <Link
                     href="/post"
                     className={`h-full p-2 flex items-center md:hover:bg-black/15 active:bg-black/15 ${
@@ -114,23 +114,28 @@ function MenuComponent(props: Props) {
                         <Link
                             key={i}
                             href={menu.href}
-                            className={`h-15 p-2 flex items-center md:hover:bg-black/15 active:bg-black/15 ${
+                            className={`h-15 pt-2 pr-2 pl-2 flex items-center ${
                                 menu.mdHidden ? "hidden md:flex" : ""
-                            } ${
-                                optimisticUrl === menu.href ||
-                                (path === "/post" && optimisticUrl === null)
-                                    ? "md:bg-black/10"
-                                    : ""
                             }`}
                             onClick={() => setOptimisticUrl(menu.href)}
                         >
-                            <div className="w-full h-full flex flex-row-reverse items-center">
-                                <IconImage
-                                    src={menu.src}
-                                    alt={menu.alt}
-                                    scale="h-[60%]"
-                                />
-                                <span className="w-full pl-10 text-1xl font-bold text-black text-left">
+                            <div
+                                className={`w-full h-full flex flex-row items-center rounded-md md:hover:bg-black/15 active:bg-black/15 ${
+                                    optimisticUrl === menu.href ||
+                                    (path === menu.href &&
+                                        optimisticUrl === null)
+                                        ? "md:bg-black/10"
+                                        : ""
+                                }`}
+                            >
+                                <div className="h-full flex justify-center items-center ml-3">
+                                    <IconImage
+                                        src={menu.src}
+                                        alt={menu.alt}
+                                        scale="h-[60%]"
+                                    />
+                                </div>
+                                <span className="w-full pl-8 text-1xl font-bold text-black text-left">
                                     {menu.menuName}
                                 </span>
                             </div>

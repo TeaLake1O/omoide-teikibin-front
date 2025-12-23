@@ -2,12 +2,12 @@
 
 import { FetchResult } from "@/app/_share/types/fetch";
 import { DJANGO_URL } from "@/config";
-import { Me } from "@/types/CurrentUserInfoLayout";
 import { CurrentUserResult } from "@/types/hook";
+import { Me } from "@/types/userInfo";
 import useSWRImmutable from "swr/immutable";
-import fetcher from "../app/_share/util/fetcher";
+import { fetcher } from "../app/_share/util/fetcher";
 
-export default function useCurrentUser(): CurrentUserResult {
+export default function useLayoutData(): CurrentUserResult {
     const { data, error, isLoading, mutate } = useSWRImmutable<FetchResult<Me>>(
         `${DJANGO_URL}/accounts/api/layout`,
         fetcher

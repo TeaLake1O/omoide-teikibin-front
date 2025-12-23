@@ -1,5 +1,5 @@
 import { FetchResult } from "../app/_share/types/fetch";
-import { Me } from "./CurrentUserInfoLayout";
+import { Me } from "./userInfo";
 
 export type CurrentUserResult = {
     me: Me | null;
