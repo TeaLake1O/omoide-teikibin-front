@@ -21,11 +21,7 @@ export default function UserIconImage(props: Props) {
 
     return (
         <div className="relative flex justify-center items-center w-full h-full overflow-hidden rounded-full bg-white">
-            {!src || !loaded ? (
-                <div className="absolute inset-0">
-                    <ImagePlaceHolder />
-                </div>
-            ) : null}
+            {!src || !loaded ? <ImagePlaceHolder /> : null}
             {src ? (
                 <Image
                     unoptimized={isDev}

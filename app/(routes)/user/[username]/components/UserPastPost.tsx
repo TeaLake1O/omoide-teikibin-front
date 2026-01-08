@@ -11,7 +11,7 @@ export default async function UserPastPost({ username }: { username: string }) {
     return (
         <div className="mr-3 ml-3">
             {initialPost.map((i) => {
-                return <PostContent post={i} key={i.post_content} />;
+                return <PostContent post={i} key={i.post_id} />;
             })}
         </div>
     );
