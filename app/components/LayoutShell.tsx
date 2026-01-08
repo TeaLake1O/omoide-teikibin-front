@@ -1,16 +1,14 @@
 "use client";
 
-import { LOGIN_URL } from "@/config";
-import useCurrentUserInfoLayout from "@/hooks/useLayoutData";
-import { LayoutUI } from "@/types/LayoutUI";
-import { Me } from "@/types/userInfo";
-import { useRouter } from "next/navigation";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import useLayoutData from "@/hooks/useLayoutData";
+import { Me } from "@/types/Me";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import Header from "../_share/components/Header";
-import { LoadingScreen } from "../_share/components/LoadingScreen";
 import useScrollToggle from "../_share/hooks/useScrollToggle";
-import Menu from "./HamburgerMenu";
-import { LayoutUIProvider } from "./LayoutUI";
+import { LayoutUIProvider } from "../_share/provider/LayoutUI";
+import { LayoutUI } from "../_share/types/provider";
+import { LoadingScreen } from "../_share/UI/LoadingScreen";
+import AsideMenu from "./AsideMenu";
 import Menubar from "./Menubar";
 
 type Props = {
@@ -20,7 +18,7 @@ type Props = {
 
 export default function LayoutShell(props: Props) {
     //カスタムフック、共通レイアウトのデータを取得する
-    const { status, me, isLoading } = useCurrentUserInfoLayout();
+    const { data: me, isLoading, refresh } = useLayoutData();
 
     const effectiveMe = me ?? props.initialMe;
 
@@ -43,24 +41,13 @@ export default function LayoutShell(props: Props) {
     const [optimisticUrl, setOptimisticUrl] = useState<string | null>(null);
 
     //Layoutで使う共通のデータ
-    const LayoutContextValue = useMemo(
-        (): LayoutUI => ({
-            toggleHamburger,
-            me: effectiveMe,
-            optimisticUrl,
-            setOptimisticUrl,
-        }),
-        [toggleHamburger, effectiveMe, optimisticUrl]
-    );
-
-    //ログインしていなかったらログインページへリダイレクト
-    const router = useRouter();
-    useEffect(() => {
-        if (status === "guest" || status === "noPermission") {
-            router.push(LOGIN_URL);
-        }
-    }, [router, status]);
-
+    const LayoutContextValue: LayoutUI = {
+        toggleHamburger,
+        me: effectiveMe,
+        optimisticUrl,
+        setOptimisticUrl,
+        refresh,
+    };
     //最低1秒はローディング画面を表示する
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -81,7 +68,6 @@ export default function LayoutShell(props: Props) {
 
     return (
         <>
-            <div id="modal-root" />
             <div
                 className="h-full md:grid 
                 md:grid-cols-[minmax(160px,1fr)_minmax(450px,650px)_minmax(240px,1.8fr)] 
@@ -97,17 +83,7 @@ export default function LayoutShell(props: Props) {
                         }
                         onClick={toggleHamburger}
                     ></div>
-                    <aside
-                        className={
-                            (hamburger
-                                ? "translate-x-0"
-                                : "-translate-x-full") +
-                            " md:block md:h-full md:translate-x-0 md:w-auto md:static fixed bg-orange-100" +
-                            " border-r border-orange-200 transition-transform duration-300 z-40 left-0 inset-y-0 w-[60%]"
-                        }
-                    >
-                        <Menu user={effectiveMe} />
-                    </aside>
+                    <AsideMenu user={effectiveMe} hamburger={hamburger} />
                     <div className="w-full h-full bg-orange-100 border-r border-orange-200 flex flex-col min-h-0">
                         <div className="w-full h-full flex flex-col">
                             <Header isDown={isDown} me={effectiveMe} />
@@ -127,7 +103,7 @@ export default function LayoutShell(props: Props) {
                             <Menubar />
                         </div>
                     </div>
-                    <div className="hidden md:block md:top-0 md:h-full">
+                    <div className="hidden md:block md:top-0 md:h-full bg-orange-100">
                         notification
                     </div>
                     <div className="hidden 2xl:block" />

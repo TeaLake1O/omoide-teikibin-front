@@ -2,20 +2,25 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import ImagePlaceHolder from "./ImagePlaceHolder";
+import ImagePlaceHolder from "../UI/ImagePlaceHolder";
 
 type Props = {
     iconUrl: string | null;
 };
+//キャッシュを持ってstateのリセットを防ぐ
+//const loadedSrcSet = new Set<string>();
 
-export default function UserIcon(props: Props) {
+export default function UserIconImage(props: Props) {
     const isDev = process.env.NODE_ENV !== "production";
-    const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
-    const src = props.iconUrl;
-    const loaded = loadedSrc === src;
+    const src = props.iconUrl ? props.iconUrl : "/img/accountsicon.png";
+    const [loaded, setLoaded] = useState<boolean>(false);
+
+    /*useEffect(() => {
+        setLoaded(loadedSrcSet.has(src));
+    }, [src]);*/
 
     return (
-        <div className="relative w-full h-full">
+        <div className="relative flex justify-center items-center w-full h-full overflow-hidden rounded-full bg-white">
             {!src || !loaded ? (
                 <div className="absolute inset-0">
                     <ImagePlaceHolder />
@@ -29,9 +34,13 @@ export default function UserIcon(props: Props) {
                     alt="icon"
                     width={128}
                     height={128}
-                    className="absolute inset-0 rounded-full aspect-square"
-                    onLoadingComplete={() => setLoadedSrc(src)}
-                    priority
+                    className={`object-cover ${
+                        loaded ? "opacity-100" : "opacity-0"
+                    }`}
+                    onLoad={() => {
+                        setLoaded(true);
+                        //loadedSrcSet.add(src);
+                    }}
                     //onLoad={() => setTimeout(() => setLoadedImage(true), 5000)}
                 />
             ) : null}

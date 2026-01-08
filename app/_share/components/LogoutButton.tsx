@@ -19,14 +19,14 @@ export default function LogOut() {
                     //router.push(LANDING_PAGE_URL);
                 }}
             >
-                <span className="text-red-600 hover:text-red-200 active:text-red-200 transition-colors duration-200">
+                <span className="text-red-500 hover:text-red-300 active:text-red-300 transition-colors duration-200">
                     ログアウト
                 </span>
             </button>
             {openModal &&
                 createPortal(
                     <div
-                        className="fixed inset-0 z-[9999] bg-black/60 flex justify-center items-center"
+                        className="fixed inset-0 z-[9990] bg-black/60 flex justify-center items-center"
                         onClick={() => setOpenModal(false)}
                     >
                         <div

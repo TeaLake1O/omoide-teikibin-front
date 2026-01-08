@@ -1,11 +1,4 @@
-import { FetchResult } from "../app/_share/types/fetch";
-import { Me } from "./userInfo";
+import { QueryResult } from "../app/_share/types/fetch";
+import { Me } from "./Me";
 
-export type CurrentUserResult = {
-    me: Me | null;
-    isError: boolean | null;
-    message: string | null;
-    status: FetchResult<Me>["status"] | null;
-    isLoading: boolean;
-    refresh: () => void;
-};
+export type CurrentUserFetchResult = QueryResult<Me>;

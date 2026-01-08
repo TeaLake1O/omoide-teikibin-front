@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import ImageIcon from "../_share/components/IconImage";
-import { useLayoutUI } from "./LayoutUI";
+import { useLayoutUI } from "../_share/provider/LayoutUI";
 
 export default function Menubar() {
     const path = usePathname();

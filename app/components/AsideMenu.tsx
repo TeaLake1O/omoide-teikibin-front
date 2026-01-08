@@ -1,0 +1,189 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { Me } from "../../types/Me";
+import IconImage from "../_share/components/IconImage";
+import LogoutButton from "../_share/components/LogoutButton";
+import UserIcon from "../_share/components/UserIconImage";
+import { useIsMdUp } from "../_share/hooks/useIsMdUp";
+import { useLayoutUI } from "../_share/provider/LayoutUI";
+
+type Props = {
+    user: Me | null;
+    hamburger: boolean;
+};
+
+type MenuNav = {
+    src: string;
+    alt: string;
+    menuName: string;
+    href: string;
+    mdHidden: boolean;
+};
+
+const menuNav: MenuNav[] = [
+    {
+        src: "/img/homeicon.png",
+        alt: "home",
+        menuName: "ホーム",
+        href: "/home",
+        mdHidden: true,
+    },
+    {
+        src: "/img/groupicon.png",
+        alt: "group",
+        menuName: "グループ",
+        href: "/group",
+        mdHidden: true,
+    },
+    {
+        src: "/img/friendicon.png",
+        alt: "friend",
+        menuName: "フレンド",
+        href: "/friend",
+        mdHidden: true,
+    },
+    {
+        src: "/img/accountsicon.png",
+        alt: "user",
+        menuName: "マイページ",
+        href: "/user",
+        mdHidden: false,
+    },
+    {
+        src: "/img/settingsicon.png",
+        alt: "setting",
+        menuName: "設定",
+        href: "/setting",
+        mdHidden: false,
+    },
+];
+
+export default function AsideMenu(props: Props) {
+    const path = usePathname();
+
+    const { optimisticUrl, setOptimisticUrl, toggleHamburger } = useLayoutUI();
+
+    const isMdUp = useIsMdUp();
+
+    const changeHamburger = () => {
+        if (!isMdUp) toggleHamburger();
+    };
+
+    useEffect(() => {
+        setOptimisticUrl(null);
+    }, [path, setOptimisticUrl]);
+
+    return (
+        <aside
+            className={
+                (props.hamburger ? "translate-x-0" : "-translate-x-full") +
+                " md:block md:h-full md:translate-x-0 md:w-auto md:static fixed bg-orange-100" +
+                " border-r border-orange-200 transition-transform duration-300 z-40 left-0 inset-y-0 w-[60%]"
+            }
+        >
+            <div className="flex flex-col h-full w-full bg-orange-100">
+                <div className="h-24 w-full flex items-center justify-center bg-orange-100">
+                    <div className="flex flex-[1.5] min-w-0 flex-col justify-center">
+                        <span className="font-sans font-bold text-lg text-left text-black pl-[25%] truncate">
+                            {props.user?.nickname ?? "名無し"}
+                        </span>
+                        <span className="font-sans font-normal text-sm text-amber-800 text-left pl-[25%] truncate">
+                            @{props.user?.username ?? "Error"}
+                        </span>
+                    </div>
+                    <div className="flex-1 rounded-full flex items-center justify-center bg-orange-100">
+                        <Link
+                            className="w-[70%] max-w-18 aspect-square rounded-full bg-orange-100 flex items-center justify-center duration-200 active:scale-94"
+                            href={`/user/${props.user?.username}`}
+                            onClick={() => {
+                                setOptimisticUrl(
+                                    `/user/${props.user?.username}`
+                                );
+                                changeHamburger();
+                            }}
+                        >
+                            <UserIcon iconUrl={props.user?.icon_url ?? null} />
+                        </Link>
+                    </div>
+                </div>
+                <div className="h-20 w-full ">
+                    <Link
+                        href="/post"
+                        className={`h-full p-2 flex items-center md:hover:bg-black/15 active:bg-black/15 ${
+                            optimisticUrl === "/post" ||
+                            (path === "/post" && optimisticUrl === null)
+                                ? "md:bg-black/10"
+                                : ""
+                        }`}
+                        onClick={() => {
+                            setOptimisticUrl("/post");
+                            toggleHamburger();
+                        }}
+                    >
+                        <div className="w-full h-full flex flex-row-reverse items-center">
+                            <IconImage
+                                src="/img/posticon.png"
+                                alt="post"
+                                scale="h-[60%]"
+                            />
+                            <span className="w-full flex justify-center text-2xl font-bold text-amber-800">
+                                投稿
+                            </span>
+                        </div>
+                    </Link>
+                </div>
+                <nav className="flex flex-col">
+                    {menuNav.map((menu, i) => {
+                        const targetHref =
+                            menu.href === "/user"
+                                ? `/user/${props.user?.username}`
+                                : menu.href;
+                        return (
+                            <Link
+                                key={i}
+                                href={targetHref}
+                                className={`h-15 pt-2 pr-2 pl-2 flex items-center ${
+                                    menu.mdHidden ? "hidden md:flex" : ""
+                                }`}
+                                onClick={() => {
+                                    setOptimisticUrl(targetHref);
+                                    changeHamburger();
+                                }}
+                            >
+                                <div
+                                    className={`w-full h-full flex flex-row items-center rounded-md md:hover:bg-black/15 active:bg-black/15 ${
+                                        optimisticUrl === targetHref ||
+                                        (path === targetHref &&
+                                            optimisticUrl === null) ||
+                                        (menu.href === "/user" &&
+                                            path.startsWith("/user/") &&
+                                            optimisticUrl === null)
+                                            ? "md:bg-black/10"
+                                            : ""
+                                    }`}
+                                >
+                                    <div className="h-full flex justify-center items-center ml-3">
+                                        <IconImage
+                                            src={menu.src}
+                                            alt={menu.alt}
+                                            scale="h-[60%]"
+                                        />
+                                    </div>
+                                    <span className="w-full pl-8 text-1xl font-bold text-black text-left">
+                                        {menu.menuName}
+                                    </span>
+                                </div>
+                            </Link>
+                        );
+                    })}
+                </nav>
+                <div className="mt-10 mb-2 mr-5 flex flex-row-reverse">
+                    <LogoutButton />
+                </div>
+            </div>
+        </aside>
+    );
+}

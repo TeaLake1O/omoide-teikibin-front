@@ -1,5 +1,6 @@
 import { DJANGO_URL } from "@/config";
-import { Me } from "@/types/userInfo";
+import { Me } from "@/types/Me";
+import AppProviders from "./_share/provider/AppProvider";
 import LayoutShell from "./components/LayoutShell";
 import "./globals.css";
 import { serverFetch } from "./servers/serverFetch";
@@ -10,7 +11,8 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     const data: Me | null = await serverFetch(
-        `${DJANGO_URL}/accounts/api/layout`
+        `${DJANGO_URL}/accounts/api/layout`,
+        `layout`
     );
 
     return (
@@ -19,7 +21,10 @@ export default async function RootLayout({
                 className="w-screen h-screen overflow-hidden
                 bg-orange-100 "
             >
-                <LayoutShell initialMe={data}>{children}</LayoutShell>
+                <div id="modal-root" />
+                <AppProviders>
+                    <LayoutShell initialMe={data}>{children}</LayoutShell>
+                </AppProviders>
             </body>
         </html>
     );

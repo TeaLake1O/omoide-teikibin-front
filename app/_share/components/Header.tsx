@@ -1,19 +1,14 @@
 "use client";
-import { useLayoutUI } from "@/app/components/LayoutUI";
-import { Me } from "@/types/userInfo";
+import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
+import { Me } from "@/types/Me";
 import Link from "next/link";
+import getPageName from "../util/getPageName";
 import IconImage from "./IconImage";
 import UserIcon from "./UserIconImage";
 
 type Props = {
     isDown: boolean;
     me: Me | null;
-};
-const pageName: Record<string, string> = {
-    "/home": "Home",
-    "/group": "Group",
-    "/post": "Post",
-    "/friend": "Friend",
 };
 
 export default function Header(props: Props) {
@@ -41,9 +36,9 @@ export default function Header(props: Props) {
                 </button>
             </div>
             <div className="flex-1 flex justify-center">
-                <span className="font-medium font-sans text-2xl text-amber-800">
+                <h1 className="font-medium font-sans text-[1.27rem] text-amber-800">
                     {getPageName(optimisticUrl)}
-                </span>
+                </h1>
             </div>
             <div className="h-12 aspect-square flex items-center justify-center">
                 <Link href="/home" className="w-full h-full">
@@ -56,11 +51,4 @@ export default function Header(props: Props) {
             </div>
         </header>
     );
-}
-function getPageName(url: string | null) {
-    if (url !== null) {
-        return pageName[url];
-    } else {
-        return "";
-    }
 }

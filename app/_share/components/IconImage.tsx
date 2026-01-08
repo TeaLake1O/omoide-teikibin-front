@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import ImagePlaceHolder from "./ImagePlaceHolder";
+import ImagePlaceHolder from "../UI/ImagePlaceHolder";
 
 type Props = {
     src: string;
