@@ -6,5 +6,6 @@ export type UserPost = {
     post_images: string | null;
     created_at: string;
     group: number;
+    group_name: string;
     post_user: UserInf;
 };

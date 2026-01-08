@@ -13,7 +13,7 @@ type Props = {
 export default function Profile(props: Props) {
     const isMe = props.data.status === "me";
     return (
-        <div className="h-[200px] md:h-[300px] w-full flex flex-col gap-5">
+        <div className="h-[200px] md:h-[300px] w-full flex flex-col gap-3">
             <ProfileBlockTop data={props.data} isMe={isMe} />
             <ProfileBlockCenter
                 data={props.data}
@@ -36,7 +36,7 @@ function ProfileBlockCenter({
     serverRefresh: () => Promise<void>;
 }) {
     return (
-        <div className="w-full flex flex-col md:p-6">
+        <div className="w-full flex flex-col p-6">
             <div className="w-full h-16 grid grid-cols-[1fr_auto_1fr] items-center">
                 <div className="h-16 aspect-square rounded-full md:ml-3">
                     <UserIconImage iconUrl={data.icon_url} />
@@ -74,7 +74,7 @@ function ProfileBlockBottom({
     isMe: boolean;
 }) {
     return (
-        <div className="w-full flex flex-col items-center justify-center md:pl-6 md:pr-6">
+        <div className="w-full flex flex-col items-center justify-center pl-6 pr-6">
             <div className="w-full flex justify-between mr-3 ml-3 mt-4">
                 <span className="text-base text-amber-800">
                     誕生日 :{" "}

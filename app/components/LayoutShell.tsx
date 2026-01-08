@@ -89,7 +89,7 @@ export default function LayoutShell(props: Props) {
                             <Header isDown={isDown} me={effectiveMe} />
 
                             <main
-                                className="p-6 no-scrollbar pb-16 md:pb-3 flex-1 overflow-y-auto min-h-0"
+                                className="no-scrollbar pb-16 md:pb-3 flex-1 overflow-y-auto min-h-0"
                                 ref={setMainRef}
                             >
                                 {props.children}

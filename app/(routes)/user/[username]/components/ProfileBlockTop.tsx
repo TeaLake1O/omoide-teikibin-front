@@ -83,7 +83,7 @@ export default function ProfileBlockTop({
     switch (status) {
         case "friend":
             return (
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between p-3 pb-0">
                     <span className="text-amber-800 text-sm">
                         フレンドのユーザー
                     </span>
@@ -97,7 +97,7 @@ export default function ProfileBlockTop({
             );
         case "incoming":
             return (
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between p-3 pb-0">
                     <span className="text-amber-800 text-sm">
                         フレンド申請がきています
                     </span>
@@ -119,7 +119,7 @@ export default function ProfileBlockTop({
             );
         case "outgoing":
             return (
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between p-3 pb-0">
                     <span className="text-amber-800 text-sm">
                         フレンド申請中
                     </span>
@@ -133,7 +133,7 @@ export default function ProfileBlockTop({
             );
         case "none":
             return (
-                <div className="flex items-center flex-row-reverse">
+                <div className="flex items-center flex-row-reverse p-3 pb-0">
                     <GenericButton
                         name="フレンド申請"
                         height="h-6"
