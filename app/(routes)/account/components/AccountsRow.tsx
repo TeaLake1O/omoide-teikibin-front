@@ -1,5 +1,6 @@
 "use client";
 
+import GenericButton from "@/app/_share/components/GenericButton";
 import { DJANGO_URL } from "@/config";
 import submit from "../util/AccountForm";
 import { ActionName } from "./AccountInfo";
@@ -19,9 +20,11 @@ export default function AccountRow(props: AccountRowProps) {
                         {props.title}
                     </span>
                     {props.buttonName && (
-                        <button
-                            type="button"
-                            onClick={async () => {
+                        <GenericButton
+                            name="変更"
+                            height="h-5"
+                            textSize=""
+                            handleOnclick={async () => {
                                 if (!props.buttonName) return;
                                 const res = await submit(props.buttonName);
                                 if (res.ok) {
@@ -33,10 +36,7 @@ export default function AccountRow(props: AccountRowProps) {
                                     console.log("fail");
                                 }
                             }}
-                            className="h-5 w-5"
-                        >
-                            button
-                        </button>
+                        />
                     )}
                 </div>
                 <span className="ml-4 text-lg mt-2">{props.name}</span>

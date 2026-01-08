@@ -11,7 +11,7 @@ export default async function Account() {
     );
 
     return (
-        <div className="h-full w-full flex flex-col min-h-0 gap-7 p-6">
+        <div className="h-full w-full">
             <AccountInfo data={data} />
         </div>
     );

@@ -19,7 +19,7 @@ export default async function Account(props: Props) {
 
     return (
         <>
-            <form method="post">
+            <form method="post" className="flex flex-col min-h-0 gap-7 p-6">
                 <AccountRow
                     title="ユーザーネーム"
                     name={username}
