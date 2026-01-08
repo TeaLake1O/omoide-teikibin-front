@@ -7,7 +7,7 @@ export default async function Account() {
     const data = await serverFetch<AccountsData>(
         `${DJANGO_URL}/accounts/api/me/detail`,
         `accounts`,
-        "no-cache"
+        "default"
     );
 
     return (

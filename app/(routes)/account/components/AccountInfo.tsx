@@ -12,9 +12,21 @@ export default function Account(props: Props) {
     const dateJoined = date_joined.replaceAll("-", "/");
     return (
         <>
-            <AccountRow title="ユーザーネーム" name={username} href="/" />
-            <AccountRow title="メールアドレス" name={email} href="/" />
-            <AccountRow title="パスワード" name="xxxxxxxxx" href="/" />
+            <AccountRow
+                title="ユーザーネーム"
+                name={username}
+                href={`${DJANGO_URL}/accounts/api/change/username`}
+            />
+            <AccountRow
+                title="メールアドレス"
+                name={email}
+                href={DJANGO_URL + "/accounts/api/change/email"}
+            />
+            <AccountRow
+                title="パスワード"
+                name="xxxxxxxxx"
+                href={DJANGO_URL + "/accounts/api/change/password"}
+            />
             <AccountRow title="登録日" name={dateJoined} />
             <div className="flex flex-col gap-5 mt-auto">
                 <div className="flex flex-row-reverse items-center">
@@ -22,7 +34,7 @@ export default function Account(props: Props) {
                 </div>
                 <div className="flex flex-row-reverse items-center">
                     <Link
-                        href={DJANGO_URL + "/"}
+                        href={DJANGO_URL + "/accounts/api/delete"}
                         className="text-red-500 hover:text-red-300 active:text-red-300"
                     >
                         アカウントの削除
@@ -49,7 +61,7 @@ function AccountRow(props: AccountRowProps) {
                     {props.href && (
                         <div className="flex justify-center items-center">
                             <GenericLink
-                                href={DJANGO_URL + "/"}
+                                href={props.href}
                                 name="変更"
                                 textSize="text-base"
                                 height="h-6"
