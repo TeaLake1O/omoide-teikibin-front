@@ -13,6 +13,7 @@ export default function LogOut() {
     return (
         <>
             <button
+                type="button"
                 onClick={async () => {
                     setOpenModal(true);
                     //await logout();
@@ -38,6 +39,7 @@ export default function LogOut() {
                             </span>
                             <div className="pt-12 md:pt-16 flex items-center gap-3">
                                 <button
+                                    type="button"
                                     className="h-8 w-24 bg-red-500 rounded-4xl hover:bg-red-400 active:scale-[95%] duration-150"
                                     onClick={async () => {
                                         await logout();
@@ -49,6 +51,7 @@ export default function LogOut() {
                                     </span>
                                 </button>
                                 <button
+                                    type="button"
                                     className="h-8 w-24 border bg-white rounded-4xl hover:bg-stone-200 active:scale-[95%] duration-150"
                                     onClick={() => setOpenModal(false)}
                                 >

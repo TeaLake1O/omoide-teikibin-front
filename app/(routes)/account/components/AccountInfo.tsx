@@ -1,5 +1,6 @@
 import LogOut from "@/app/_share/components/LogoutButton";
 import { AccountsData } from "../types/accountsData";
+import AccountDelete from "./AccountDelete";
 import AccountRow from "./AccountsRow";
 
 export type ActionName =
@@ -40,9 +41,7 @@ export default async function Account(props: Props) {
                         <LogOut />
                     </div>
                     <div className="flex flex-row-reverse items-center">
-                        <button className="text-red-500 hover:text-red-300 active:text-red-300">
-                            アカウントの削除
-                        </button>
+                        <AccountDelete />
                     </div>
                 </div>
             </form>
