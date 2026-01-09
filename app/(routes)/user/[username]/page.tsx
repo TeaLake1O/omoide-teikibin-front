@@ -13,7 +13,8 @@ export default async function UserPage({
     const tag = `user:${username}`;
     const data = await serverFetch<UserPageData>(
         `${DJANGO_URL}/accounts/api/mypage/${username}`,
-        tag
+        tag,
+        "force-cache"
     );
     const serverRefresh = refreshServerFetch.bind(null, tag);
 

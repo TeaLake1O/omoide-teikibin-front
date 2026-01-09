@@ -148,7 +148,7 @@ export default function EditButton(props: Props) {
                         profileText={profileText}
                         isLessMaxLength={isProfileTextLessMaxLength}
                     />
-                    <div className="h-8 m-3 w-full flex justify-between items-center">
+                    <div className="h-8 m-3 md:mb-1 mb-6 w-full flex justify-between items-center">
                         <GenericButton
                             name="キャンセル"
                             height="h-full"
@@ -199,7 +199,7 @@ function EditButtonFormContent(childProps: EditButtonFormContentProps) {
         profileText,
     } = childProps;
     return (
-        <div className="h-full w-full flex-col flex gap-5 items-center overflow-y-auto resize-none no-scrollbar">
+        <div className="h-full w-full flex-col flex gap-3 items-center overflow-y-auto resize-none no-scrollbar">
             <div className="w-[90%] mb-4">
                 <div className="flex items-center mt-2 justify-between">
                     <div className="h-14 md:h-20 aspect-square rounded-full">
@@ -251,7 +251,7 @@ function EditButtonFormContent(childProps: EditButtonFormContentProps) {
                     name="birthday"
                 />
             </label>
-            <label className="w-[90%] h-full border border-amber-800 rounded-md bg-white p-1 mb-2 block select-none">
+            <label className="w-[90%] md:h-full h-[30%] border border-amber-800 rounded-md bg-white p-1 mb-2 select-none flex flex-col ">
                 <div className="flex justify-between">
                     <span className="text-[12px] text-gray-400">自己紹介</span>
                     <span
@@ -277,7 +277,7 @@ function EditButtonFormContent(childProps: EditButtonFormContentProps) {
                 </div>
                 <textarea
                     value={profileText}
-                    className="focus:outline-none mt-4 w-full h-40 overflow-y-auto resize-none"
+                    className="focus:outline-none mt-4 w-full h-full overflow-y-auto resize-none"
                     name="profile_text"
                     onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                         setProfileText(e.currentTarget.value)

@@ -1,5 +1,5 @@
 import GenericLink from "@/app/_share/components/GenericLink";
-import UserIconImage from "@/app/_share/components/UserIconImage";
+import ModalImage from "@/app/_share/components/ModalImage";
 import { UserPageData } from "../types/userPageData";
 import EditButton from "./EditButton";
 import ProfileBlockTop from "./ProfileBlockTop";
@@ -39,7 +39,10 @@ function ProfileBlockCenter({
         <div className="w-full flex flex-col p-6">
             <div className="w-full h-16 grid grid-cols-[1fr_auto_1fr] items-center">
                 <div className="h-16 aspect-square rounded-full md:ml-3">
-                    <UserIconImage iconUrl={data.icon_url} />
+                    <ModalImage
+                        iconUrl={data.icon_url}
+                        rounded="rounded-full"
+                    />
                 </div>
                 <div className="flex flex-col gap-2 mr-3 ml-3 min-w-0">
                     <span className="text-2xl flex-1 text-black text-center truncate">
@@ -107,7 +110,7 @@ function ProfileBlockBottom({
                         ? "自己紹介を登録しましょう"
                         : data.user_profile}
                 </div>
-                <span className="mt-6 border-b border-amber-800 text-amber-800">
+                <span className="mt-6 mb-3 border-b border-amber-800 text-amber-800">
                     過去の投稿
                 </span>
             </div>

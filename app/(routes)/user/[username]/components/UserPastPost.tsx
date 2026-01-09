@@ -1,7 +1,7 @@
 import { UserPost } from "@/app/_share/types/userPost";
 import { serverFetch } from "@/app/servers/serverFetch";
 import { DJANGO_URL } from "@/config";
-import PostContent from "./PostContent";
+import PostContent from "../../../../_share/components/PostContent";
 
 export default async function UserPastPost({ username }: { username: string }) {
     const limit = 20;
@@ -12,7 +12,7 @@ export default async function UserPastPost({ username }: { username: string }) {
     if (initialPost.length === 0) {
         return (
             <div>
-                <span className="text-amber-800">まだ投稿がありません</span>
+                <span className="text-amber-800 p-3">まだ投稿がありません</span>
             </div>
         );
     } else {
