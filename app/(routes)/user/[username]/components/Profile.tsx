@@ -3,7 +3,6 @@ import ModalImage from "@/app/_share/components/ModalImage";
 import { UserPageData } from "../types/userPageData";
 import EditButton from "./EditButton";
 import ProfileBlockTop from "./ProfileBlockTop";
-import UserPastPost from "./UserPastPost";
 
 type Props = {
     data: UserPageData;
@@ -13,16 +12,17 @@ type Props = {
 export default function Profile(props: Props) {
     const isMe = props.data.status === "me";
     return (
-        <div className="h-[200px] md:h-[300px] w-full flex flex-col gap-3">
-            <ProfileBlockTop data={props.data} isMe={isMe} />
-            <ProfileBlockCenter
-                data={props.data}
-                isMe={isMe}
-                serverRefresh={props.serverRefresh}
-            />
-            <ProfileBlockBottom data={props.data} isMe={isMe} />
-            <UserPastPost username={props.data.username} />
-        </div>
+        <>
+            <div className="min-h-[200px] md:min-h-[300px] w-full flex flex-col gap-3">
+                <ProfileBlockTop data={props.data} isMe={isMe} />
+                <ProfileBlockCenter
+                    data={props.data}
+                    isMe={isMe}
+                    serverRefresh={props.serverRefresh}
+                />
+                <ProfileBlockBottom data={props.data} isMe={isMe} />
+            </div>
+        </>
     );
 }
 
@@ -77,8 +77,8 @@ function ProfileBlockBottom({
     isMe: boolean;
 }) {
     return (
-        <div className="w-full flex flex-col items-center justify-center pl-6 pr-6">
-            <div className="w-full flex justify-between mr-3 ml-3 mt-4">
+        <div className="w-full flex flex-col items-center justify-center">
+            <div className="w-full flex justify-between mr-3 ml-3 mt-4 pl-6 pr-6">
                 <span className="text-base text-amber-800">
                     誕生日 :{" "}
                     {data.birthday
@@ -93,9 +93,9 @@ function ProfileBlockBottom({
                     hidden={!isMe}
                 />
             </div>
-            <div className="w-full mt-10 flex flex-col">
+            <div className="w-full mt-7 flex flex-col">
                 <span
-                    className={`text-sm text-gray-500 ${
+                    className={`text-sm text-gray-500 pl-6 pr-6 ${
                         !isMe &&
                         (!data.user_profile || data.user_profile.length === 0)
                             ? "hidden"
@@ -104,13 +104,13 @@ function ProfileBlockBottom({
                 >
                     自己紹介
                 </span>
-                <div className="p-4 text-base w-full no-scrollbar break-words">
+                <div className="text-base w-full no-scrollbar break-words p-6">
                     {isMe &&
                     (!data.user_profile || data.user_profile.length === 0)
                         ? "自己紹介を登録しましょう"
                         : data.user_profile}
                 </div>
-                <span className="mt-6 mb-3 border-b border-amber-800 text-amber-800">
+                <span className="mt-3 pl-3 pb-1 h-auto border-b border-orange-300 w-full text-amber-800">
                     過去の投稿
                 </span>
             </div>

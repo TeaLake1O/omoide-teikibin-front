@@ -10,10 +10,10 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const data: Me | null = await serverFetch(
-        `${DJANGO_URL}/accounts/api/layout`,
-        `layout`
-    );
+    const data: Me | null = await serverFetch({
+        url: `${DJANGO_URL}/accounts/api/layout`,
+        tag: "layout",
+    });
 
     return (
         <html lang="ja">

@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import CloseButton from "../UI/CloseButton";
 
 type Props = {
-    iconUrl: string;
+    iconUrl: string | null;
     text?: string | null;
     rounded?: string;
 };
@@ -18,6 +18,7 @@ export default function ModalImage(props: Props) {
             : null;
 
     const [openModal, setOpenModal] = useState<boolean>(false);
+    const src = props.iconUrl ? props.iconUrl : "/img/accountsicon.png";
 
     if (!root) return null;
     return (
@@ -27,7 +28,7 @@ export default function ModalImage(props: Props) {
             }`}
         >
             <Image
-                src={props.iconUrl}
+                src={src}
                 alt="投稿画像"
                 onClick={() => setOpenModal(true)}
                 fill
@@ -50,12 +51,12 @@ export default function ModalImage(props: Props) {
                                 className="flex relative items-center md:max-w-[75vw] md:max-h-[75vh] w-[90%] h-auto"
                             >
                                 <Image
-                                    src={props.iconUrl}
+                                    src={src}
                                     alt="投稿画像"
                                     width={1200}
                                     height={800}
                                     preload
-                                    className="w-full h-auto max-h-[80vh] object-contain"
+                                    className="w-full h-auto max-h-[80vh] min-h-[60vh] object-contain"
                                 ></Image>
                             </div>
                             {props.text && (
