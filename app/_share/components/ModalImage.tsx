@@ -40,7 +40,10 @@ export default function ModalImage(props: Props) {
                         className="fixed inset-0 z-[9990] bg-black/90 flex justify-center items-center"
                         onClick={() => setOpenModal(false)}
                     >
-                        <div className="w-10 h-10 aspect-square absolute left-12 top-6">
+                        <div
+                            className="w-10 h-10  aspect-square absolute md:left-6 left-2 top-6"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <CloseButton
                                 handleOnclick={() => setOpenModal(false)}
                             />
@@ -48,15 +51,15 @@ export default function ModalImage(props: Props) {
                         <div className="flex flex-col items-center">
                             <div
                                 onClick={(e) => e.stopPropagation()}
-                                className="flex relative items-center md:max-w-[75vw] md:max-h-[75vh] w-[90%] h-auto"
+                                className="flex relative items-center w-full min-h-0 h-auto"
                             >
                                 <Image
                                     src={src}
                                     alt="投稿画像"
                                     width={1200}
                                     height={800}
-                                    preload
-                                    className="w-full h-auto max-h-[80vh] min-h-[60vh] object-contain"
+                                    priority
+                                    className="md:max-w-[80vh] md:max-h-[75vh] h-auto max-h-[80vh] md:min-h-[60vh] min-h-0 object-contain"
                                 ></Image>
                             </div>
                             {props.text && (

@@ -7,8 +7,10 @@ import { serverFetch } from "./servers/serverFetch";
 
 export default async function RootLayout({
     children,
+    modal,
 }: {
     children: React.ReactNode;
+    modal: React.ReactNode;
 }) {
     const data: Me | null = await serverFetch({
         url: `${DJANGO_URL}/accounts/api/layout`,

@@ -1,8 +1,8 @@
+import FollowButton from "@/app/_share/components/FollowButton";
 import GenericLink from "@/app/_share/components/GenericLink";
 import ModalImage from "@/app/_share/components/ModalImage";
 import { UserPageData } from "../types/userPageData";
 import EditButton from "./EditButton";
-import ProfileBlockTop from "./ProfileBlockTop";
 
 type Props = {
     data: UserPageData;
@@ -14,8 +14,14 @@ export default function Profile(props: Props) {
     return (
         <>
             <div className="min-h-[200px] md:min-h-[300px] w-full flex flex-col gap-3">
-                <ProfileBlockTop data={props.data} isMe={isMe} />
-                <ProfileBlockCenter
+                <div className="mt-3 flex flex-row-reverse">
+                    <FollowButton
+                        isMe={isMe}
+                        state={props.data.status}
+                        username={props.data.username}
+                    />
+                </div>
+                <ProfileBlockTop
                     data={props.data}
                     isMe={isMe}
                     serverRefresh={props.serverRefresh}
@@ -26,7 +32,7 @@ export default function Profile(props: Props) {
     );
 }
 
-function ProfileBlockCenter({
+function ProfileBlockTop({
     data,
     isMe,
     serverRefresh,

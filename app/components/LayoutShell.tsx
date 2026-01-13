@@ -3,12 +3,12 @@
 import useLayoutData from "@/hooks/useLayoutData";
 import { Me } from "@/types/Me";
 import { ReactNode, useCallback, useEffect, useState } from "react";
-import Header from "../_share/components/Header";
 import useScrollToggle from "../_share/hooks/useScrollToggle";
 import { LayoutUIProvider } from "../_share/provider/LayoutUI";
 import { LayoutUI } from "../_share/types/provider";
 import { LoadingScreen } from "../_share/UI/LoadingScreen";
 import AsideMenu from "./AsideMenu";
+import Header from "./Header";
 import Menubar from "./Menubar";
 
 type Props = {
@@ -85,11 +85,11 @@ export default function LayoutShell(props: Props) {
                     ></div>
                     <AsideMenu user={effectiveMe} hamburger={hamburger} />
                     <div className="w-full h-full bg-orange-100 border-r border-orange-200 flex flex-col min-h-0">
-                        <div className="w-full h-full flex flex-col">
+                        <div className="w-full h-full flex flex-col relative">
                             <Header isDown={isDown} me={effectiveMe} />
 
                             <main
-                                className="no-scrollbar pb-16 md:pb-3 flex-1 overflow-y-auto min-h-0"
+                                className={`no-scrollbar pb-16 md:pb-0 flex-1 min-h-0 relative ${"overflow-y-auto"}`}
                                 ref={setMainRef}
                             >
                                 {props.children}

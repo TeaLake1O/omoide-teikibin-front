@@ -3,35 +3,32 @@ import GenericButton from "@/app/_share/components/GenericButton";
 import { useToast } from "@/app/_share/provider/Toast";
 import { Status } from "@/app/_share/types/status";
 import nextStatusMap from "@/app/_share/util/nextStatusMap";
-import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import friendRequest from "../../../../_share/api/friendRequest";
-import { UserPageData } from "../types/userPageData";
+import friendRequest from "../api/friendRequest";
 
 const SEND_MS = 3000;
 
-export default function ProfileBlockTop({
-    data,
+export default function FollowButton({
+    state,
     isMe,
+    username,
 }: {
-    data: UserPageData;
+    state: Status;
     isMe: boolean;
+    username: string;
 }) {
-    const [status, setStatus] = useState<Status>(data.status);
+    const [status, setStatus] = useState<Status>(state);
     const prevStatus = useRef<Status | null>(null);
 
     const timer = useRef<number | null>(null);
 
     const isSend = useRef(false);
 
-    const username = usePathname().slice("/user/".length);
-
     const { showToast } = useToast();
 
     const optimisticSend = useCallback(
         (isPositive: boolean) => {
             if (isSend.current) return;
-            showToast("フレンド関係を更新しました。", "text-black");
             isSend.current = true;
             setStatus((prev) => {
                 prevStatus.current = prev;
@@ -42,7 +39,7 @@ export default function ProfileBlockTop({
                 if (res.status === "success" && res.resData !== null) {
                     setStatus(res.resData.status);
                 } else {
-                    showToast("エラーがが発生しました。", "text-black");
+                    showToast("エラーが発生しました。", "text-black");
                     //prevStatusはここではnullにはなり得ないけどTSCの警告止めるため型アサーションを使う
                     setStatus(prevStatus.current as Status);
                 }
@@ -83,12 +80,12 @@ export default function ProfileBlockTop({
     switch (status) {
         case "friend":
             return (
-                <div className="flex items-center justify-between p-3 pb-0">
-                    <span className="text-amber-800 text-sm">
-                        フレンドのユーザー
+                <div className="flex items-center justify-between mr-3">
+                    <span className="text-amber-800 text-sm mr-3">
+                        フレンド
                     </span>
                     <GenericButton
-                        name="フレンド関係を解消"
+                        name="フレンドを削除"
                         height="h-6"
                         textSize="text-sm"
                         handleOnclick={() => callback(false)}
@@ -97,9 +94,9 @@ export default function ProfileBlockTop({
             );
         case "incoming":
             return (
-                <div className="flex items-center justify-between p-3 pb-0">
-                    <span className="text-amber-800 text-sm">
-                        フレンド申請がきています
+                <div className="flex items-center justify-between mr-3">
+                    <span className="text-amber-800 text-sm mr-2">
+                        申請がきています
                     </span>
                     <div className="flex gap-3">
                         <GenericButton
@@ -119,12 +116,12 @@ export default function ProfileBlockTop({
             );
         case "outgoing":
             return (
-                <div className="flex items-center justify-between p-3 pb-0">
+                <div className="flex items-center justify-between gap-2 mr-3">
                     <span className="text-amber-800 text-sm">
                         フレンド申請中
                     </span>
                     <GenericButton
-                        name="申請をキャンセル"
+                        name="キャンセル"
                         height="h-6"
                         textSize="text-sm"
                         handleOnclick={() => callback(false)}
@@ -133,7 +130,7 @@ export default function ProfileBlockTop({
             );
         case "none":
             return (
-                <div className="flex items-center flex-row-reverse p-3 pb-0">
+                <div className="flex items-center flex-row-reverse mr-3">
                     <GenericButton
                         name="フレンド申請"
                         height="h-6"

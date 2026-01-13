@@ -8,6 +8,7 @@ import { FRONT_URL } from "@/config";
 import Link from "next/link";
 import useQueryData from "../hooks/useQueryData";
 import { QueryResult } from "../types/fetch";
+import FollowButton from "./FollowButton";
 
 export type PostContentProps = {
     posts: UserPost[];
@@ -28,8 +29,8 @@ export default function PostContent(props: PostContentProps) {
                     <div
                         className={`w-full border-orange-300 border-b-0 
                 bg-orange-100 flex flex-col min-h-38 p-3 h-auto ${
-                    isLast && "mb-16 md:mb-1"
-                } ${isFirst ? "border-none" : "border-t"}`}
+                    isFirst ? "border-none" : "border-t"
+                }`}
                         key={post.post_id}
                     >
                         <div className="flex flex-row items-center mb-3">
@@ -41,11 +42,11 @@ export default function PostContent(props: PostContentProps) {
                                     iconUrl={post.post_user.icon_url}
                                 />
                             </Link>
-                            <div className="flex gap-5 ml-7 justify-between w-full">
+                            <div className="flex gap-5 ml-7 justify-between items-center w-full">
                                 <Link
                                     href={`${FRONT_URL}/user/${post_user.username}`}
                                 >
-                                    <span className="hover:border-b text-lg">
+                                    <span className="hover:border-b text-lg font-semibold">
                                         {post.post_user.nickname ??
                                             post.post_user.username}
                                     </span>
@@ -70,9 +71,18 @@ export default function PostContent(props: PostContentProps) {
                                 </div>
                             </div>
                         )}
-                        <span className="text-xs text-gray-500 mt-auto ml-auto">
-                            {formatDateTime(post.created_at, true)}
-                        </span>
+                        <div className="flex justify-between">
+                            <div className="justify-center">
+                                <FollowButton
+                                    state={post.post_user.status}
+                                    isMe={post.post_user.status === "me"}
+                                    username={post.post_user.username}
+                                />
+                            </div>
+                            <span className="text-xs text-gray-500 mt-auto ml-auto">
+                                {formatDateTime(post.created_at, true)}
+                            </span>
+                        </div>
                     </div>
                 );
             })}

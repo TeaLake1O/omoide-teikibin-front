@@ -2,9 +2,11 @@
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import { Me } from "@/types/Me";
 import Link from "next/link";
-import getPageName from "../util/getPageName";
-import IconImage from "./IconImage";
-import UserIcon from "./UserIconImage";
+import { usePathname, useRouter } from "next/navigation";
+import IconImage from "../_share/components/IconImage";
+import UserIcon from "../_share/components/UserIconImage";
+import BackButton from "../_share/UI/BackButton";
+import getPageName from "../_share/util/getPageName";
 
 type Props = {
     isDown: boolean;
@@ -15,6 +17,15 @@ export default function Header(props: Props) {
     const { toggleHamburger } = useLayoutUI();
 
     const { optimisticUrl } = useLayoutUI();
+    const path = usePathname();
+    const hasBuckButton = path.startsWith("/user/") || path.startsWith("/post");
+
+    const router = useRouter();
+
+    const back = () => {
+        console.log(window.history.state);
+        router.back();
+    };
 
     return (
         <header
@@ -27,13 +38,18 @@ export default function Header(props: Props) {
             }
         >
             <div className="h-12 aspect-square rounded-full flex items-center justify-center md:invisible">
-                <button
-                    type="button"
-                    onClick={toggleHamburger}
-                    className="h-[90%] aspect-square flex items-center justify-center duration-200 active:scale-96 md:pointer-events-none"
-                >
-                    <UserIcon iconUrl={props.me?.icon_url ?? null} />
-                </button>
+                {!hasBuckButton ? (
+                    <button
+                        type="button"
+                        onClick={toggleHamburger}
+                        className={`h-[90%] aspect-square flex items-center justify-center 
+                        duration-200 active:scale-96 md:pointer-events-none`}
+                    >
+                        <UserIcon iconUrl={props.me?.icon_url ?? null} />
+                    </button>
+                ) : (
+                    <BackButton handleOnclick={back} />
+                )}
             </div>
             <div className="flex-1 flex justify-center">
                 <h1 className="font-medium font-sans text-[1.27rem] text-amber-800">
