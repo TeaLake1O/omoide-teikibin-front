@@ -7,7 +7,6 @@ import { serverFetch } from "./servers/serverFetch";
 
 export default async function RootLayout({
     children,
-    modal,
 }: {
     children: React.ReactNode;
     modal: React.ReactNode;
