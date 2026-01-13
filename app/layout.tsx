@@ -9,7 +9,6 @@ export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode;
-    modal: React.ReactNode;
 }) {
     const data: Me | null = await serverFetch({
         url: `${DJANGO_URL}/accounts/api/layout`,
