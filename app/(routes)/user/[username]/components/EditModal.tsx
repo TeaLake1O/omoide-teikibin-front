@@ -133,7 +133,7 @@ export default function EditButton(props: Props) {
                     ref={formRef}
                     onSubmit={(e) => e.preventDefault()}
                 >
-                    <h2 className="text-[1.3rem] text-amber-800 text-center">
+                    <h2 className="text-[1.3rem] text-amber-800 text-center md:mt-1 mt-16">
                         プロフィールの変更
                     </h2>
                     <EditButtonFormContent
