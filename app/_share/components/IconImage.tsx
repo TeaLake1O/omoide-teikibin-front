@@ -25,11 +25,12 @@ export default function ImageIcon(props: Props) {
                 alt={alt}
                 width={64}
                 height={64}
+                sizes={""}
                 draggable={false}
                 className={`absolute pointer-events-none select-none absolute-center ${
                     isLoaded ? "opacity-100" : "opacity-0"
                 }`}
-                onLoadingComplete={() => setLoadedSrc(src)}
+                onLoad={() => setLoadedSrc(src)}
             />
         </div>
     );

@@ -3,7 +3,7 @@
 import useGroupsData from "@/hooks/useGroupsData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import createPost from "../_share/api/createPost";
 import usePickImage from "../_share/hooks/usePickImage";
@@ -23,9 +23,14 @@ export default function PostModal() {
 
     const router = useRouter();
 
+    const isPosted = useRef(false);
+
     const submit = async () => {
+        if (isPosted.current) return;
+
         if (!PostGroup) return showToast("グループを選択してください");
         if (!file) return showToast("画像が選択されていません");
+        isPosted.current = true;
 
         showToast("投稿中...");
 
@@ -35,31 +40,17 @@ export default function PostModal() {
         fd.append("post_images", file);
         if (PostText) fd.append("post_content", PostText);
 
-        try {
-            const res = await createPost(fd);
-            showToast(
-                res.status === "success"
-                    ? "投稿しました"
-                    : "エラーが発生しました",
-                "text-black"
-            );
-        } catch (e: unknown) {
-            console.error("createPost failed:", e);
-            showToast(`投稿失敗: ${String(e)}`, "text-black");
-        }
-
-        /*const res = await createPost(fd);
+        const res = await createPost(fd);
 
         router.refresh();
 
         close();
 
-        
-
         showToast(
             res.status === "success" ? "投稿しました" : "エラーが発生しました",
             "text-black"
-        );*/
+        );
+        isPosted.current = false;
     };
 
     const close = () => {
