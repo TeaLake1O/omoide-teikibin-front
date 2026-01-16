@@ -3,7 +3,7 @@ import { Status } from "./status";
 export type UserInf = {
     id: number;
     username: string;
-    icon_url: string;
+    icon_url: string | null;
     nickname: string | null;
     status: Status;
 };

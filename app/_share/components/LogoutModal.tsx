@@ -20,7 +20,7 @@ export default function LogOut() {
                     //router.push(LANDING_PAGE_URL);
                 }}
             >
-                <span className="text-red-500 hover:text-red-300 active:text-red-300 transition-colors duration-200">
+                <span className="text-red-500 hover:text-red-300 active:text-red-300 transition-colors duration-200 ">
                     ログアウト
                 </span>
             </button>
@@ -34,7 +34,7 @@ export default function LogOut() {
                             className="w-64 h-50 bg-orange-100 md:w-90 md:h-60 rounded-2xl flex flex-col items-center"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <span className="pt-15 font-bold text-lg text-black">
+                            <span className="pt-15 text-lg text-black">
                                 ログアウトしますか？
                             </span>
                             <div className="pt-12 md:pt-16 flex items-center gap-3">
@@ -46,7 +46,7 @@ export default function LogOut() {
                                         router.push(LANDING_PAGE_URL);
                                     }}
                                 >
-                                    <span className="text-white font-bold leading-none">
+                                    <span className="text-white leading-none">
                                         ログアウト
                                     </span>
                                 </button>
@@ -55,7 +55,7 @@ export default function LogOut() {
                                     className="h-8 w-24 border bg-white rounded-4xl hover:bg-stone-200 active:scale-[95%] duration-150"
                                     onClick={() => setOpenModal(false)}
                                 >
-                                    <span className="text-black font-sans font-bold leading-none">
+                                    <span className="text-black font-sans leading-none">
                                         キャンセル
                                     </span>
                                 </button>

@@ -1,8 +1,9 @@
 import FollowButton from "@/app/_share/components/FollowButton";
-import GenericLink from "@/app/_share/components/GenericLink";
 import ModalImage from "@/app/_share/components/ModalImage";
+import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicImageUrl";
+import GenericLink from "@/app/_share/UI/GenericLink";
 import { UserPageData } from "../types/userPageData";
-import EditButton from "./EditButton";
+import EditModal from "./EditModal";
 
 type Props = {
     data: UserPageData;
@@ -46,7 +47,7 @@ function ProfileBlockTop({
             <div className="w-full h-16 grid grid-cols-[1fr_auto_1fr] items-center">
                 <div className="h-16 aspect-square rounded-full md:ml-3">
                     <ModalImage
-                        iconUrl={data.icon_url}
+                        src={data.icon_url ?? UNKNOWN_USER_ICON_URL}
                         rounded="rounded-full"
                     />
                 </div>
@@ -60,7 +61,7 @@ function ProfileBlockTop({
                 </div>
                 <div className="flex flex-row-reverse items-center">
                     {data.status === "me" && (
-                        <EditButton
+                        <EditModal
                             iconUrl={data.icon_url}
                             profileText={data.user_profile}
                             nickname={data.nickname}

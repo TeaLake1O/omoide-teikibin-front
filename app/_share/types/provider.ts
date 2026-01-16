@@ -8,3 +8,9 @@ export type LayoutUI = {
     optimisticUrl: string | null;
     setOptimisticUrl: Dispatch<React.SetStateAction<string | null>>;
 };
+
+export type PostModal = {
+    closePostModal: () => void;
+    openPostModal: () => void;
+    isOpenPostModal: boolean;
+};

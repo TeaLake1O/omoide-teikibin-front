@@ -1,14 +1,15 @@
 "use client";
 
-import GenericButton from "@/app/_share/components/GenericButton";
+import GenericButton from "@/app/_share/UI/GenericButton";
 import MountedModal from "@/app/_share/components/MountedModal";
 import UserIconImage from "@/app/_share/components/UserIconImage";
+import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicImageUrl";
+import usePickImage from "@/app/_share/hooks/usePickImage";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import { useToast } from "@/app/_share/provider/Toast";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import useChangeIconImage from "../hooks/useChangeIconImage";
-import updateProfile from "../util/updateProfile";
+import updateProfile from "../api/updateProfile";
 
 type Props = {
     iconUrl: string | null;
@@ -31,7 +32,7 @@ export default function EditButton(props: Props) {
 
     const { refresh: layoutRefresh } = useLayoutUI();
 
-    const { url, fileOpen, inputProps, file, imageReset } = useChangeIconImage(
+    const { url, fileOpen, inputProps, file, imageReset } = usePickImage(
         props.iconUrl ? props.iconUrl : "/accountsicon.png"
     );
 
@@ -121,7 +122,7 @@ export default function EditButton(props: Props) {
                 name="編集"
                 height="h-7"
                 width="w-16"
-                textSize="text-lg"
+                textSize="text-sm"
                 hidden={!props.isMe}
                 handleOnclick={open}
             />
@@ -169,7 +170,7 @@ export default function EditButton(props: Props) {
 }
 
 type EditButtonFormContentProps = {
-    url: string | null;
+    url: string | undefined;
     inputProps: React.InputHTMLAttributes<HTMLInputElement> & {
         ref: React.Ref<HTMLInputElement>;
     };
@@ -203,14 +204,14 @@ function EditButtonFormContent(childProps: EditButtonFormContentProps) {
             <div className="w-[90%] mb-4">
                 <div className="flex items-center mt-2 justify-between">
                     <div className="h-14 md:h-20 aspect-square rounded-full">
-                        <UserIconImage iconUrl={url} />
+                        <UserIconImage iconUrl={url ?? UNKNOWN_USER_ICON_URL} />
                     </div>
                     <input {...inputProps} />
                     <div>
                         <GenericButton
                             name="アイコンを変更"
                             height="h-7"
-                            textSize="text-lg"
+                            textSize="text-sm"
                             handleOnclick={fileOpen}
                         />
                     </div>

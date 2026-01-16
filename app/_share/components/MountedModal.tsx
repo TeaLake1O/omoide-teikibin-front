@@ -10,6 +10,7 @@ type Props = {
 };
 
 export default function MountedModal(props: Props) {
+    console.log("click");
     const root =
         typeof document !== "undefined"
             ? document.getElementById("modal-root")

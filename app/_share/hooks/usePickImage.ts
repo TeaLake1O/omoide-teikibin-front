@@ -2,14 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function useChangeIconImage(initialUrl: string) {
+export default function usePickImage(initialUrl?: string) {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [url, setUrl] = useState(initialUrl);
     const [filename, setFilename] = useState("");
     const [file, setFile] = useState<File | null>(null);
 
     useEffect(() => {
-        if (!url.startsWith("blob:")) return;
+        if (!url || !url.startsWith("blob:")) return;
         return () => URL.revokeObjectURL(url);
     }, [url]);
 
@@ -38,7 +38,10 @@ export default function useChangeIconImage(initialUrl: string) {
         style: { display: "none" } as const,
     };
 
-    const imageReset = () => setUrl(initialUrl);
+    const imageReset = () => {
+        setUrl(initialUrl ? initialUrl : "");
+        setFile(null);
+    };
 
     return { url, filename, file, fileOpen, inputProps, imageReset };
 }

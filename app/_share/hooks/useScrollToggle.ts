@@ -12,7 +12,7 @@ type Props = {
 export default function useScrollToggle(props: Props) {
     const isMdUp = useIsMdUp();
 
-    const { limit = 80, jitter = 5 } = props;
+    const { limit = 40, jitter = 5 } = props;
 
     const [isDown, setIsDown] = useState(false);
 

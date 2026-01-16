@@ -95,6 +95,13 @@ export const postJson = async <T>(
 ): Promise<FetchResult<T>> => {
     return await request<T>(url, { method: "POST", body, headers });
 };
+export const postForm = async <T>(
+    url: string,
+    data: FormData,
+    headers?: Record<string, string>
+): Promise<FetchResult<T>> => {
+    return await request<T>(url, { method: "POST", formData: data, headers });
+};
 
 export const patchJson = async <T>(
     url: string,

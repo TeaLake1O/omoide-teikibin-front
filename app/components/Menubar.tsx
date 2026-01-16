@@ -4,11 +4,13 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import ImageIcon from "../_share/components/IconImage";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
+import { usePostModal } from "../_share/provider/PostModal";
 
 export default function Menubar() {
     const path = usePathname();
 
     const { optimisticUrl, setOptimisticUrl } = useLayoutUI();
+    const { openPostModal } = usePostModal();
 
     useEffect(() => {
         setOptimisticUrl(path);
@@ -42,29 +44,52 @@ export default function Menubar() {
     ];
     return (
         <nav className="grid grid-cols-5 w-full h-full">
-            {items.map((item) => (
-                <Link
-                    key={item.alt}
-                    className={`w-full h-full flex items-center justify-center 
+            {items.map((item) => {
+                if (item.alt === "post") {
+                    return (
+                        <button
+                            key={"post"}
+                            className={`w-full h-full flex items-center justify-center group`}
+                            onContextMenu={(e) => e.preventDefault()}
+                            onClick={openPostModal}
+                        >
+                            <div
+                                className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
+                                    transition-colors flex items-center justify-center"
+                            >
+                                <ImageIcon
+                                    src={item.src}
+                                    alt={item.alt}
+                                    scale={item.scale}
+                                />
+                            </div>
+                        </button>
+                    );
+                } else
+                    return (
+                        <Link
+                            key={item.alt}
+                            className={`w-full h-full flex items-center justify-center 
                         group ${
                             optimisticUrl === item.href ? "bg-orange-200" : ""
                         }`}
-                    onContextMenu={(e) => e.preventDefault()}
-                    href={item.href}
-                    onClick={() => setOptimisticUrl(item.href)}
-                >
-                    <div
-                        className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
+                            onContextMenu={(e) => e.preventDefault()}
+                            href={item.href}
+                            onClick={() => setOptimisticUrl(item.href)}
+                        >
+                            <div
+                                className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
                     transition-colors flex items-center justify-center"
-                    >
-                        <ImageIcon
-                            src={item.src}
-                            alt={item.alt}
-                            scale={item.scale}
-                        />
-                    </div>
-                </Link>
-            ))}
+                            >
+                                <ImageIcon
+                                    src={item.src}
+                                    alt={item.alt}
+                                    scale={item.scale}
+                                />
+                            </div>
+                        </Link>
+                    );
+            })}
             <button
                 className={`w-full h-full flex items-center justify-center 
                         group ${

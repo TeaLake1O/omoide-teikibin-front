@@ -6,6 +6,7 @@ import ImagePlaceHolder from "../UI/ImagePlaceHolder";
 
 type Props = {
     iconUrl: string | null;
+    isOverlay?: boolean;
 };
 //キャッシュを持ってstateのリセットを防ぐ
 //const loadedSrcSet = new Set<string>();
@@ -20,7 +21,17 @@ export default function UserIconImage(props: Props) {
     }, [src]);*/
 
     return (
-        <div className="relative flex justify-center items-center w-full h-full overflow-hidden rounded-full bg-white">
+        <div
+            className="relative flex justify-center items-center w-full 
+            h-full overflow-hidden rounded-full bg-white"
+        >
+            <div
+                className={
+                    props.isOverlay
+                        ? ` hover:bg-black/20 active:bg-black/20 absolute inset-0 transition-colors duration-200`
+                        : " hidden"
+                }
+            />
             {!src || !loaded ? <ImagePlaceHolder /> : null}
             {src ? (
                 <Image
@@ -30,7 +41,7 @@ export default function UserIconImage(props: Props) {
                     alt="icon"
                     width={128}
                     height={128}
-                    className={`object-cover ${
+                    className={`object-cover group-hover:bg-black/20 ${
                         loaded ? "opacity-100" : "opacity-0"
                     }`}
                     onLoad={() => {

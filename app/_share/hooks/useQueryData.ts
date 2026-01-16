@@ -2,25 +2,27 @@
 
 import { LOGIN_URL } from "@/config";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { ApiError, fetcherOrThrow } from "../api/requestTanstack";
 import { QueryResultTanstack } from "../types/fetch";
 
-export default function useQueryData<T>(url: string): QueryResultTanstack<T> {
-    const router = useRouter();
+const minute = 60_000;
 
+export default function useQueryData<T>(
+    url: string,
+    enabled: boolean
+): QueryResultTanstack<T> {
     const q = useQuery<T, ApiError>({
         queryKey: ["api", url],
         queryFn: () => fetcherOrThrow<T>(url),
-        retry: 0,
-        staleTime: Infinity,
+        retry: 3,
+        staleTime: minute,
         refetchOnWindowFocus: false,
+        enabled: enabled,
+        gcTime: 5 * minute,
     });
 
-    const isRedirecting =
-        q.isError &&
-        (q.error?.status === "noPermission" || q.error?.status === "notFound");
+    const isRedirecting = q.isError && q.error?.status === "noPermission";
 
     useEffect(() => {
         if (!q.isError) return;
@@ -28,10 +30,7 @@ export default function useQueryData<T>(url: string): QueryResultTanstack<T> {
             window.location.replace(LOGIN_URL);
             return;
         }
-        if (q.error?.status === "notFound") {
-            router.replace("/not-found");
-        }
-    }, [q.isError, q.error, router]);
+    }, [q.isError, q.error]);
 
     if (q.isPending || isRedirecting) {
         return {

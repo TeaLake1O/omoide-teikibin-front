@@ -1,5 +1,5 @@
 "use client";
-import GenericButton from "@/app/_share/components/GenericButton";
+import GenericButton from "@/app/_share/UI/GenericButton";
 import { useToast } from "@/app/_share/provider/Toast";
 import { Status } from "@/app/_share/types/status";
 import nextStatusMap from "@/app/_share/util/nextStatusMap";

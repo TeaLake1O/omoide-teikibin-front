@@ -4,11 +4,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Me } from "../../types/Me";
-import IconImage from "../_share/components/IconImage";
-import LogoutButton from "../_share/components/LogoutButton";
+import {
+    default as IconImage,
+    default as ImageIcon,
+} from "../_share/components/IconImage";
+import LogoutButton from "../_share/components/LogoutModal";
 import UserIcon from "../_share/components/UserIconImage";
 import { useIsMdUp } from "../_share/hooks/useIsMdUp";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
+import { usePostModal } from "../_share/provider/PostModal";
+import PostModal from "./PostModal";
 
 type Props = {
     user: Me | null;
@@ -65,6 +70,7 @@ export default function AsideMenu(props: Props) {
     const path = usePathname();
 
     const { optimisticUrl, setOptimisticUrl, toggleHamburger } = useLayoutUI();
+    const { openPostModal } = usePostModal();
 
     const isMdUp = useIsMdUp();
 
@@ -110,21 +116,12 @@ export default function AsideMenu(props: Props) {
                     </div>
                 </div>
                 <div className="h-20 w-full ">
-                    <Link
-                        href="/post"
-                        className={`h-full p-2 flex items-center md:hover:bg-black/15 active:bg-black/15 ${
-                            optimisticUrl === "/post" ||
-                            (path === "/post" && optimisticUrl === null)
-                                ? "md:bg-black/10"
-                                : ""
-                        }`}
-                        onClick={() => {
-                            setOptimisticUrl("/post");
-                            toggleHamburger();
-                        }}
+                    <button
+                        className="h-full w-full p-2 flex items-center md:hover:bg-black/15 active:bg-black/15"
+                        onClick={openPostModal}
                     >
                         <div className="w-full h-full flex flex-row-reverse items-center">
-                            <IconImage
+                            <ImageIcon
                                 src="/img/posticon.png"
                                 alt="post"
                                 scale="h-[60%]"
@@ -133,7 +130,7 @@ export default function AsideMenu(props: Props) {
                                 投稿
                             </span>
                         </div>
-                    </Link>
+                    </button>
                 </div>
                 <nav className="flex flex-col">
                     {menuNav.map((menu, i) => {
@@ -184,6 +181,7 @@ export default function AsideMenu(props: Props) {
                     <LogoutButton />
                 </div>
             </div>
+            <PostModal />
         </aside>
     );
 }

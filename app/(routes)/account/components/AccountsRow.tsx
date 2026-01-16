@@ -1,6 +1,6 @@
 "use client";
 
-import GenericButton from "@/app/_share/components/GenericButton";
+import GenericButton from "@/app/_share/UI/GenericButton";
 import { DJANGO_URL } from "@/config";
 import submit from "../util/AccountForm";
 import { ActionName } from "./AccountInfo";

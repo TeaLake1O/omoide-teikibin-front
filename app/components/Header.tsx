@@ -2,7 +2,7 @@
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import { Me } from "@/types/Me";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import IconImage from "../_share/components/IconImage";
 import UserIcon from "../_share/components/UserIconImage";
 import BackButton from "../_share/UI/BackButton";
@@ -13,18 +13,19 @@ type Props = {
     me: Me | null;
 };
 
+const backButtonUrl = ["/user/"];
+
 export default function Header(props: Props) {
     const { toggleHamburger } = useLayoutUI();
 
     const { optimisticUrl } = useLayoutUI();
     const path = usePathname();
-    const hasBuckButton = path.startsWith("/user/") || path.startsWith("/post");
+    const hasBackButton = backButtonUrl.some((url) => path.startsWith(url));
 
-    const router = useRouter();
+    //const router = useRouter();
 
     const back = () => {
-        console.log(window.history.state);
-        router.back();
+        window.history.back();
     };
 
     return (
@@ -37,18 +38,20 @@ export default function Header(props: Props) {
                 " md:h-16 md:opacity-100 md:border-b md:pointer-events-auto"
             }
         >
-            <div className="h-12 aspect-square rounded-full flex items-center justify-center md:invisible">
-                {!hasBuckButton ? (
+            <div className="h-12 aspect-square rounded-full flex items-center justify-center">
+                {!hasBackButton ? (
                     <button
                         type="button"
                         onClick={toggleHamburger}
                         className={`h-[90%] aspect-square flex items-center justify-center 
-                        duration-200 active:scale-96 md:pointer-events-none`}
+                        duration-200 active:scale-96 md:pointer-events-none md:invisible`}
                     >
                         <UserIcon iconUrl={props.me?.icon_url ?? null} />
                     </button>
                 ) : (
-                    <BackButton handleOnclick={back} />
+                    <div className="flex justify-center items-center h-[90%] aspect-square rounded-full hover:bg-black/20 transition-colors duration-300">
+                        <BackButton handleOnclick={back} />
+                    </div>
                 )}
             </div>
             <div className="flex-1 flex justify-center">

@@ -28,7 +28,7 @@ export default function GenericButton(props: Props) {
             <span
                 className={`${
                     props.textColor ? props.textColor : "text-black"
-                } text-xs text-center ${props.textSize}`}
+                } text-center ${props.textSize ? props.textSize : "text-xs"}`}
             >
                 {props.name}
             </span>
