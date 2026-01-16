@@ -45,7 +45,7 @@ export default function PostModal() {
             );
         } catch (e: unknown) {
             console.error("createPost failed:", e);
-            showToast(`投稿失敗: ${String(e?.message ?? e)}`, "text-black");
+            showToast(`投稿失敗: ${String(e)}`, "text-black");
         }
 
         /*const res = await createPost(fd);
