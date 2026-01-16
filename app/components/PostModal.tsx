@@ -35,16 +35,31 @@ export default function PostModal() {
         fd.append("post_images", file);
         if (PostText) fd.append("post_content", PostText);
 
-        const res = await createPost(fd);
+        try {
+            const res = await createPost(fd);
+            showToast(
+                res.status === "success"
+                    ? "投稿しました"
+                    : "エラーが発生しました",
+                "text-black"
+            );
+        } catch (e: unknown) {
+            console.error("createPost failed:", e);
+            showToast(`投稿失敗: ${String(e?.message ?? e)}`, "text-black");
+        }
+
+        /*const res = await createPost(fd);
 
         router.refresh();
 
         close();
 
+        
+
         showToast(
             res.status === "success" ? "投稿しました" : "エラーが発生しました",
             "text-black"
-        );
+        );*/
     };
 
     const close = () => {

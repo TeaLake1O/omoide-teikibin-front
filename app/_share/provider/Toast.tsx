@@ -62,8 +62,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             {children}
             <div
                 className={`fixed top-0 h-8 border mt-1 left-1/2 -translate-x-1/2 rounded-md 
-                    flex justify-center items-center bg-orange-100 duration-500 shadow-xl ring-1 ring-amber-800
-                    z-[9999] ${
+                    justify-center items-center bg-orange-100 duration-500 shadow-xl ring-1 ring-amber-800
+                    z-[9999] inline-flex  whitespace-nowrap ${
                         isShow && message !== null
                             ? " opacity-100"
                             : " opacity-0"
