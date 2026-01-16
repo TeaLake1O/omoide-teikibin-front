@@ -15,7 +15,7 @@ import GenericButton from "../_share/UI/GenericButton";
 export default function PostModal() {
     const { isOpenPostModal, closePostModal } = usePostModal();
     const res = useGroupsData(isOpenPostModal);
-    const { url, fileOpen, inputProps, file, imageReset } = usePickImage();
+    const { url, inputProps, file, imageReset } = usePickImage();
     const { showToast } = useToast();
 
     const [PostText, setPostText] = useState("");
@@ -26,6 +26,8 @@ export default function PostModal() {
     const submit = async () => {
         if (!PostGroup) return showToast("グループを選択してください");
         if (!file) return showToast("画像が選択されていません");
+
+        showToast("投稿中...");
 
         const fd = new FormData();
 
