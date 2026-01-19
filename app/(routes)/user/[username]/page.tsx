@@ -21,8 +21,7 @@ export default async function UserPage({
     });
     const serverRefresh = refreshServerFetch.bind(null, tag);
 
-    const limit = 20;
-    const userPageURL = `${DJANGO_URL}/post/api/mypage/${username}?limit=${limit}`;
+    const userPageURL = `${DJANGO_URL}/post/api/mypage/${username}`;
     const initialPost = await serverFetch<UserPost[]>({
         url: userPageURL,
         tag: tag,
@@ -35,7 +34,7 @@ export default async function UserPage({
             <PostContent
                 url={userPageURL}
                 posts={initialPost}
-                key={API_CACHE_KEYS.userPagePost}
+                apiKey={API_CACHE_KEYS.userPagePost}
             />
         </div>
     );

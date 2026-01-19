@@ -17,14 +17,21 @@ import FollowButton from "./FollowButton";
 export type PostContentProps = {
     posts: UserPost[];
     url: string;
-    key: ApiCacheKeys;
+    apiKey: ApiCacheKeys;
 };
 
 export default function PostContent(props: PostContentProps) {
-    const res = usePost(props.url, props.posts, props.key);
+    const limit = 2;
+
+    const res = usePost(props.url, props.posts, props.apiKey, limit);
 
     const posts = res.data?.pages.flat() ?? [];
+    const newest = res.data?.pages?.[0]?.[0]?.created_at;
+
+    const latest = useNewPost(props.url, newest ?? "", limit);
+
     if (!posts) return null;
+
     return (
         <>
             {posts.map((post, index) => {
@@ -112,7 +119,7 @@ export default function PostContent(props: PostContentProps) {
     );
 }
 
-function useAfterPost(
+function useNewPost(
     url: string,
     time: string,
     limit: number = 20
@@ -122,22 +129,11 @@ function useAfterPost(
         true
     );
 }
-function useBreforePost(
-    url: string,
-    time: string,
-    limit: number = 20
-): QueryResultTanstack<UserPost[]> {
-    return useQueryData<UserPost[]>(
-        `${url}?limit=${limit}&before=${time}`,
-        true
-    );
-}
-
 function usePost(
     url: string,
     initialPosts: UserPost[],
     key: ApiCacheKeys,
-    limit: number = 2
+    limit: number = 20
 ): InfiniteResultTanstack<UserPost[]> {
     const InitialData: InfiniteData<UserPost[]> = {
         pages: [initialPosts],
