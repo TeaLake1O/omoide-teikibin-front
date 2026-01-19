@@ -16,7 +16,6 @@ export default function useQueryDataSwr<T>(url: string): QueryResult<T> {
     const isLoadingObj = {
         data: null,
         isError: null,
-        message: null,
         status: null,
         isLoading: true,
         refresh: () => mutate(),
@@ -44,7 +43,6 @@ export default function useQueryDataSwr<T>(url: string): QueryResult<T> {
         return {
             data: null,
             isError: true,
-            message: data?.message || "エラーが発生しました。",
             status: data?.status || "error",
             isLoading: false,
             refresh: () => mutate(),
@@ -53,7 +51,6 @@ export default function useQueryDataSwr<T>(url: string): QueryResult<T> {
     return {
         data: data.resData,
         isError: false,
-        message: data.message,
         status: data.status,
         isLoading: false,
         refresh: () => mutate(),
