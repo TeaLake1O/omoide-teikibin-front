@@ -23,7 +23,7 @@ export default function ModalImage(props: Props) {
     if (!props.src) return;
     return (
         <div
-            className={`flex justify-center items-center w-full h-full overflow-hidden bg-white relative ${
+            className={`flex justify-center items-center w-full h-full overflow-hidden bg-gray-200 relative ${
                 props.rounded ? props.rounded : "rounded-none"
             }`}
         >

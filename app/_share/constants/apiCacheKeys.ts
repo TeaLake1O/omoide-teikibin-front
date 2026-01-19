@@ -1,6 +1,8 @@
 export const API_CACHE_KEYS = {
-    homePost: "homePost",
-    userPagePost: "userPagePost",
+    homePost: () => ["homePost"] as const,
+    userPagePost: (username: string) => ["userPagePost", username] as const,
 } as const;
 
-export type ApiCacheKeys = keyof typeof API_CACHE_KEYS;
+export type ApiCacheKeys = ReturnType<
+    (typeof API_CACHE_KEYS)[keyof typeof API_CACHE_KEYS]
+>;

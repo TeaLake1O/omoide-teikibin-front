@@ -120,7 +120,7 @@ export default function AsideMenu(props: Props) {
                     >
                         <div className="w-full h-full flex flex-row-reverse items-center">
                             <div className="h-[80%] flex justify-center items-center">
-                                <PostButton />
+                                <PostButton isAside />
                             </div>
                             <span className="w-full flex justify-center text-2xl font-bold text-amber-800">
                                 投稿

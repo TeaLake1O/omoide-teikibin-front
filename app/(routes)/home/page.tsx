@@ -14,7 +14,7 @@ export default async function Home() {
         <PostContent
             url={`${DJANGO_URL}/post/api/home`}
             posts={posts}
-            apiKey={API_CACHE_KEYS.homePost}
+            apiKey={API_CACHE_KEYS.homePost()}
         />
     );
 }

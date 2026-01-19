@@ -38,7 +38,7 @@ export default function PostContent(props: PostContentProps) {
         const newPosts = latest.data;
         if (!newPosts || newPosts.length === 0) return;
 
-        qc.setQueryData<InfiniteData<UserPost[]>>([props.apiKey], (old) => {
+        qc.setQueryData<InfiniteData<UserPost[]>>(props.apiKey, (old) => {
             if (!old) return old;
 
             const exist = new Set(old.pages.flat().map((p) => p.post_id));
@@ -90,7 +90,7 @@ export default function PostContent(props: PostContentProps) {
 
         observer.observe(el);
         return () => observer.disconnect();
-    }, [hasNext, isFetchingNext, fetchNext, posts.length]);
+    }, [hasNext, isFetchingNext, fetchNext, posts.length, isNext]);
 
     if (!posts) return null;
 
