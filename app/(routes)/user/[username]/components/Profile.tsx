@@ -1,6 +1,6 @@
 import FollowButton from "@/app/_share/components/FollowButton";
 import ModalImage from "@/app/_share/components/ModalImage";
-import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicImageUrl";
+import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrl";
 import GenericLink from "@/app/_share/UI/GenericLink";
 import { UserPageData } from "../types/userPageData";
 import EditModal from "./EditModal";

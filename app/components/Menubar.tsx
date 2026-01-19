@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import ImageIcon from "../_share/components/IconImage";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
 import { usePostModal } from "../_share/provider/PostModal";
+import PostButton from "../_share/UI/PostButton";
 
 export default function Menubar() {
     const path = usePathname();
@@ -30,7 +31,7 @@ export default function Menubar() {
             scale: "w-[70%]",
         },
         {
-            src: "/img/posticon.png",
+            src: "",
             alt: "post",
             href: "/post",
             scale: "w-[70%]",
@@ -57,11 +58,7 @@ export default function Menubar() {
                                 className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
                                     transition-colors flex items-center justify-center"
                             >
-                                <ImageIcon
-                                    src={item.src}
-                                    alt={item.alt}
-                                    scale={item.scale}
-                                />
+                                <PostButton />
                             </div>
                         </button>
                     );

@@ -1,8 +1,8 @@
 "use client";
 
 import useGroupsData from "@/hooks/useGroupsData";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import createPost from "../_share/api/createPost";
@@ -21,7 +21,7 @@ export default function PostModal() {
     const [PostText, setPostText] = useState("");
     const [PostGroup, setPostGroup] = useState("");
 
-    const router = useRouter();
+    const qc = useQueryClient();
 
     const isPosted = useRef(false);
 
@@ -42,7 +42,7 @@ export default function PostModal() {
 
         const res = await createPost(fd);
 
-        router.refresh();
+        qc.invalidateQueries();
 
         close();
 

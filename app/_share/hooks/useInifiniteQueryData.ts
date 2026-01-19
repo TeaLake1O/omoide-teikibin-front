@@ -1,30 +1,42 @@
 "use client";
 
 import { LOGIN_URL } from "@/config";
-import { useQuery } from "@tanstack/react-query";
+import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ApiError, fetcherOrThrow } from "../api/requestTanstack";
-import { QueryResultTanstack } from "../types/fetch";
+import { ApiCacheKeys } from "../constants/apiCacheKeys";
+import { InfiniteResultTanstack } from "../types/fetch";
 
 const minute = 60_000;
 
-export default function useQueryData<T>(
-    url: string,
-    enabled: boolean,
-    initialData?: T
-): QueryResultTanstack<T> {
-    const q = useQuery<T, ApiError>({
-        queryKey: ["api", url],
-        queryFn: () => fetcherOrThrow<T>(url),
+export default function useInfiniteQueryData<T>(args: {
+    rawUrl: string;
+    enabled: boolean;
+    queryKey: ApiCacheKeys;
+    initialData?: InfiniteData<T>;
+    getNextCursor: (lastPage: T) => string | undefined;
+}): InfiniteResultTanstack<T> {
+    const { rawUrl, enabled, queryKey, initialData, getNextCursor } = args;
+    const q = useInfiniteQuery<T, ApiError>({
+        queryKey: [queryKey] as const,
+        queryFn: ({ pageParam }) => {
+            const before = pageParam;
+            const url =
+                rawUrl +
+                (before ? "&before=" + encodeURIComponent(String(before)) : "");
+            return fetcherOrThrow<T>(url);
+        },
         retry: (failureCount, error) => {
             if (error.status === "noPermission") return false;
             return failureCount < 3;
         },
+        getNextPageParam: (lastPage) => getNextCursor(lastPage),
+        initialPageParam: null as string | null,
+        initialData: initialData,
         staleTime: minute,
         refetchOnWindowFocus: true,
-        enabled: enabled,
+        enabled,
         gcTime: 5 * minute,
-        initialData,
         refetchOnMount: initialData !== undefined ? false : true,
         refetchInterval: minute / 2,
         refetchIntervalInBackground: true,
@@ -49,6 +61,9 @@ export default function useQueryData<T>(
             isLoading: true,
             refresh: () => q.refetch(),
             error: null,
+            fetchNext: () => void q.fetchNextPage(),
+            hasNext: false,
+            isFetchingNext: false,
         };
     }
     if (q.isError) {
@@ -59,15 +74,21 @@ export default function useQueryData<T>(
             isLoading: false,
             refresh: () => q.refetch(),
             error: q.error,
+            fetchNext: () => void q.fetchNextPage(),
+            hasNext: false,
+            isFetchingNext: false,
         };
     }
 
     return {
-        data: q.data,
+        data: q.data ?? null,
         isError: false,
         status: "success",
         isLoading: false,
         refresh: () => q.refetch(),
         error: null,
+        fetchNext: () => void q.fetchNextPage(),
+        hasNext: !!q.hasNextPage,
+        isFetchingNext: q.isFetchingNextPage,
     };
 }

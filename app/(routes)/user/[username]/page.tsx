@@ -1,4 +1,5 @@
 import PostContent from "@/app/_share/components/PostContent";
+import { API_CACHE_KEYS } from "@/app/_share/constants/apiCacheKeys";
 import { UserPost } from "@/app/_share/types/userPost";
 import { refreshServerFetch } from "@/app/servers/action";
 import { serverFetch } from "@/app/servers/serverFetch";
@@ -31,7 +32,11 @@ export default async function UserPage({
     return (
         <div className="flex flex-col">
             <Profile data={data} serverRefresh={serverRefresh} />
-            <PostContent url={userPageURL} posts={initialPost} />
+            <PostContent
+                url={userPageURL}
+                posts={initialPost}
+                key={API_CACHE_KEYS.userPagePost}
+            />
         </div>
     );
 }

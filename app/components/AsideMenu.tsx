@@ -4,15 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Me } from "../../types/Me";
-import {
-    default as IconImage,
-    default as ImageIcon,
-} from "../_share/components/IconImage";
+import { default as IconImage } from "../_share/components/IconImage";
 import LogoutButton from "../_share/components/LogoutModal";
 import UserIcon from "../_share/components/UserIconImage";
 import { useIsMdUp } from "../_share/hooks/useIsMdUp";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
 import { usePostModal } from "../_share/provider/PostModal";
+import PostButton from "../_share/UI/PostButton";
 import PostModal from "./PostModal";
 
 type Props = {
@@ -121,11 +119,7 @@ export default function AsideMenu(props: Props) {
                         onClick={openPostModal}
                     >
                         <div className="w-full h-full flex flex-row-reverse items-center">
-                            <ImageIcon
-                                src="/img/posticon.png"
-                                alt="post"
-                                scale="h-[60%]"
-                            />
+                            <PostButton />
                             <span className="w-full flex justify-center text-2xl font-bold text-amber-800">
                                 投稿
                             </span>

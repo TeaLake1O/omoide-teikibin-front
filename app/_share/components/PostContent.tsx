@@ -5,18 +5,26 @@ import UserIconImage from "@/app/_share/components/UserIconImage";
 import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import { FRONT_URL } from "@/config";
+import { InfiniteData } from "@tanstack/react-query";
 import Link from "next/link";
-import { UNKNOWN_USER_ICON_URL } from "../constants/publicImageUrl";
+import { ApiCacheKeys } from "../constants/apiCacheKeys";
+import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrl";
+import useInfiniteQueryData from "../hooks/useInifiniteQueryData";
+import useQueryData from "../hooks/useQueryData";
+import { InfiniteResultTanstack, QueryResultTanstack } from "../types/fetch";
 import FollowButton from "./FollowButton";
 
 export type PostContentProps = {
     posts: UserPost[];
     url: string;
+    key: ApiCacheKeys;
 };
 
 export default function PostContent(props: PostContentProps) {
-    //const posts = useInitialPost(url);
-    const { posts, url } = props;
+    const res = usePost(props.url, props.posts, props.key);
+
+    const posts = res.data?.pages.flat() ?? [];
+    if (!posts) return null;
     return (
         <>
             {posts.map((post, index) => {
@@ -96,31 +104,54 @@ export default function PostContent(props: PostContentProps) {
                                 {formatDateTime(post.created_at, true)}
                             </span>
                         </div>
+                        <button onClick={res.fetchNext}>更新</button>
                     </div>
                 );
             })}
         </>
     );
 }
-/*
+
 function useAfterPost(
     url: string,
     time: string,
     limit: number = 20
-): QueryResult<UserPost[]> {
-    return useQueryData<UserPost[]>(`${url}?limit=${limit}&after=${time}`);
+): QueryResultTanstack<UserPost[]> {
+    return useQueryData<UserPost[]>(
+        `${url}?limit=${limit}&after=${time}`,
+        true
+    );
 }
 function useBreforePost(
     url: string,
     time: string,
     limit: number = 20
-): QueryResult<UserPost[]> {
-    return useQueryData<UserPost[]>(`${url}?limit=${limit}&before=${time}`);
+): QueryResultTanstack<UserPost[]> {
+    return useQueryData<UserPost[]>(
+        `${url}?limit=${limit}&before=${time}`,
+        true
+    );
 }
-function useInitialPost(
+
+function usePost(
     url: string,
-    limit: number = 20
-): QueryResult<UserPost[]> {
-    return useQueryData<UserPost[]>(`${url}?limit=${limit}`);
+    initialPosts: UserPost[],
+    key: ApiCacheKeys,
+    limit: number = 2
+): InfiniteResultTanstack<UserPost[]> {
+    const InitialData: InfiniteData<UserPost[]> = {
+        pages: [initialPosts],
+        pageParams: [null],
+    };
+    return useInfiniteQueryData({
+        rawUrl: url + `?limit=${limit}`,
+        enabled: true,
+        queryKey: key,
+        initialData: InitialData,
+        getNextCursor: (lastPage) => {
+            if (lastPage.length <= 0) return undefined;
+            const last = lastPage[lastPage.length - 1];
+            return last?.created_at;
+        },
+    });
 }
-*/
