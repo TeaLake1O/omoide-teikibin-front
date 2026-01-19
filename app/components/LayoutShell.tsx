@@ -2,7 +2,6 @@
 
 import useLayoutData from "@/hooks/useLayoutData";
 import { Me } from "@/types/Me";
-import Script from "next/script";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import useScrollToggle from "../_share/hooks/useScrollToggle";
 import { LayoutUIProvider } from "../_share/provider/LayoutUI";
@@ -110,7 +109,7 @@ export default function LayoutShell(props: Props) {
                     <div className="hidden 2xl:block" />
                 </LayoutUIProvider>
             </div>
-            {<Script src="https://unpkg.com/react-scan/dist/auto.global.js" />}
+            {/*<Script src="https://unpkg.com/react-scan/dist/auto.global.js" />*/}
         </>
     );
 }

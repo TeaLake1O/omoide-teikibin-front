@@ -5,13 +5,15 @@ import UserIconImage from "@/app/_share/components/UserIconImage";
 import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import { FRONT_URL } from "@/config";
-import { InfiniteData } from "@tanstack/react-query";
+import { InfiniteData, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ApiCacheKeys } from "../constants/apiCacheKeys";
 import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrl";
 import useInfiniteQueryData from "../hooks/useInifiniteQueryData";
 import useQueryData from "../hooks/useQueryData";
 import { InfiniteResultTanstack, QueryResultTanstack } from "../types/fetch";
+import Loader from "../UI/Loader";
 import FollowButton from "./FollowButton";
 
 export type PostContentProps = {
@@ -28,7 +30,67 @@ export default function PostContent(props: PostContentProps) {
     const posts = res.data?.pages.flat() ?? [];
     const newest = res.data?.pages?.[0]?.[0]?.created_at;
 
-    const latest = useNewPost(props.url, newest ?? "", limit);
+    const latest = useNewPost(props.url, newest, limit);
+
+    const qc = useQueryClient();
+
+    useEffect(() => {
+        const newPosts = latest.data;
+        if (!newPosts || newPosts.length === 0) return;
+
+        qc.setQueryData<InfiniteData<UserPost[]>>([props.apiKey], (old) => {
+            if (!old) return old;
+
+            const exist = new Set(old.pages.flat().map((p) => p.post_id));
+            const add = newPosts.filter((p) => !exist.has(p.post_id));
+            if (add.length === 0) return old;
+            const first = old.pages[0] ?? [];
+            //oldを展開した後、pagesで新しいデータを使い上書きしている
+            return {
+                ...old,
+                pages: [[...add, ...first], ...old.pages.slice(1)],
+            };
+        });
+    }, [latest.data, props.apiKey, qc]);
+
+    const lastEl = useRef<HTMLDivElement | null>(null);
+    const setLastEl = useCallback((node: HTMLDivElement | null) => {
+        lastEl.current = node;
+    }, []);
+
+    const { hasNext, isFetchingNext, fetchNext } = res;
+
+    const [isNext, setIsNext] = useState(false);
+
+    useEffect(() => {
+        if (isNext) return;
+        const el = lastEl.current;
+        if (!el) return;
+
+        if (!hasNext || isFetchingNext) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const e = entries[0];
+                if (!e?.isIntersecting) return;
+                if (!hasNext || isFetchingNext) return;
+                console.log("fetchnext");
+                setIsNext(true);
+                window.setTimeout(() => {
+                    fetchNext();
+                    setIsNext(false);
+                }, 2000);
+            },
+            {
+                root: null,
+                rootMargin: "50px",
+                threshold: 0.1,
+            }
+        );
+
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [hasNext, isFetchingNext, fetchNext, posts.length]);
 
     if (!posts) return null;
 
@@ -47,6 +109,7 @@ export default function PostContent(props: PostContentProps) {
                 }`}
                         key={post.post_id}
                         onClick={() => console.log("click")}
+                        ref={isLast ? setLastEl : undefined}
                     >
                         <div
                             className="flex flex-row items-center mb-3"
@@ -111,22 +174,31 @@ export default function PostContent(props: PostContentProps) {
                                 {formatDateTime(post.created_at, true)}
                             </span>
                         </div>
-                        <button onClick={res.fetchNext}>更新</button>
                     </div>
                 );
             })}
+            <div
+                className={`w-full h-14 flex  justify-center items-center ${
+                    isNext || isFetchingNext ? "block" : "hidden"
+                }
+                `}
+            >
+                <div className="h-[60%] aspect-square flex justify-center items-center">
+                    <Loader />
+                </div>
+            </div>
         </>
     );
 }
 
 function useNewPost(
     url: string,
-    time: string,
+    time: string | undefined,
     limit: number = 20
 ): QueryResultTanstack<UserPost[]> {
     return useQueryData<UserPost[]>(
-        `${url}?limit=${limit}&after=${time}`,
-        true
+        `${url}?limit=${limit}&after=${encodeURIComponent(time ? time : "")}`,
+        !!time
     );
 }
 function usePost(
