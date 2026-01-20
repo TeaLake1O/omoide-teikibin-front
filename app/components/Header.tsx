@@ -38,12 +38,12 @@ export default function Header(props: Props) {
                 " md:h-16 md:opacity-100 md:border-b md:pointer-events-auto"
             }
         >
-            <div className="h-12 aspect-square rounded-full flex items-center justify-center">
+            <div className="h-12 w-12 aspect-square rounded-full flex items-center justify-center">
                 {!hasBackButton ? (
                     <button
                         type="button"
                         onClick={toggleHamburger}
-                        className={`h-[90%] aspect-square flex items-center justify-center 
+                        className={`h-[90%] w-[90%] aspect-square flex items-center justify-center 
                         duration-200 active:scale-96 md:pointer-events-none md:invisible`}
                     >
                         <UserIcon iconUrl={props.me?.icon_url ?? null} />
