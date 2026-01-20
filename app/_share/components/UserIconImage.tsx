@@ -23,7 +23,7 @@ export default function UserIconImage(props: Props) {
     return (
         <div
             className="relative flex justify-center items-center w-full 
-            h-full overflow-hidden rounded-full bg-white"
+            h-full overflow-hidden rounded-full bg-gray-200"
         >
             <div
                 className={

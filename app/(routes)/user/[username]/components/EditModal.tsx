@@ -203,7 +203,7 @@ function EditButtonFormContent(childProps: EditButtonFormContentProps) {
         <div className="w-full flex-col flex gap-3 items-center overflow-y-auto resize-none no-scrollbar">
             <div className="w-[90%] mb-4">
                 <div className="flex items-center mt-2 justify-between">
-                    <div className="h-14 md:h-20 aspect-square rounded-full">
+                    <div className="h-14 w-14 md:h-20 md:w-20 aspect-square rounded-full">
                         <UserIconImage iconUrl={url ?? UNKNOWN_USER_ICON_URL} />
                     </div>
                     <input {...inputProps} />

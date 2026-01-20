@@ -17,7 +17,7 @@ export default async function UserPage({
     const data = await serverFetch<UserPageData>({
         url: `${DJANGO_URL}/accounts/api/mypage/${username}`,
         tag: tag,
-        cache: "force-cache",
+        cache: "default",
     });
     const serverRefresh = refreshServerFetch.bind(null, tag);
 
@@ -25,7 +25,7 @@ export default async function UserPage({
     const initialPost = await serverFetch<UserPost[]>({
         url: userPageURL,
         tag: tag,
-        cache: "force-cache",
+        cache: "default",
     });
 
     return (

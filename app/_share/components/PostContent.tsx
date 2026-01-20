@@ -116,7 +116,7 @@ export default function PostContent(props: PostContentProps) {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Link
-                                className="w-12 aspect-square rounded-full group"
+                                className="w-12 h-12 aspect-square rounded-full group"
                                 href={`${FRONT_URL}/user/${post_user.username}`}
                             >
                                 <UserIconImage
