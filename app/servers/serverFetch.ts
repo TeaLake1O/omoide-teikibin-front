@@ -15,7 +15,7 @@ export async function serverFetch<T>(props: Props): Promise<T> {
     const cookieHeader = cookie.toString();
     const res = await fetch(url, {
         headers: { cookie: cookieHeader },
-        cache: cache ? cache : "default",
+        cache: cache ? cache : "no-store",
 
         ...(tag ? { next: { tags: [tag], revalidate: false as const } } : {}),
     });

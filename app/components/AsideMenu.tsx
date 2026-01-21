@@ -2,14 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { ComponentType, useEffect } from "react";
 import { Me } from "../../types/Me";
-import { default as IconImage } from "../_share/components/IconImage";
 import LogoutButton from "../_share/components/LogoutModal";
 import UserIcon from "../_share/components/UserIconImage";
 import { useIsMdUp } from "../_share/hooks/useIsMdUp";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
 import { usePostModal } from "../_share/provider/PostModal";
+import FriendsIcon from "../_share/UI/menuIcon/FriendsIcon";
+import GroupIcon from "../_share/UI/menuIcon/GroupIcon";
+import HomeIcon from "../_share/UI/menuIcon/HomeIcon";
+import MypageIcon from "../_share/UI/menuIcon/MypageIcon";
+import SettingsIcon from "../_share/UI/menuIcon/settingsIcon";
 import PostButton from "../_share/UI/PostButton";
 import PostModal from "./PostModal";
 
@@ -19,7 +23,7 @@ type Props = {
 };
 
 type MenuNav = {
-    src: string;
+    Icon: ComponentType<{ isActive: boolean }>;
     alt: string;
     menuName: string;
     href: string;
@@ -28,35 +32,35 @@ type MenuNav = {
 
 const menuNav: MenuNav[] = [
     {
-        src: "/img/homeicon.png",
+        Icon: HomeIcon,
         alt: "home",
         menuName: "ホーム",
         href: "/home",
         mdHidden: true,
     },
     {
-        src: "/img/groupicon.png",
+        Icon: GroupIcon,
         alt: "group",
         menuName: "グループ",
         href: "/group",
         mdHidden: true,
     },
     {
-        src: "/img/friendicon.png",
+        Icon: FriendsIcon,
         alt: "friend",
         menuName: "フレンド",
         href: "/friend",
         mdHidden: true,
     },
     {
-        src: "/img/accountsicon.png",
+        Icon: MypageIcon,
         alt: "user",
         menuName: "マイページ",
         href: "/user",
         mdHidden: false,
     },
     {
-        src: "/img/settingsicon.png",
+        Icon: SettingsIcon,
         alt: "setting",
         menuName: "設定",
         href: "/setting",
@@ -84,7 +88,7 @@ export default function AsideMenu(props: Props) {
         <aside
             className={
                 (props.hamburger ? "translate-x-0" : "-translate-x-full") +
-                " md:block md:h-full md:translate-x-0 md:w-auto md:static fixed bg-orange-100" +
+                " md:block md:h-full md:translate-x-0 md:w-auto md:static fixed bg-orange-100 " +
                 " border-r border-orange-200 transition-transform duration-300 z-40 left-0 inset-y-0 w-[60%]"
             }
         >
@@ -134,6 +138,12 @@ export default function AsideMenu(props: Props) {
                             menu.href === "/user"
                                 ? `/user/${props.user?.username}`
                                 : menu.href;
+                        const isActive =
+                            optimisticUrl === targetHref ||
+                            (path === targetHref && optimisticUrl === null) ||
+                            (menu.href === "/user" &&
+                                path.startsWith("/user/") &&
+                                optimisticUrl === null);
                         return (
                             <Link
                                 key={i}
@@ -148,22 +158,25 @@ export default function AsideMenu(props: Props) {
                             >
                                 <div
                                     className={`w-full h-full flex flex-row items-center rounded-md md:hover:bg-black/15 active:bg-black/15 ${
-                                        optimisticUrl === targetHref ||
-                                        (path === targetHref &&
-                                            optimisticUrl === null) ||
-                                        (menu.href === "/user" &&
-                                            path.startsWith("/user/") &&
-                                            optimisticUrl === null)
-                                            ? "md:bg-black/10"
-                                            : ""
+                                        isActive ? "md:bg-black/10" : ""
                                     }`}
                                 >
                                     <div className="h-full flex justify-center items-center ml-3">
-                                        <IconImage
-                                            src={menu.src}
-                                            alt={menu.alt}
-                                            scale="h-[60%]"
-                                        />
+                                        <div
+                                            className={`aspect-square flex justify-center items-center ${
+                                                menu.href.startsWith("/user/")
+                                                    ? "h-[60%] w-[60%]"
+                                                    : "h-[70%] w-[70%]"
+                                            }`}
+                                        >
+                                            <menu.Icon
+                                                isActive={
+                                                    isActive ||
+                                                    (!isMdUp &&
+                                                        menu.href === "/user")
+                                                }
+                                            />
+                                        </div>
                                     </div>
                                     <span className="w-full pl-8 text-1xl font-bold text-black text-left">
                                         {menu.menuName}

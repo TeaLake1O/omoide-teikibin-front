@@ -93,6 +93,7 @@ export default function PostContent(props: PostContentProps) {
     }, [hasNext, isFetchingNext, fetchNext, posts.length, isNext]);
 
     if (!posts) return null;
+    if (posts.length === 0) return <h1>投稿がありません</h1>;
 
     return (
         <>

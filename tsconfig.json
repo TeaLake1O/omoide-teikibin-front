@@ -29,7 +29,8 @@
         ".next/types/**/*.ts",
         ".next/dev/types/**/*.ts",
         "**/*.mts",
-        "tailwind.config.cjs"
+        "tailwind.config.cjs",
+        "app/_share/UI/menuIcon/HomeIcon.tsx"
     ],
     "exclude": ["node_modules"]
 }

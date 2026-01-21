@@ -3,6 +3,7 @@ import GenericButton from "@/app/_share/UI/GenericButton";
 import { useToast } from "@/app/_share/provider/Toast";
 import { Status } from "@/app/_share/types/status";
 import nextStatusMap from "@/app/_share/util/nextStatusMap";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import friendRequest from "../api/friendRequest";
 
@@ -23,6 +24,8 @@ export default function FollowButton({
     const timer = useRef<number | null>(null);
 
     const isSend = useRef(false);
+
+    const path = usePathname();
 
     const { showToast } = useToast();
 
@@ -79,19 +82,31 @@ export default function FollowButton({
     if (isMe) return null;
     switch (status) {
         case "friend":
-            return (
-                <div className="flex items-center justify-between mr-3">
-                    <span className="text-amber-800 text-sm mr-3">
-                        フレンド
-                    </span>
-                    <GenericButton
-                        name="フレンドを削除"
-                        height="h-6"
-                        textSize="text-sm"
-                        handleOnclick={() => callback(false)}
-                    />
-                </div>
-            );
+            if (path.startsWith("/user/")) {
+                return (
+                    <div className="flex items-center justify-between mr-3">
+                        <span className="text-amber-800 text-sm mr-3">
+                            フレンド
+                        </span>
+                        <GenericButton
+                            name="フレンドを削除"
+                            height="h-6"
+                            textSize="text-sm font-bold"
+                            textColor="text-amber-900"
+                            handleOnclick={() => callback(false)}
+                        />
+                    </div>
+                );
+            } else {
+                return (
+                    <div className="flex items-center justify-between mr-3">
+                        <span className="text-amber-800 text-sm mr-3">
+                            フレンド
+                        </span>
+                    </div>
+                );
+            }
+
         case "incoming":
             return (
                 <div className="flex items-center justify-between mr-3">

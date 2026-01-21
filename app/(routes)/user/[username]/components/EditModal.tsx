@@ -60,6 +60,8 @@ export default function EditButton(props: Props) {
         const base = baseLine.current;
         if (base === null) return;
 
+        showToast("変更中...", "text-black");
+
         const fd = new FormData();
 
         if (base.nickname !== nickname) fd.append("nickname", nickname ?? "");
