@@ -33,6 +33,7 @@ export default function PostModal() {
         isPosted.current = true;
 
         showToast("投稿中...");
+        closePostModal();
 
         const fd = new FormData();
 
@@ -44,20 +45,18 @@ export default function PostModal() {
 
         qc.invalidateQueries();
 
-        close();
-
         showToast(
             res.status === "success" ? "投稿しました" : "エラーが発生しました",
             "text-black"
         );
-        isPosted.current = false;
+        reset();
     };
 
-    const close = () => {
+    const reset = () => {
         imageReset();
         setPostGroup("");
         setPostText("");
-        closePostModal();
+        isPosted.current = false;
     };
     return (
         <>
@@ -65,7 +64,7 @@ export default function PostModal() {
                 createPortal(
                     <div
                         className="fixed inset-0 z-[9990] bg-black/60 flex justify-center items-center"
-                        onClick={close}
+                        onClick={closePostModal}
                     >
                         <form
                             className="md:h-full md:max-w-[40%] pl-10 pr-10 overflow-y-auto no-scrollbar
@@ -76,7 +75,7 @@ export default function PostModal() {
                                 <div className="w-24">
                                     <div className="relative h-10 aspect-square ml-1">
                                         <CloseButton
-                                            handleOnclick={close}
+                                            handleOnclick={closePostModal}
                                             color="bg-black"
                                         />
                                     </div>

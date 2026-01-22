@@ -4,7 +4,7 @@ import { LANDING_PAGE_URL } from "@/config";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import logout from "../util/logout";
+import logout from "../../util/logout";
 
 export default function LogOut() {
     const router = useRouter();

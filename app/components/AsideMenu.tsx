@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ComponentType, useEffect } from "react";
 import { Me } from "../../types/Me";
-import LogoutButton from "../_share/components/LogoutModal";
+import LogoutButton from "../_share/components/modals/LogoutModal";
 import UserIcon from "../_share/components/UserIconImage";
 import { useIsMdUp } from "../_share/hooks/useIsMdUp";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
@@ -119,7 +119,7 @@ export default function AsideMenu(props: Props) {
                 </div>
                 <div className="h-20 w-full ">
                     <button
-                        className="h-full w-full p-2 flex items-center md:hover:bg-black/15 active:bg-black/15"
+                        className="h-full w-full p-2 flex items-center transition-colors duration-100 md:hover:bg-black/15 active:bg-black/15"
                         onClick={openPostModal}
                     >
                         <div className="w-full h-full flex flex-row-reverse items-center">
@@ -157,9 +157,10 @@ export default function AsideMenu(props: Props) {
                                 }}
                             >
                                 <div
-                                    className={`w-full h-full flex flex-row items-center rounded-md md:hover:bg-black/15 active:bg-black/15 ${
-                                        isActive ? "md:bg-black/10" : ""
-                                    }`}
+                                    className={`w-full h-full flex flex-row items-center rounded-md 
+                                        transition-colors duration-100 md:hover:bg-black/15 active:bg-black/15 ${
+                                            isActive ? "md:bg-black/15" : ""
+                                        }`}
                                 >
                                     <div className="h-full flex justify-center items-center ml-3">
                                         <div

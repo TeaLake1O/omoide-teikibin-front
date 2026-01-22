@@ -1,6 +1,6 @@
 "use client";
 
-import ModalImage from "@/app/_share/components/ModalImage";
+import ModalImage from "@/app/_share/components/modals/ImageModal";
 import UserIconImage from "@/app/_share/components/UserIconImage";
 import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";

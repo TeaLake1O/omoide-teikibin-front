@@ -8,7 +8,7 @@ export default async function Home() {
     const posts = await serverFetch<UserPost[]>({
         url: `${DJANGO_URL}/post/api/home?limit=2`,
         tag: "homePost",
-        cache: "no-cache",
+        cache: "no-store",
     });
     return (
         <PostContent

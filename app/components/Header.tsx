@@ -49,7 +49,10 @@ export default function Header(props: Props) {
                         <UserIcon iconUrl={props.me?.icon_url ?? null} />
                     </button>
                 ) : (
-                    <div className="flex justify-center items-center h-[90%] aspect-square rounded-full active:bg-black/20 hover:bg-black/20 transition-colors duration-300">
+                    <div
+                        onClick={back}
+                        className="flex justify-center items-center h-[90%] aspect-square rounded-full active:bg-black/20 hover:bg-black/20 transition-colors duration-300"
+                    >
                         <BackButton handleOnclick={back} />
                     </div>
                 )}

@@ -61,15 +61,17 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         <ToastContext.Provider value={{ showToast }}>
             {children}
             <div
-                className={`fixed top-0 h-8 border mt-1 left-1/2 -translate-x-1/2 rounded-md 
-                    justify-center items-center bg-orange-100 duration-500 shadow-xl ring-1 ring-amber-800
+                className={`fixed top-0 border h-8 mt-1 left-1/2 -translate-x-1/2 rounded-sm
+                    justify-center items-center bg-orange-200 duration-500 shadow-2xl
                     z-[9999] inline-flex  whitespace-nowrap ${
                         isShow && message !== null
                             ? " opacity-100"
                             : " opacity-0"
                     }`}
             >
-                <span className={`mt-1 mb-1 mr-3 ml-3 font-sans ${textClass}`}>
+                <span
+                    className={`mt-1 mb-1 mr-3 ml-3 font-sans font-bold ${textClass}`}
+                >
                     {message}
                 </span>
             </div>

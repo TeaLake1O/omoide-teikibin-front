@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import CloseButton from "../UI/CloseButton";
+import CloseButton from "../../UI/CloseButton";
 
 type Props = {
     src: string;
@@ -11,7 +11,7 @@ type Props = {
     rounded?: string;
 };
 
-export default function ModalImage(props: Props) {
+export default function ImageModal(props: Props) {
     const root =
         typeof document !== "undefined"
             ? document.getElementById("modal-root")

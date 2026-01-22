@@ -1,4 +1,4 @@
-import LogOut from "@/app/_share/components/LogoutModal";
+import LogOut from "@/app/_share/components/modals/LogoutModal";
 import { AccountsData } from "../types/accountsData";
 import AccountDelete from "./AccountDelete";
 import AccountRow from "./AccountsRow";

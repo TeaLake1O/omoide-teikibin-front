@@ -10,6 +10,7 @@ import { LoadingScreen } from "../_share/UI/LoadingScreen";
 import AsideMenu from "./AsideMenu";
 import Header from "./Header";
 import Menubar from "./Menubar";
+import Notifications from "./Notifications";
 
 type Props = {
     children: ReactNode;
@@ -68,12 +69,12 @@ export default function LayoutShell(props: Props) {
 
     return (
         <>
-            <div
-                className="h-full md:grid 
-                md:grid-cols-[minmax(160px,1fr)_minmax(450px,650px)_minmax(240px,1.8fr)] 
+            <LayoutUIProvider value={LayoutContextValue}>
+                <div
+                    className="h-full md:grid 
+                md:grid-cols-[minmax(140px,1fr)_minmax(360px,650px)_minmax(200px,1.8fr)] 
                 2xl:grid-cols-[1fr_minmax(200px,1fr)_minmax(450px,650px)_minmax(300px,1.8fr)_1fr]"
-            >
-                <LayoutUIProvider value={LayoutContextValue}>
+                >
                     <div className="hidden 2xl:block" />
                     <div
                         className={
@@ -104,12 +105,12 @@ export default function LayoutShell(props: Props) {
                         </div>
                     </div>
                     <div className="hidden md:block md:top-0 md:h-full bg-orange-100">
-                        notification
+                        <Notifications />
                     </div>
                     <div className="hidden 2xl:block" />
-                </LayoutUIProvider>
-            </div>
-            {/*<Script src="https://unpkg.com/react-scan/dist/auto.global.js" />*/}
+                </div>
+                {/*<Script src="https://unpkg.com/react-scan/dist/auto.global.js" />*/}
+            </LayoutUIProvider>
         </>
     );
 }
