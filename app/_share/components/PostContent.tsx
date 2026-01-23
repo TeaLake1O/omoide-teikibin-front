@@ -5,11 +5,12 @@ import UserIconImage from "@/app/_share/components/UserIconImage";
 import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import { FRONT_URL } from "@/config";
-import { InfiniteData, useQueryClient } from "@tanstack/react-query";
+import { InfiniteData } from "@tanstack/react-query";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { ApiCacheKeys } from "../constants/apiCacheKeys";
 import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrl";
+import useAddToInfinite from "../hooks/useAddToInfinite";
+import useInfiniteScrollTrigger from "../hooks/useInfiniteScrollTrigger";
 import useInfiniteQueryData from "../hooks/useInifiniteQueryData";
 import useQueryData from "../hooks/useQueryData";
 import { InfiniteResultTanstack, QueryResultTanstack } from "../types/fetch";
@@ -32,65 +33,24 @@ export default function PostContent(props: PostContentProps) {
 
     const latest = useNewPost(props.url, newest, limit);
 
-    const qc = useQueryClient();
-
-    useEffect(() => {
-        const newPosts = latest.data;
-        if (!newPosts || newPosts.length === 0) return;
-
-        qc.setQueryData<InfiniteData<UserPost[]>>(props.apiKey, (old) => {
-            if (!old) return old;
-
-            const exist = new Set(old.pages.flat().map((p) => p.post_id));
-            const add = newPosts.filter((p) => !exist.has(p.post_id));
-            if (add.length === 0) return old;
-            const first = old.pages[0] ?? [];
-            //oldを展開した後、pagesで新しいデータを使い上書きしている
-            return {
-                ...old,
-                pages: [[...add, ...first], ...old.pages.slice(1)],
-            };
-        });
-    }, [latest.data, props.apiKey, qc]);
-
-    const lastEl = useRef<HTMLDivElement | null>(null);
-    const setLastEl = useCallback((node: HTMLDivElement | null) => {
-        lastEl.current = node;
-    }, []);
-
     const { hasNext, isFetchingNext, fetchNext } = res;
 
-    const [isNext, setIsNext] = useState(false);
+    useAddToInfinite<UserPost>({
+        apiKey: props.apiKey,
+        latest: latest.data,
+        getId: (p) => p.post_id,
+    });
 
-    useEffect(() => {
-        if (isNext) return;
-        const el = lastEl.current;
-        if (!el) return;
-
-        if (!hasNext || isFetchingNext) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const e = entries[0];
-                if (!e?.isIntersecting) return;
-                if (!hasNext || isFetchingNext) return;
-                console.log("fetchnext");
-                setIsNext(true);
-                window.setTimeout(() => {
-                    fetchNext();
-                    setIsNext(false);
-                }, 2000);
-            },
-            {
-                root: null,
-                rootMargin: "50px",
-                threshold: 0.1,
-            }
-        );
-
-        observer.observe(el);
-        return () => observer.disconnect();
-    }, [hasNext, isFetchingNext, fetchNext, posts.length, isNext]);
+    const { setLastEl, isNext } = useInfiniteScrollTrigger({
+        enabled: true,
+        hasNext,
+        isFetchingNext,
+        fetchNext,
+        root: null,
+        rootMargin: "50px",
+        threshold: 0.1,
+        delayMs: 1500,
+    });
 
     if (!posts) return null;
     if (posts.length === 0) return <h1>投稿がありません</h1>;

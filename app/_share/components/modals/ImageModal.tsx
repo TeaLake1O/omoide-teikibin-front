@@ -56,14 +56,14 @@ export default function ImageModal(props: Props) {
                                 <Image
                                     src={props.src}
                                     alt="投稿画像"
-                                    width={1200}
+                                    width={800}
                                     height={800}
                                     priority
                                     className="md:max-w-[80vh] md:max-h-[75vh] h-auto max-h-[80vh] md:min-h-[60vh] min-h-0 object-contain"
                                 ></Image>
                             </div>
                             {props.text && (
-                                <div className="pt-6 max-w-[75vw]">
+                                <div className="pt-6">
                                     <span className="text-white truncate block">
                                         {props.text}
                                     </span>

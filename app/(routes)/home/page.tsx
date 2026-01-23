@@ -5,14 +5,15 @@ import { serverFetch } from "@/app/servers/serverFetch";
 import { DJANGO_URL } from "@/config";
 
 export default async function Home() {
+    const url = `${DJANGO_URL}/post/api/home`;
     const posts = await serverFetch<UserPost[]>({
-        url: `${DJANGO_URL}/post/api/home?limit=2`,
+        url: url + "?limit=2",
         tag: "homePost",
         cache: "no-store",
     });
     return (
         <PostContent
-            url={`${DJANGO_URL}/post/api/home`}
+            url={url}
             posts={posts}
             apiKey={API_CACHE_KEYS.homePost()}
         />

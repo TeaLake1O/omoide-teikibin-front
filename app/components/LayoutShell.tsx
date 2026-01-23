@@ -3,6 +3,7 @@
 import useLayoutData from "@/hooks/useLayoutData";
 import { Me } from "@/types/Me";
 import { ReactNode, useCallback, useEffect, useState } from "react";
+import { useIsMdUp } from "../_share/hooks/useIsMdUp";
 import useScrollToggle from "../_share/hooks/useScrollToggle";
 import { LayoutUIProvider } from "../_share/provider/LayoutUI";
 import { LayoutUI } from "../_share/types/provider";
@@ -38,6 +39,7 @@ export default function LayoutShell(props: Props) {
         //アローで書かないと連打で古い値を掴むことがあるらしい
         setHamburger((prev) => !prev);
     }, []);
+    const isMdUp = useIsMdUp();
 
     const [optimisticUrl, setOptimisticUrl] = useState<string | null>(null);
 
@@ -90,7 +92,9 @@ export default function LayoutShell(props: Props) {
                             <Header isDown={isDown} me={effectiveMe} />
 
                             <main
-                                className={`no-scrollbar pb-16 md:pb-0 flex-1 min-h-0 relative ${"overflow-y-auto"}`}
+                                className={`${
+                                    isMdUp ? "no-scrollbar" : "scrollbar-slim"
+                                } pb-16 md:pb-0 flex-1 min-h-0 relative ${"overflow-y-auto"}`}
                                 ref={setMainRef}
                             >
                                 {props.children}
@@ -104,7 +108,7 @@ export default function LayoutShell(props: Props) {
                             <Menubar />
                         </div>
                     </div>
-                    <div className="hidden md:block md:top-0 md:h-full bg-orange-100">
+                    <div className="hidden md:block lg:border-r lg:border-orange-300 md:top-0 flex-1 min-h-0 md:h-full bg-orange-100">
                         <Notifications />
                     </div>
                     <div className="hidden 2xl:block" />

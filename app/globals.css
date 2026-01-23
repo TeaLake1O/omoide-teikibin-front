@@ -17,6 +17,32 @@ body {
     overflow: hidden;
 }
 
+@layer utilities {
+    .scrollbar-slim {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(190, 83, 2, 0.45) transparent;
+    }
+
+    .scrollbar-slim::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    .scrollbar-slim::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .scrollbar-slim::-webkit-scrollbar-thumb {
+        background: rgba(180, 83, 9, 0.35);
+        border-radius: 9999px;
+        border: 3px solid transparent;
+        background-clip: padding-box;
+    }
+
+    .scrollbar-slim:hover::-webkit-scrollbar-thumb {
+        background: rgba(180, 83, 9, 0.55);
+        background-clip: padding-box;
+    }
+}
+
 @keyframes wave {
     0%,
     100% {

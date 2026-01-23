@@ -23,7 +23,7 @@ export default async function UserPage({
 
     const userPageURL = `${DJANGO_URL}/post/api/mypage/${username}`;
     const initialPost = await serverFetch<UserPost[]>({
-        url: userPageURL,
+        url: userPageURL + "?limit=2",
         tag: tag,
         cache: "no-store",
     });
