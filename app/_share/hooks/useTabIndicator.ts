@@ -69,7 +69,7 @@ export default function useTabIndicator<T extends string>({
         setHoverId(null);
         schedule(() => {
             setHoverIndicator(null);
-        }, 300);
+        }, 200);
     };
 
     const setHover = (id: T | null) => {

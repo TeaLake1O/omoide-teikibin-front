@@ -2,13 +2,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ComponentType, useEffect } from "react";
-import ImageIcon from "../_share/components/IconImage";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
+import { useNotifyModal } from "../_share/provider/NotifyModal";
 import { usePostModal } from "../_share/provider/PostModal";
 import FriendsIcon from "../_share/UI/menuIcon/FriendsIcon";
 import GroupIcon from "../_share/UI/menuIcon/GroupIcon";
 import HomeIcon from "../_share/UI/menuIcon/HomeIcon";
+import NotifyIcon from "../_share/UI/menuIcon/NotifyIcon";
 import PostButton from "../_share/UI/PostButton";
+import NotificationModal from "./NotificationModal";
 
 type Item = {
     Icon: ComponentType<{ isActive: boolean }> | null;
@@ -48,6 +50,7 @@ export default function Menubar() {
 
     const { optimisticUrl, setOptimisticUrl, me } = useLayoutUI();
     const { openPostModal } = usePostModal();
+    const { openNotifyModal, isOpenNotifyModal } = useNotifyModal();
 
     useEffect(() => {
         setOptimisticUrl(path);
@@ -100,40 +103,24 @@ export default function Menubar() {
                                     >
                                         <item.Icon isActive={isActive} />
                                     </div>
-                                ) : (
-                                    <ImageIcon
-                                        scale={item.scale}
-                                        src={"img/notifsIcon.png"}
-                                        alt={item.alt}
-                                    />
-                                )}
+                                ) : null}
                             </div>
                         </Link>
                     );
             })}
             <button
-                className={`w-full h-full flex items-center justify-center 
-                        group ${
-                            optimisticUrl === "/notification"
-                                ? "bg-orange-200"
-                                : ""
-                        }`}
+                className="w-full h-full flex items-center justify-center group"
                 onContextMenu={(e) => e.preventDefault()}
-                onClick={() => {
-                    console.log("hello");
-                }}
+                onClick={openNotifyModal}
             >
                 <div
-                    className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
-                    transition-colors flex items-center justify-center"
+                    className="aspect-square h-14 w-14 rounded-full group-active:bg-black/15 duration-300
+                            transition-colors flex items-center justify-center"
                 >
-                    <ImageIcon
-                        src="/img/notifsicon.png"
-                        alt="notification"
-                        scale="w-[50%]"
-                    />
+                    <NotifyIcon isActive={isOpenNotifyModal} />
                 </div>
             </button>
+            <NotificationModal />
         </nav>
     );
 }

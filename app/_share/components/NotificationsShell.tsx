@@ -51,14 +51,20 @@ export default function NotificationsShell() {
                         type="button"
                         onClick={() => setActiveId(item.id)}
                         onMouseEnter={() => setHover(item.id)}
-                        className="w-full h-full flex justify-center items-center"
+                        className={`h-full flex justify-center items-center ${"w-full"}`}
                     >
-                        <span className="">{item.label}</span>
+                        <span
+                            className={`${
+                                item.id === activeId ? "font-bold" : ""
+                            }`}
+                        >
+                            {item.label}
+                        </span>
                     </button>
                 ))}
                 <div
-                    className={`absolute h-[80%] bg-black/10 rounded-sm transition-[transform,width,opacity] 
-                    pointer-events-none duration-200 ease-out ${
+                    className={`absolute h-[80%] bg-black/10 rounded-sm transition-[transform,opacity] 
+                    pointer-events-none duration-300 ${
                         hoverIndicator && hoverId ? "opacity-100" : "opacity-0"
                     }`}
                     style={{
@@ -75,7 +81,7 @@ export default function NotificationsShell() {
                 />
                 <span
                     className={`absolute bottom-0 h-[2px] rounded-full bg-orange-400 
-                        transition-[transform,width] duration-500 ease-out ${
+                        transition-[transform,width] duration-500 ${
                             isCalcComplete ? "" : "hidden"
                         }`}
                     style={{
@@ -118,7 +124,6 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
         getCursor: (n) => n.created_at,
         getId: (n) => n.notify_id,
     });
-    console.log(POST_NOTIFY_URL);
 
     if (!notifies) return null;
     if (isEmpty) return <h1>通知がありません</h1>;
@@ -222,8 +227,7 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
 
     return (
         <div className="w-full flex flex-col justify-center items-center">
-            {notifies.map((notify, index) => {
-                const isLast = notifies.length - 1 === index;
+            {notifies.map((notify) => {
                 const user = notify.actor;
                 const isMessage = notify.status === "message";
                 return (

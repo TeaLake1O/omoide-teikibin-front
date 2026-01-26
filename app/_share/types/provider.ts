@@ -14,3 +14,9 @@ export type PostModal = {
     openPostModal: () => void;
     isOpenPostModal: boolean;
 };
+
+export type NotifyModal = {
+    isOpenNotifyModal: boolean;
+    openNotifyModal: () => void;
+    closeNotifyModal: () => void;
+};
