@@ -1,12 +1,13 @@
 "use client";
 
-import { LOGIN_URL } from "@/config";
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ApiError, fetcherOrThrow } from "../api/requestTanstack";
 import { ApiCacheKeys } from "../constants/apiCacheKeys";
+import { LOGIN_URL } from "../constants/apiUrls";
 import { InfiniteResultTanstack } from "../types/fetch";
 
+const seconds = 1_000;
 const minute = 60_000;
 
 export default function useInfiniteQueryData<T>(args: {
@@ -18,7 +19,7 @@ export default function useInfiniteQueryData<T>(args: {
 }): InfiniteResultTanstack<T> {
     const { rawUrl, enabled, queryKey, initialData, getNextCursor } = args;
     const q = useInfiniteQuery<T, ApiError>({
-        queryKey: [queryKey] as const,
+        queryKey: queryKey,
         queryFn: ({ pageParam }) => {
             const before = pageParam;
             const url =
@@ -33,13 +34,10 @@ export default function useInfiniteQueryData<T>(args: {
         getNextPageParam: (lastPage) => getNextCursor(lastPage),
         initialPageParam: null as string | null,
         initialData: initialData,
-        staleTime: minute,
-        refetchOnWindowFocus: true,
+        staleTime: 30 * seconds,
         enabled,
-        gcTime: 5 * minute,
-        refetchOnMount: initialData !== undefined ? false : true,
-        refetchInterval: minute / 2,
-        refetchIntervalInBackground: true,
+        gcTime: minute * 10,
+        refetchOnWindowFocus: false,
         refetchOnReconnect: true,
     });
 

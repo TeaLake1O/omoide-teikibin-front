@@ -1,18 +1,20 @@
 "use client";
 
-import { LOGIN_URL } from "@/config";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ApiError, fetcherOrThrow } from "../api/requestTanstack";
+import { LOGIN_URL } from "../constants/apiUrls";
 import { QueryResultTanstack } from "../types/fetch";
 
 const minute = 60_000;
 
-export default function useQueryData<T>(
-    url: string,
-    enabled: boolean,
-    initialData?: T
-): QueryResultTanstack<T> {
+export default function useQueryData<T>(args: {
+    url: string;
+    enabled: boolean;
+    initialData?: T;
+    time?: number;
+}): QueryResultTanstack<T> {
+    const { url, enabled, initialData /*time後で使う*/ } = args;
     const q = useQuery<T, ApiError>({
         queryKey: ["api", url],
         queryFn: () => fetcherOrThrow<T>(url),

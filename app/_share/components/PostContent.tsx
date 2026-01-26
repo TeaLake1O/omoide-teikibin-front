@@ -5,55 +5,41 @@ import UserIconImage from "@/app/_share/components/UserIconImage";
 import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import { FRONT_URL } from "@/config";
-import { InfiniteData } from "@tanstack/react-query";
 import Link from "next/link";
 import { ApiCacheKeys } from "../constants/apiCacheKeys";
-import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrl";
-import useAddToInfinite from "../hooks/useAddToInfinite";
-import useInfiniteScrollTrigger from "../hooks/useInfiniteScrollTrigger";
-import useInfiniteQueryData from "../hooks/useInifiniteQueryData";
-import useQueryData from "../hooks/useQueryData";
-import { InfiniteResultTanstack, QueryResultTanstack } from "../types/fetch";
+import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrls";
+import useInfinityScrollContents from "../hooks/useInfiniteScrollContents";
 import Loader from "../UI/Loader";
 import FollowButton from "./FollowButton";
 
 export type PostContentProps = {
-    posts: UserPost[];
+    initialPosts: UserPost[];
     url: string;
     apiKey: ApiCacheKeys;
 };
 
 export default function PostContent(props: PostContentProps) {
-    const limit = 2;
+    const { initialPosts, url, apiKey } = props;
 
-    const res = usePost(props.url, props.posts, props.apiKey, limit);
-
-    const posts = res.data?.pages.flat() ?? [];
-    const newest = res.data?.pages?.[0]?.[0]?.created_at;
-
-    const latest = useNewPost(props.url, newest, limit);
-
-    const { hasNext, isFetchingNext, fetchNext } = res;
-
-    useAddToInfinite<UserPost>({
-        apiKey: props.apiKey,
-        latest: latest.data,
+    const {
+        setLastEl,
+        isNext,
+        contents: posts,
+        isEmpty,
+        isLoading,
+    } = useInfinityScrollContents<UserPost>({
+        initialData: initialPosts,
+        url,
+        apiKey,
+        enabled: true,
+        getCursor: (p) => p.created_at,
         getId: (p) => p.post_id,
     });
 
-    const { setLastEl, isNext } = useInfiniteScrollTrigger({
-        enabled: true,
-        hasNext,
-        isFetchingNext,
-        fetchNext,
-        root: null,
-        rootMargin: "50px",
-        threshold: 0.1,
-        delayMs: 1500,
-    });
-
     if (!posts) return null;
-    if (posts.length === 0) return <h1>投稿がありません</h1>;
+
+    if (isEmpty) return <h1 className="p-4">投稿がありません</h1>;
+    if (isLoading) return <div>ロード</div>;
 
     return (
         <>
@@ -64,7 +50,7 @@ export default function PostContent(props: PostContentProps) {
 
                 return (
                     <div
-                        className={`w-full border-orange-300 bg-orange-100 hover:bg-orange-200/30 transition-colors duration-200 border-b-0 
+                        className={`w-full border-orange-200 bg-orange-100 hover:bg-orange-200/30 transition-colors duration-200 border-b-0 
                 flex flex-col min-h-38 p-3 h-auto ${
                     isFirst ? "border-none" : "border-t"
                 }`}
@@ -140,7 +126,7 @@ export default function PostContent(props: PostContentProps) {
             })}
             <div
                 className={`w-full h-14 flex  justify-center items-center ${
-                    isNext || isFetchingNext ? "block" : "hidden"
+                    isNext ? "block" : "hidden"
                 }
                 `}
             >
@@ -150,37 +136,4 @@ export default function PostContent(props: PostContentProps) {
             </div>
         </>
     );
-}
-
-function useNewPost(
-    url: string,
-    time: string | undefined,
-    limit: number = 20
-): QueryResultTanstack<UserPost[]> {
-    return useQueryData<UserPost[]>(
-        `${url}?limit=${limit}&after=${encodeURIComponent(time ? time : "")}`,
-        !!time
-    );
-}
-function usePost(
-    url: string,
-    initialPosts: UserPost[],
-    key: ApiCacheKeys,
-    limit: number = 20
-): InfiniteResultTanstack<UserPost[]> {
-    const InitialData: InfiniteData<UserPost[]> = {
-        pages: [initialPosts],
-        pageParams: [null],
-    };
-    return useInfiniteQueryData({
-        rawUrl: url + `?limit=${limit}`,
-        enabled: true,
-        queryKey: key,
-        initialData: InitialData,
-        getNextCursor: (lastPage) => {
-            if (lastPage.length <= 0) return undefined;
-            const last = lastPage[lastPage.length - 1];
-            return last?.created_at;
-        },
-    });
 }

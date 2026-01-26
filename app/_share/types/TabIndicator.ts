@@ -10,10 +10,16 @@ export type Indicator = {
 export type UseTabIndicator<T> = {
     activeId: T;
     setActiveId: (id: T) => void;
-    indicator: Indicator;
+    hoverId: T | null;
+    setHover: (id: T | null) => void;
+
+    activeIndicator: Indicator;
+    clearHover: () => void;
+    hoverIndicator: Indicator | null;
 
     wrapRef: (el: HTMLDivElement | null) => void;
     tabRef: (id: T) => (el: HTMLButtonElement | null) => void;
     isCalcComplete: boolean;
-    update: () => void;
+    updateActive: () => void;
+    updateHover: () => void;
 };

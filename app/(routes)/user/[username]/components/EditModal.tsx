@@ -2,7 +2,7 @@
 
 import MountedModal from "@/app/_share/components/modals/MountedModal";
 import UserIconImage from "@/app/_share/components/UserIconImage";
-import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrl";
+import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrls";
 import usePickImage from "@/app/_share/hooks/usePickImage";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import { useToast } from "@/app/_share/provider/Toast";

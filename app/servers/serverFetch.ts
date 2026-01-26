@@ -1,7 +1,7 @@
-import { LOGIN_URL } from "@/config";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import "server-only";
+import { LOGIN_URL } from "../_share/constants/apiUrls";
 
 type Props = {
     url: string;
@@ -17,7 +17,7 @@ export async function serverFetch<T>(props: Props): Promise<T> {
         headers: { cookie: cookieHeader },
         cache: cache ? cache : "no-store",
 
-        ...(tag ? { next: { tags: [tag], revalidate: false as const } } : {}),
+        ...(tag ? { next: { tags: [tag] } } : {}),
     });
 
     if (res.status === 404) {

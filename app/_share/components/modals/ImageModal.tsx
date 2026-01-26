@@ -20,7 +20,7 @@ export default function ImageModal(props: Props) {
     const [openModal, setOpenModal] = useState<boolean>(false);
 
     if (!root) return null;
-    if (!props.src) return;
+    if (!props.src) return null;
     return (
         <div
             className={`flex justify-center items-center w-full h-full overflow-hidden bg-gray-200 relative ${
@@ -64,7 +64,7 @@ export default function ImageModal(props: Props) {
                             </div>
                             {props.text && (
                                 <div className="pt-6">
-                                    <span className="text-white truncate block">
+                                    <span className="text-white truncate max-w-128 block">
                                         {props.text}
                                     </span>
                                 </div>

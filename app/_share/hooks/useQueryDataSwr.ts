@@ -1,11 +1,12 @@
 "use client";
 
 import { FetchResult, QueryResult } from "@/app/_share/types/fetch";
-import { DJANGO_URL, LOGIN_URL } from "@/config";
+import { DJANGO_URL } from "@/config";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import useSWRImmutable from "swr/immutable";
 import { fetcher } from "../api/request";
+import { LOGIN_URL } from "../constants/apiUrls";
 
 export default function useQueryDataSwr<T>(url: string): QueryResult<T> {
     const { data, error, isLoading, mutate } = useSWRImmutable<FetchResult<T>>(

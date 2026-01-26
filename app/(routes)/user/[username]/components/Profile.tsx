@@ -1,6 +1,6 @@
 import FollowButton from "@/app/_share/components/FollowButton";
 import ModalImage from "@/app/_share/components/modals/ImageModal";
-import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrl";
+import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrls";
 import Age from "@/app/_share/UI/Age";
 import GenericLink from "@/app/_share/UI/GenericLink";
 import { UserPageData } from "../types/userPageData";
@@ -94,15 +94,17 @@ function ProfileBlockBottom({
                             ? data.birthday.replaceAll("-", "/")
                             : "未登録"}
                     </span>
-                    <span className="text-base text-amber-800">
-                        {data.birthday && (
-                            <Age
-                                className="font-bold"
-                                birthday={data.birthday}
-                            />
-                        )}
-                        歳
-                    </span>
+                    {data.birthday && (
+                        <span className="text-base text-amber-800">
+                            {data.birthday && (
+                                <Age
+                                    className="font-bold"
+                                    birthday={data.birthday}
+                                />
+                            )}
+                            歳
+                        </span>
+                    )}
                 </div>
                 <GenericLink
                     height="h-6"

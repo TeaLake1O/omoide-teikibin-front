@@ -14,7 +14,7 @@ export default async function Home() {
     return (
         <PostContent
             url={url}
-            posts={posts}
+            initialPosts={posts}
             apiKey={API_CACHE_KEYS.homePost()}
         />
     );

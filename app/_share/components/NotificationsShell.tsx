@@ -1,14 +1,11 @@
 "use client";
 
-import { DJANGO_URL } from "@/config";
 import Image from "next/image";
-import { API_CACHE_KEYS, ApiCacheKeys } from "../constants/apiCacheKeys";
-import useAddToInfinite from "../hooks/useAddToInfinite";
-import useInfiniteScrollTrigger from "../hooks/useInfiniteScrollTrigger";
-import useInfiniteQueryData from "../hooks/useInifiniteQueryData";
-import useQueryData from "../hooks/useQueryData";
+import { API_CACHE_KEYS } from "../constants/apiCacheKeys";
+import { FRIEND_NOTIFY_URL, POST_NOTIFY_URL } from "../constants/apiUrls";
+import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrls";
+import useInfiniteScrollContents from "../hooks/useInfiniteScrollContents";
 import useTabIndicator from "../hooks/useTabIndicator";
-import { InfiniteResultTanstack, QueryResultTanstack } from "../types/fetch";
 import { PostNotify } from "../types/notify";
 import { TabItem } from "../types/TabIndicator";
 import { NonEmptyArray } from "../types/util";
@@ -27,7 +24,11 @@ export default function NotificationsShell() {
     const {
         wrapRef,
         tabRef,
-        indicator,
+        activeIndicator,
+        setHover,
+        clearHover,
+        hoverIndicator,
+        hoverId,
         setActiveId,
         activeId,
         isCalcComplete,
@@ -36,11 +37,12 @@ export default function NotificationsShell() {
     return (
         <div className="h-full w-full flex flex-col min-h-0">
             <div
-                className={`grid h-16 w-full justify-center items-center relative`}
+                className={`grid h-16 w-full justify-center items-center relative border-b border-b-orange-200`}
                 style={{
                     gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))`,
                 }}
                 ref={wrapRef}
+                onMouseLeave={clearHover}
             >
                 {items.map((item) => (
                     <button
@@ -48,85 +50,115 @@ export default function NotificationsShell() {
                         ref={tabRef(item.id)}
                         type="button"
                         onClick={() => setActiveId(item.id)}
-                        className="w-full h-full"
+                        onMouseEnter={() => setHover(item.id)}
+                        className="w-full h-full flex justify-center items-center"
                     >
                         <span className="">{item.label}</span>
                     </button>
                 ))}
-                <span
-                    className={`absolute bottom-0 h-[2px] bg-orange-300 transition-all duration-300 ease-out ${
-                        isCalcComplete ? "" : "hidden"
+                <div
+                    className={`absolute h-[80%] bg-black/10 rounded-sm transition-[transform,width,opacity] 
+                    pointer-events-none duration-200 ease-out ${
+                        hoverIndicator && hoverId ? "opacity-100" : "opacity-0"
                     }`}
                     style={{
-                        transform: `translateX(${indicator.left}px)`,
-                        width: `${indicator.width}px`,
+                        transform: `translateX(${
+                            hoverIndicator
+                                ? hoverIndicator.left +
+                                  hoverIndicator.width * 0.1
+                                : 0
+                        }px)`,
+                        width: `${
+                            hoverIndicator ? hoverIndicator.width * 0.8 : 0
+                        }px`,
+                    }}
+                />
+                <span
+                    className={`absolute bottom-0 h-[2px] rounded-full bg-orange-400 
+                        transition-[transform,width] duration-500 ease-out ${
+                            isCalcComplete ? "" : "hidden"
+                        }`}
+                    style={{
+                        transform: `translateX(${
+                            activeIndicator
+                                ? activeIndicator.left +
+                                  activeIndicator.width * 0.25
+                                : 0
+                        }px)`,
+                        width: `${
+                            activeIndicator ? activeIndicator.width * 0.5 : 0
+                        }px`,
                     }}
                 />
             </div>
-            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-slim mt-2">
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-slim">
                 {activeId === "post" && (
                     <PostNotificationContents activeId={activeId} />
                 )}
-                {activeId === "friend" && <div>test</div>}
+                {activeId === "friend" && (
+                    <FriendNotificationContents activeId={activeId} />
+                )}
             </div>
         </div>
     );
 }
 
 function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
-    const limit = 2;
-    const res = usePostNotify(
-        API_CACHE_KEYS.postNotify(),
-        activeId === "post",
-        limit
-    );
-    const notifies = res.data?.pages.flat() ?? [];
-    const newest = res.data?.pages?.[0]?.[0]?.created_at;
-
-    const latest = useNewPostNotify(newest, limit);
-
-    const { fetchNext, isFetchingNext, hasNext } = res;
-
-    useAddToInfinite<PostNotify>({
+    const {
+        setLastEl,
+        isNext,
+        contents: notifies,
+        isLoading,
+        isEmpty,
+    } = useInfiniteScrollContents<PostNotify>({
+        url: POST_NOTIFY_URL,
         apiKey: API_CACHE_KEYS.postNotify(),
-        latest: latest.data,
-        getId: (p) => p.notify_id,
-    });
 
-    const { setLastEl, isNext } = useInfiniteScrollTrigger({
-        enabled: true,
-        hasNext,
-        isFetchingNext,
-        fetchNext,
-        root: null,
-        rootMargin: "50px",
-        threshold: 0.1,
-        delayMs: 1500,
+        enabled: activeId === "post",
+        getCursor: (n) => n.created_at,
+        getId: (n) => n.notify_id,
     });
+    console.log(POST_NOTIFY_URL);
 
     if (!notifies) return null;
-    if (notifies.length === 0) return <h1>通知がありません</h1>;
+    if (isEmpty) return <h1>通知がありません</h1>;
+    if (isLoading)
+        return (
+            <div className="w-full h-full flex flex-col justify-center items-center gap-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                    <div
+                        className="border border-gray-100 bg-gray-100 h-48 w-[80%] rounded-md"
+                        key={i}
+                    />
+                ))}
+            </div>
+        );
 
     return (
-        <div className="w-full flex flex-col justify-center items-center gap-3">
+        <div className="w-full flex flex-col justify-center items-center">
             {notifies.map((notify, index) => {
                 const isLast = notifies.length - 1 === index;
+                const user = notify.actor;
                 return (
                     <div
                         key={notify.notify_id}
                         ref={isLast ? setLastEl : undefined}
-                        className="w-[90%] p-3 border border-amber-800 rounded-md mb-1"
+                        className="w-full border-b p-3 border-b-orange-200 hover:bg-black/10 transition-colors duration-200"
                     >
-                        <div className="flex justify-between">
-                            <span className="text-sm font-bold">
+                        <div className="flex mr-2 gap-5 items-center">
+                            <Image
+                                src={user.icon_url ?? UNKNOWN_USER_ICON_URL}
+                                alt="投稿通知画像"
+                                width={24}
+                                height={24}
+                                className="h-10 w-10 aspect-square rounded-full"
+                            />
+                            <span className="text-sm truncate font-bold">
                                 {notify.message}
-                            </span>
-                            <span className="text-sm">
-                                {formatDateTime(notify.created_at, false)}
                             </span>
                         </div>
                         <div className="flex flex-col justify-center items-center p-2 gap-3">
-                            <span className="text-sm text-black truncate w-[80%]">
+                            <span className="text-sm text-gray-500 truncate w-[80%]">
                                 {notify.post_detail?.post_content}
                             </span>
                             <div>
@@ -134,12 +166,15 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
                                     <Image
                                         src={notify.post_detail?.post_images}
                                         alt="投稿通知画像"
-                                        width={192}
-                                        height={192}
+                                        width={112}
+                                        height={112}
                                     />
                                 )}
                             </div>
                         </div>
+                        <span className="text-sm text-amber-800">
+                            {formatDateTime(notify.created_at, true)}
+                        </span>
                     </div>
                 );
             })}
@@ -154,33 +189,86 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
     );
 }
 
-//ここのリファクタやる
+function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
+    const {
+        //setLastEl,
+        isNext,
+        contents: notifies,
+        isLoading,
+        isEmpty,
+    } = useInfiniteScrollContents<PostNotify>({
+        url: FRIEND_NOTIFY_URL,
+        apiKey: API_CACHE_KEYS.friendNotify(),
 
-function usePostNotify(
-    key: ApiCacheKeys,
-    enabled: boolean,
-    limit: number = 20
-): InfiniteResultTanstack<PostNotify[]> {
-    return useInfiniteQueryData({
-        rawUrl: DJANGO_URL + "/notify/api/post" + `?limit=${limit}`,
-        enabled,
-        queryKey: key,
-        getNextCursor: (lastPage) => {
-            if (lastPage.length <= 0) return undefined;
-            const last = lastPage[lastPage.length - 1];
-            return last?.created_at;
-        },
+        enabled: activeId === "friend",
+        getCursor: (n) => n.created_at,
+        getId: (n) => n.notify_id,
     });
-}
 
-function useNewPostNotify(
-    time: string | undefined,
-    limit: number = 20
-): QueryResultTanstack<PostNotify[]> {
-    return useQueryData<PostNotify[]>(
-        `${
-            DJANGO_URL + "/notify/api/post"
-        }?limit=${limit}&after=${encodeURIComponent(time ? time : "")}`,
-        !!time
+    if (!notifies) return null;
+    if (isEmpty) return <h1>通知がありません</h1>;
+    if (isLoading) {
+        return (
+            <div className="w-full h-full flex flex-col justify-center items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                    <div
+                        className="border border-gray-100 bg-gray-100 h-24 w-[80%] rounded-md"
+                        key={i}
+                    />
+                ))}
+            </div>
+        );
+    }
+
+    return (
+        <div className="w-full flex flex-col justify-center items-center">
+            {notifies.map((notify, index) => {
+                const isLast = notifies.length - 1 === index;
+                const user = notify.actor;
+                const isMessage = notify.status === "message";
+                return (
+                    <div
+                        key={notify.notify_id}
+                        className={`w-full flex flex-col gap-3 border-orange-200 p-3 
+                            transition-colors duration-200 hover:bg-black/10 ${"border-b"} `}
+                    >
+                        <div className="flex mr-2 gap-5 items-center">
+                            <Image
+                                src={user.icon_url ?? UNKNOWN_USER_ICON_URL}
+                                alt="投稿通知画像"
+                                width={24}
+                                height={24}
+                                className="h-10 w-10 aspect-square rounded-full"
+                            />
+                            {isMessage ? (
+                                <span className="text-sm font-bold truncate">
+                                    {user.nickname ?? user.username}
+                                    さんからメッセージが届いています
+                                </span>
+                            ) : (
+                                <span className="text-sm font-bold truncate">
+                                    {notify.message}
+                                </span>
+                            )}
+                        </div>
+                        {isMessage && (
+                            <span className="text-gray-500 ml-20 truncate">
+                                {notify.message}
+                            </span>
+                        )}
+                        <span className="text-sm mt-2 text-amber-800">
+                            {formatDateTime(notify.created_at, true)}
+                        </span>
+                    </div>
+                );
+            })}
+            {isNext && (
+                <div className="w-full h-10 flex justify-center items-center">
+                    <div className="h-[80%] aspect-square">
+                        <Loader />
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

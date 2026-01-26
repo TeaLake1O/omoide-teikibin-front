@@ -5,9 +5,14 @@ type PostDetail = {
 };
 
 export type PostNotify = {
-    status: string;
+    status: "post" | "friend" | "message" | "else";
     notify_id: string;
-    actor: number;
+    actor: {
+        id: number;
+        username: string;
+        icon_url: string | null;
+        nickname: string | null;
+    };
     message: string;
     is_read: boolean;
     created_at: string;
