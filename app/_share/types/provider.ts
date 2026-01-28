@@ -3,6 +3,8 @@ import { Dispatch } from "react";
 
 export type LayoutUI = {
     toggleHamburger: () => void;
+    hamburger: boolean;
+    isLoading: boolean;
     me: Me | null;
     refresh: () => void;
     optimisticUrl: string | null;

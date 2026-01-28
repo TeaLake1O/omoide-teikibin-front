@@ -16,6 +16,7 @@ export default async function Home() {
             url={url}
             initialPosts={posts}
             apiKey={API_CACHE_KEYS.homePost()}
+            apiKeyInfinite={API_CACHE_KEYS.homePostInfinite()}
         />
     );
 }

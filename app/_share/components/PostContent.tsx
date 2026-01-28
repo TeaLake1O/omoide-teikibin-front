@@ -16,10 +16,11 @@ export type PostContentProps = {
     initialPosts: UserPost[];
     url: string;
     apiKey: ApiCacheKeys;
+    apiKeyInfinite: ApiCacheKeys;
 };
 
 export default function PostContent(props: PostContentProps) {
-    const { initialPosts, url, apiKey } = props;
+    const { initialPosts, url, apiKey, apiKeyInfinite } = props;
 
     const {
         setLastEl,
@@ -31,6 +32,7 @@ export default function PostContent(props: PostContentProps) {
         initialData: initialPosts,
         url,
         apiKey,
+        apiKeyInfinite,
         enabled: true,
         getCursor: (p) => p.created_at,
         getId: (p) => p.post_id,

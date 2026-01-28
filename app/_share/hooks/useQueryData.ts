@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { ApiError, fetcherOrThrow } from "../api/requestTanstack";
+import { ApiCacheKeys } from "../constants/apiCacheKeys";
 import { LOGIN_URL } from "../constants/apiUrls";
 import { QueryResultTanstack } from "../types/fetch";
 
@@ -12,11 +13,12 @@ export default function useQueryData<T>(args: {
     url: string;
     enabled: boolean;
     initialData?: T;
+    queryKey: ApiCacheKeys;
     time?: number;
 }): QueryResultTanstack<T> {
-    const { url, enabled, initialData /*time後で使う*/ } = args;
+    const { url, enabled, initialData, queryKey /*time後で使う*/ } = args;
     const q = useQuery<T, ApiError>({
-        queryKey: ["api", url],
+        queryKey: queryKey,
         queryFn: () => fetcherOrThrow<T>(url),
         retry: (failureCount, error) => {
             if (error.status === "noPermission") return false;

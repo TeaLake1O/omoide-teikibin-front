@@ -53,7 +53,7 @@ export default function Menubar() {
     const { openNotifyModal, isOpenNotifyModal } = useNotifyModal();
 
     useEffect(() => {
-        setOptimisticUrl(path);
+        setOptimisticUrl(null);
     }, [path, setOptimisticUrl]);
 
     return (
@@ -91,7 +91,10 @@ export default function Menubar() {
                         group`}
                             onContextMenu={(e) => e.preventDefault()}
                             href={item.href}
-                            onClick={() => setOptimisticUrl(item.href)}
+                            onClick={() => {
+                                setOptimisticUrl(targetHref);
+                                console.log(optimisticUrl);
+                            }}
                         >
                             <div
                                 className="aspect-square h-14 w-14 rounded-full group-active:bg-black/15 duration-300

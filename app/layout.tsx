@@ -22,8 +22,8 @@ export default async function RootLayout({
                 bg-orange-100 "
             >
                 <div id="modal-root" />
-                <AppProviders>
-                    <LayoutShell initialMe={data}>{children}</LayoutShell>
+                <AppProviders initialMe={data}>
+                    <LayoutShell>{children}</LayoutShell>
                 </AppProviders>
             </body>
         </html>

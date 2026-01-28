@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { memo } from "react";
 import { API_CACHE_KEYS } from "../constants/apiCacheKeys";
 import { FRIEND_NOTIFY_URL, POST_NOTIFY_URL } from "../constants/apiUrls";
 import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrls";
@@ -63,7 +64,7 @@ export default function NotificationsShell() {
                     </button>
                 ))}
                 <div
-                    className={`absolute h-[80%] bg-black/10 rounded-sm transition-[transform,opacity] 
+                    className={`absolute h-[80%] bg-black/10 md:block hidden rounded-sm transition-[transform,opacity] 
                     pointer-events-none duration-300 ${
                         hoverIndicator && hoverId ? "opacity-100" : "opacity-0"
                     }`}
@@ -97,17 +98,27 @@ export default function NotificationsShell() {
                     }}
                 />
             </div>
-            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-slim">
-                {activeId === "post" && (
-                    <PostNotificationContents activeId={activeId} />
-                )}
-                {activeId === "friend" && (
-                    <FriendNotificationContents activeId={activeId} />
-                )}
-            </div>
+            <NotificationBody activeId={activeId} />
         </div>
     );
 }
+
+const NotificationBody = memo(function notificationBody({
+    activeId,
+}: {
+    activeId: NotifyId;
+}) {
+    return (
+        <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-slim">
+            {activeId === "post" && (
+                <PostNotificationContents activeId={activeId} />
+            )}
+            {activeId === "friend" && (
+                <FriendNotificationContents activeId={activeId} />
+            )}
+        </div>
+    );
+});
 
 function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
     const {
@@ -118,8 +129,8 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
         isEmpty,
     } = useInfiniteScrollContents<PostNotify>({
         url: POST_NOTIFY_URL,
+        apiKeyInfinite: API_CACHE_KEYS.postNotifyInfinite(),
         apiKey: API_CACHE_KEYS.postNotify(),
-
         enabled: activeId === "post",
         getCursor: (n) => n.created_at,
         getId: (n) => n.notify_id,
@@ -148,12 +159,12 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
                     <div
                         key={notify.notify_id}
                         ref={isLast ? setLastEl : undefined}
-                        className="w-full border-b p-3 border-b-orange-200 hover:bg-black/10 transition-colors duration-200"
+                        className="w-full border-b p-3 border-b-orange-200 hover:bg-black/10 active:bg-black/20 transition-colors duration-200"
                     >
                         <div className="flex mr-2 gap-5 items-center">
                             <Image
                                 src={user.icon_url ?? UNKNOWN_USER_ICON_URL}
-                                alt="投稿通知画像"
+                                alt="通知アイコン"
                                 width={24}
                                 height={24}
                                 className="h-10 w-10 aspect-square rounded-full"
@@ -204,7 +215,7 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
     } = useInfiniteScrollContents<PostNotify>({
         url: FRIEND_NOTIFY_URL,
         apiKey: API_CACHE_KEYS.friendNotify(),
-
+        apiKeyInfinite: API_CACHE_KEYS.friendNotifyInfinite(),
         enabled: activeId === "friend",
         getCursor: (n) => n.created_at,
         getId: (n) => n.notify_id,
@@ -234,7 +245,7 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
                     <div
                         key={notify.notify_id}
                         className={`w-full flex flex-col gap-3 border-orange-200 p-3 
-                            transition-colors duration-200 hover:bg-black/10 ${"border-b"} `}
+                            transition-colors duration-200 hover:bg-black/10 active:bg-black/20 ${"border-b"} `}
                     >
                         <div className="flex mr-2 gap-5 items-center">
                             <Image

@@ -13,19 +13,28 @@ import useQueryData from "./useQueryData";
 export default function useInfiniteScrollContents<T>(args: {
     initialData?: T[];
     url: string;
+    apiKeyInfinite: ApiCacheKeys;
     apiKey: ApiCacheKeys;
     enabled: boolean;
     getCursor: (item: T) => string;
     getId: (item: T) => string;
 }): UseInfiniteScrollContents<T> {
-    const { initialData, url, apiKey, getCursor, getId, enabled } = args;
+    const {
+        initialData,
+        url,
+        apiKey,
+        getCursor,
+        getId,
+        enabled,
+        apiKeyInfinite,
+    } = args;
 
     const limit = 2;
 
     const res = useOldContents<T>({
         url,
         initialData,
-        key: apiKey,
+        key: apiKeyInfinite,
         limit,
         enabled,
         getCursor,
@@ -36,12 +45,18 @@ export default function useInfiniteScrollContents<T>(args: {
         ? getCursor(res.data.pages[0][0])
         : undefined;
 
-    const latest = useNewContents<T>({ url, time: newest, limit, enabled });
+    const latest = useNewContents<T>({
+        url,
+        time: newest,
+        limit,
+        enabled,
+        apiKey,
+    });
 
     const { hasNext, isFetchingNext, fetchNext } = res;
 
     useAddToInfinite<T>({
-        apiKey: apiKey,
+        apiKey: apiKeyInfinite,
         latest: latest.data,
         enabled,
         getId,
@@ -74,12 +89,14 @@ function useNewContents<T>(args: {
     time: string | undefined;
     limit: number;
     enabled: boolean;
+    apiKey: ApiCacheKeys;
 }): QueryResultTanstack<T[]> {
-    const { url, time, limit = 20, enabled } = args;
+    const { url, time, limit = 20, enabled, apiKey } = args;
     return useQueryData<T[]>({
         url: `${url}?limit=${limit}&after=${encodeURIComponent(
             time ? time : ""
         )}`,
+        queryKey: apiKey,
         enabled: enabled && !!time,
     });
 }

@@ -35,6 +35,7 @@ export default async function UserPage({
                 url={userPageURL}
                 initialPosts={initialPost}
                 apiKey={API_CACHE_KEYS.userPagePost(username)}
+                apiKeyInfinite={API_CACHE_KEYS.userPagePostInfinite(username)}
             />
         </div>
     );

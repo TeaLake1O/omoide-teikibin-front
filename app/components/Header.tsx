@@ -59,7 +59,7 @@ export default function Header(props: Props) {
             </div>
             <div className="flex-1 flex justify-center">
                 <h1 className="font-medium font-sans text-[1.27rem] text-amber-800">
-                    {getPageName(optimisticUrl)}
+                    {getPageName(optimisticUrl) || getPageName(path)}
                 </h1>
             </div>
             <div className="h-12 aspect-square flex items-center justify-center">
