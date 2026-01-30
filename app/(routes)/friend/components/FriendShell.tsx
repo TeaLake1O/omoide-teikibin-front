@@ -19,6 +19,8 @@ const items = [
 
 type TabId = (typeof items)[number]["id"];
 
+const defaultTab: TabId = "view";
+
 export default function FriendShell(props: Props) {
     const {
         wrapRef,
@@ -29,9 +31,9 @@ export default function FriendShell(props: Props) {
         activeId,
     } = useTabIndicator<TabId>({ items: items });
     return (
-        <div className="h-full w-full">
+        <div className="h-full w-full flex flex-col min-h-0">
             <div
-                className="h-18 flex w-full items-center relative justify-center"
+                className="h-18 shrink-0  flex w-full items-center relative justify-center"
                 ref={wrapRef}
             >
                 {items.map((item) => {
@@ -42,7 +44,9 @@ export default function FriendShell(props: Props) {
                             ref={tabRef(item.id)}
                             key={item.id}
                             type="button"
-                            onClick={() => setActiveId(item.id)}
+                            onClick={() => {
+                                setActiveId(item.id);
+                            }}
                         >
                             <span
                                 className={`text-xl text-amber-800 text-center ${
@@ -67,11 +71,13 @@ export default function FriendShell(props: Props) {
                     }}
                 />
             </div>
-            {activeId === "request" && (
-                <FriendRequest data={props.requestsData} />
-            )}
-            {activeId === "view" && <FriendLists data={props.friendData} />}
-            {activeId === "search" && <FriendSearch />}
+            <div className="flex-1 min-h-0 w-full">
+                {activeId === "request" && (
+                    <FriendRequest data={props.requestsData} />
+                )}
+                {activeId === "view" && <FriendLists data={props.friendData} />}
+                {activeId === "search" && <FriendSearch />}
+            </div>
         </div>
     );
 }

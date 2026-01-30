@@ -29,10 +29,14 @@ export default function SearchBox({
                 className="peer min-w-0 flex-1 h-[80%] focus:ml-3 border-none  focus:outline-none focus:ring-0 focus:border-transparent
                         focus-visible:outline-none focus-visible:ring-0"
                 onChange={(e) => setText(e.currentTarget.value)}
+                onClick={(e) => e.stopPropagation()}
                 value={text}
                 placeholder="検索"
             />
-            <div className="peer-focus:hidden h-full aspect-square flex items-center justify-center p-2">
+            <div
+                className="peer-focus:hidden h-full
+aspect-square flex items-center justify-center p-2"
+            >
                 <SearchIcon />
             </div>
         </label>

@@ -1,14 +1,16 @@
 "use client";
 
-import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrls";
+import UserIconImage from "@/app/_share/components/UserIconImage";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import formatDateTime from "@/app/_share/util/formatDateTime";
-import Image from "next/image";
 import Link from "next/link";
 import { FriendData } from "../types/friends";
 
 export default function FriendLists({ data }: { data: FriendData[] }) {
     const { me } = useLayoutUI();
+    if (data.length === 0) {
+        return <div>メッセージはありません</div>;
+    }
     return (
         <div className="w-full min-h-0 flex flex-col items-center">
             {data.map((item, index) => {
@@ -26,18 +28,10 @@ export default function FriendLists({ data }: { data: FriendData[] }) {
                             <div className="flex flex-row items-center justify-center gap-4">
                                 <Link
                                     href={`/user/${item.other.username}`}
-                                    className="h-10 w-10 aspect-square rounded-full group"
+                                    className="h-10 w-10 aspect-square rounded-full"
                                 >
-                                    <Image
-                                        src={
-                                            item.other.icon_url ??
-                                            UNKNOWN_USER_ICON_URL
-                                        }
-                                        alt="投稿通知画像"
-                                        width={24}
-                                        height={24}
-                                        className="h-full w-full aspect-square rounded-full group-hover:brightness-90 
-                                    transition-filter duration-200 group-active:brightness-90"
+                                    <UserIconImage
+                                        iconUrl={item.other.icon_url}
                                     />
                                 </Link>
                                 <span className="text-lg truncate">{name}</span>

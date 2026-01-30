@@ -4,4 +4,5 @@ export type UseInfiniteScrollContents<T> = {
     contents: T[];
     isLoading: boolean;
     isEmpty: boolean;
+    refresh: () => void;
 };

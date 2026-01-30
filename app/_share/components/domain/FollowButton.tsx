@@ -91,7 +91,7 @@ export default function FollowButton({
                         <GenericButton
                             name="フレンドを削除"
                             height="h-6"
-                            textSize="text-sm font-bold"
+                            textSize="text-[80%] font-bold"
                             textColor="text-amber-900"
                             handleOnclick={() => callback(false)}
                         />
@@ -109,21 +109,21 @@ export default function FollowButton({
 
         case "incoming":
             return (
-                <div className="flex items-center justify-between mr-3">
+                <div className="flex items-center justify-between mr-3 h-full">
                     <span className="text-amber-800 text-sm mr-2">
                         申請がきています
                     </span>
                     <div className="flex gap-3">
                         <GenericButton
                             name="許可"
-                            height="h-6"
-                            textSize="text-sm"
+                            height="h-full"
+                            textSize="text-[80%]"
                             handleOnclick={() => callback(true)}
                         />
                         <GenericButton
                             name="拒否"
-                            height="h-6"
-                            textSize="text-sm"
+                            height="h-full"
+                            textSize="text-[80%]"
                             handleOnclick={() => callback(false)}
                         />
                     </div>
@@ -131,25 +131,25 @@ export default function FollowButton({
             );
         case "outgoing":
             return (
-                <div className="flex items-center justify-between gap-2 mr-3">
+                <div className="flex h-full items-center justify-between gap-2 mr-3">
                     <span className="text-amber-800 text-sm">
                         フレンド申請中
                     </span>
                     <GenericButton
                         name="キャンセル"
-                        height="h-6"
-                        textSize="text-sm"
+                        height="h-full"
+                        textSize="text-[80%]"
                         handleOnclick={() => callback(false)}
                     />
                 </div>
             );
         case "none":
             return (
-                <div className="flex items-center flex-row-reverse mr-3">
+                <div className="flex h-full items-center flex-row-reverse mr-3">
                     <GenericButton
                         name="フレンド申請"
-                        height="h-6"
-                        textSize="text-sm"
+                        height="h-full"
+                        textSize="text-[80%]"
                         handleOnclick={() => callback(true)}
                     />
                 </div>

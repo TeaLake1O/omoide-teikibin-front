@@ -81,6 +81,7 @@ export default function useInfiniteFeedContents<T>(args: {
         contents,
         isLoading: res.isLoading,
         isEmpty: !res.isLoading && contents.length === 0,
+        refresh: res.refresh,
     };
 
     return rs;

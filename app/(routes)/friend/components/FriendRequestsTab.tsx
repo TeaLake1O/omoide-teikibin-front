@@ -1,13 +1,15 @@
 "use client";
 
 import FollowButton from "@/app/_share/components/domain/FollowButton";
-import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrls";
+import UserIconImage from "@/app/_share/components/UserIconImage";
 import formatDateTime from "@/app/_share/util/formatDateTime";
-import Image from "next/image";
 import Link from "next/link";
 import { FriendRequestData } from "../types/friends";
 
 export default function FriendRequest({ data }: { data: FriendRequestData[] }) {
+    if (data.length === 0) {
+        return <div>申請はありません</div>;
+    }
     return (
         <div className="w-full min-h-0 flex flex-col items-center">
             {data.map((item, index) => {
@@ -25,19 +27,9 @@ export default function FriendRequest({ data }: { data: FriendRequestData[] }) {
                             <div className="flex flex-row items-center justify-center gap-4">
                                 <Link
                                     href={`/user/${item.username}`}
-                                    className="h-10 w-10 aspect-square rounded-full group"
+                                    className="h-10 w-10 aspect-square rounded-full"
                                 >
-                                    <Image
-                                        src={
-                                            item.icon_url ??
-                                            UNKNOWN_USER_ICON_URL
-                                        }
-                                        alt="投稿通知画像"
-                                        width={24}
-                                        height={24}
-                                        className="h-full w-full aspect-square rounded-full group-hover:brightness-90 
-                                    transition-filter duration-200 group-active:brightness-90"
-                                    />
+                                    <UserIconImage iconUrl={item.icon_url} />
                                 </Link>
                                 <span className="text-lg truncate">{name}</span>
                             </div>
