@@ -9,3 +9,6 @@ export type FriendData = {
     sender_username: string;
     sender_nickname: string | null;
 };
+export type FriendRequestData = UserInf & {
+    updated_at: string;
+};

@@ -2,10 +2,11 @@
 
 import Script from "next/script";
 import { ReactNode, useEffect, useState } from "react";
-import { useIsMdUp } from "../_share/hooks/useIsMdUp";
-import useScrollToggle from "../_share/hooks/useScrollToggle";
+import { LoadingScreen } from "../_share/components/UI/util/LoadingScreen";
+import useScrollToggle from "../_share/hooks/observe/useScrollToggle";
+import { useIsMdUp } from "../_share/hooks/util/useIsMdUp";
+import useTimeout from "../_share/hooks/util/useTimeout";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
-import { LoadingScreen } from "../_share/UI/LoadingScreen";
 import AsideMenu from "./AsideMenu";
 import Header from "./Header";
 import Menubar from "./Menubar";
@@ -28,13 +29,13 @@ export default function LayoutShell(props: Props) {
     const isMdUp = useIsMdUp();
 
     //最低1秒はローディング画面を表示する
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setMinDelayDone(true);
-        }, 1000);
 
-        return () => clearTimeout(timer);
-    }, []);
+    const { schedule } = useTimeout();
+
+    useEffect(() => {
+        // 毎回表示のたびに最低1秒待ちたいなら、isLoadingがtrueになったタイミングでリセットしてもいい
+        schedule(() => setMinDelayDone(true), 1000);
+    }, [schedule]);
 
     //isLoadingならローディング画面を表示
     if (isLoading || !minDelayDone) {

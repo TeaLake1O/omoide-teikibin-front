@@ -2,37 +2,39 @@
 
 import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { ApiError, fetcherOrThrow } from "../api/requestTanstack";
-import { ApiCacheKeys } from "../constants/apiCacheKeys";
-import { LOGIN_URL } from "../constants/apiUrls";
-import { InfiniteResultTanstack } from "../types/fetch";
+import { ApiError, fetcherOrThrow } from "../../api/requestTanstack";
+import { ApiCacheKeys } from "../../constants/apiCacheKeys";
+import { LOGIN_URL } from "../../constants/apiUrls";
+import { InfiniteResultTanstack, Page } from "../../types/fetch";
 
 const seconds = 1_000;
 const minute = 60_000;
 
 export default function useInfiniteQueryData<T>(args: {
-    rawUrl: string;
+    url: string;
     enabled: boolean;
     queryKey: ApiCacheKeys;
-    initialData?: InfiniteData<T>;
-    getNextCursor: (lastPage: T) => string | undefined;
+    initialData?: InfiniteData<Page<T>, string>;
 }): InfiniteResultTanstack<T> {
-    const { rawUrl, enabled, queryKey, initialData, getNextCursor } = args;
-    const q = useInfiniteQuery<T, ApiError>({
+    const { url, enabled, queryKey, initialData } = args;
+
+    const q = useInfiniteQuery<
+        Page<T>,
+        ApiError,
+        InfiniteData<Page<T>, string>,
+        ApiCacheKeys,
+        string
+    >({
         queryKey: queryKey,
         queryFn: ({ pageParam }) => {
-            const before = pageParam;
-            const url =
-                rawUrl +
-                (before ? "&before=" + encodeURIComponent(String(before)) : "");
-            return fetcherOrThrow<T>(url);
+            return fetcherOrThrow<Page<T>>(pageParam);
         },
         retry: (failureCount, error) => {
             if (error.status === "noPermission") return false;
             return failureCount < 3;
         },
-        getNextPageParam: (lastPage) => getNextCursor(lastPage),
-        initialPageParam: null as string | null,
+        getNextPageParam: (lastPage) => lastPage.next ?? undefined,
+        initialPageParam: url,
         initialData: initialData,
         staleTime: 30 * seconds,
         enabled,

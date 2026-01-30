@@ -1,8 +1,8 @@
-import FollowButton from "@/app/_share/components/FollowButton";
+import FollowButton from "@/app/_share/components/domain/FollowButton";
 import ModalImage from "@/app/_share/components/modals/ImageModal";
+import GenericLink from "@/app/_share/components/UI/button/GenericLink";
+import Age from "@/app/_share/components/UI/util/Age";
 import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrls";
-import Age from "@/app/_share/UI/Age";
-import GenericLink from "@/app/_share/UI/GenericLink";
 import { UserPageData } from "../types/userPageData";
 import EditModal from "./EditModal";
 

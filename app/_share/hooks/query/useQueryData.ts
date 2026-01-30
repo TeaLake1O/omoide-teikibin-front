@@ -2,10 +2,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { ApiError, fetcherOrThrow } from "../api/requestTanstack";
-import { ApiCacheKeys } from "../constants/apiCacheKeys";
-import { LOGIN_URL } from "../constants/apiUrls";
-import { QueryResultTanstack } from "../types/fetch";
+import { ApiError, fetcherOrThrow } from "../../api/requestTanstack";
+import { ApiCacheKeys } from "../../constants/apiCacheKeys";
+import { LOGIN_URL } from "../../constants/apiUrls";
+import { QueryResultTanstack } from "../../types/fetch";
 
 const minute = 60_000;
 

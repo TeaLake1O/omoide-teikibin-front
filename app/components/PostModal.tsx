@@ -6,11 +6,11 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import createPost from "../_share/api/createPost";
-import usePickImage from "../_share/hooks/usePickImage";
+import CloseButton from "../_share/components/UI/button/CloseButton";
+import GenericButton from "../_share/components/UI/button/GenericButton";
+import usePickImage from "../_share/hooks/util/usePickImage";
 import { usePostModal } from "../_share/provider/PostModal";
 import { useToast } from "../_share/provider/Toast";
-import CloseButton from "../_share/UI/CloseButton";
-import GenericButton from "../_share/UI/GenericButton";
 
 export default function PostModal() {
     const { isOpenPostModal, closePostModal } = usePostModal();

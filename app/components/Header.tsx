@@ -4,8 +4,8 @@ import { Me } from "@/types/Me";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import IconImage from "../_share/components/IconImage";
+import BackButton from "../_share/components/UI/button/BackButton";
 import UserIcon from "../_share/components/UserIconImage";
-import BackButton from "../_share/UI/BackButton";
 import getPageName from "../_share/util/getPageName";
 
 type Props = {

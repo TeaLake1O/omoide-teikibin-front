@@ -1,11 +1,11 @@
 "use client";
-import GenericButton from "@/app/_share/UI/GenericButton";
+import GenericButton from "@/app/_share/components/UI/button/GenericButton";
 import { useToast } from "@/app/_share/provider/Toast";
 import { Status } from "@/app/_share/types/status";
 import nextStatusMap from "@/app/_share/util/nextStatusMap";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import friendRequest from "../api/friendRequest";
+import friendRequest from "../../api/friendRequest";
 
 const SEND_MS = 3000;
 
@@ -82,7 +82,7 @@ export default function FollowButton({
     if (isMe) return null;
     switch (status) {
         case "friend":
-            if (path.startsWith("/user/")) {
+            if (path.startsWith("/user/") || path.startsWith("friend")) {
                 return (
                     <div className="flex items-center justify-between mr-3">
                         <span className="text-amber-800 text-sm mr-3">

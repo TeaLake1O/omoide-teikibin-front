@@ -4,7 +4,7 @@ import {
     FRIEND_NOTIFY_COUNT_URL,
     POST_NOTIFY_COUNT_URL,
 } from "../constants/apiUrls";
-import useQueryData from "../hooks/useQueryData";
+import useQueryData from "../hooks/query/useQueryData";
 
 type NotifyCount = {
     friendCount: number;
@@ -38,6 +38,7 @@ export function NotifyCountProvider({
             enabled,
             queryKey: fqk,
         }).data?.count ?? 0;
+
     const postCount =
         useQueryData<CountResult>({
             url: POST_NOTIFY_COUNT_URL,

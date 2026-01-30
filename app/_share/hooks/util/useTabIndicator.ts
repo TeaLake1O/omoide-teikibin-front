@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { Indicator, TabItem, UseTabIndicator } from "../types/TabIndicator";
-import { NonEmptyArray } from "../types/util";
+import { Indicator, TabItem, UseTabIndicator } from "../../types/TabIndicator";
+import { NonEmptyArray } from "../../types/util";
 import useTimeout from "./useTimeout";
 
 //かたジェネリクスをextendsできるらしい、RecordでそのままTを指定できないためstring系であることを明示する

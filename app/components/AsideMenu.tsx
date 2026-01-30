@@ -5,16 +5,16 @@ import { usePathname } from "next/navigation";
 import { ComponentType, useEffect } from "react";
 import { Me } from "../../types/Me";
 import LogoutButton from "../_share/components/modals/LogoutModal";
+import FriendsIcon from "../_share/components/UI/Icon/FriendsIcon";
+import GroupIcon from "../_share/components/UI/Icon/GroupIcon";
+import HomeIcon from "../_share/components/UI/Icon/HomeIcon";
+import MypageIcon from "../_share/components/UI/Icon/MypageIcon";
+import PostButton from "../_share/components/UI/Icon/PostIcon";
+import SettingsIcon from "../_share/components/UI/Icon/settingsIcon";
 import UserIcon from "../_share/components/UserIconImage";
-import { useIsMdUp } from "../_share/hooks/useIsMdUp";
+import { useIsMdUp } from "../_share/hooks/util/useIsMdUp";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
 import { usePostModal } from "../_share/provider/PostModal";
-import FriendsIcon from "../_share/UI/menuIcon/FriendsIcon";
-import GroupIcon from "../_share/UI/menuIcon/GroupIcon";
-import HomeIcon from "../_share/UI/menuIcon/HomeIcon";
-import MypageIcon from "../_share/UI/menuIcon/MypageIcon";
-import SettingsIcon from "../_share/UI/menuIcon/settingsIcon";
-import PostButton from "../_share/UI/PostButton";
 import PostModal from "./PostModal";
 
 type Props = {
@@ -140,10 +140,8 @@ export default function AsideMenu(props: Props) {
                                 : menu.href;
                         const isActive =
                             optimisticUrl === targetHref ||
-                            (path === targetHref && optimisticUrl === null) ||
-                            (menu.href === "/user" &&
-                                path.startsWith("/user/") &&
-                                optimisticUrl === null);
+                            (path === targetHref && optimisticUrl === null);
+
                         return (
                             <Link
                                 key={i}

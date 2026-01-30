@@ -6,10 +6,10 @@ import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import { FRONT_URL } from "@/config";
 import Link from "next/link";
-import { ApiCacheKeys } from "../constants/apiCacheKeys";
-import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrls";
-import useInfinityScrollContents from "../hooks/useInfiniteScrollContents";
-import Loader from "../UI/Loader";
+import { ApiCacheKeys } from "../../constants/apiCacheKeys";
+import { UNKNOWN_USER_ICON_URL } from "../../constants/publicUrls";
+import useInfinityFeedContents from "../../hooks/domain/useInfiniteFeedContents";
+import Loader from "../UI/util/Loader";
 import FollowButton from "./FollowButton";
 
 export type PostContentProps = {
@@ -17,10 +17,11 @@ export type PostContentProps = {
     url: string;
     apiKey: ApiCacheKeys;
     apiKeyInfinite: ApiCacheKeys;
+    nextUrl: string | null;
 };
 
 export default function PostContent(props: PostContentProps) {
-    const { initialPosts, url, apiKey, apiKeyInfinite } = props;
+    const { initialPosts, url, apiKey, apiKeyInfinite, nextUrl } = props;
 
     const {
         setLastEl,
@@ -28,25 +29,36 @@ export default function PostContent(props: PostContentProps) {
         contents: posts,
         isEmpty,
         isLoading,
-    } = useInfinityScrollContents<UserPost>({
+    } = useInfinityFeedContents<UserPost>({
         initialData: initialPosts,
         url,
+        nextUrl,
         apiKey,
         apiKeyInfinite,
         enabled: true,
-        getCursor: (p) => p.created_at,
-        getId: (p) => p.post_id,
+        getId: (p) => String(p.post_id),
     });
 
     if (!posts) return null;
+    const getId = (p: UserPost) => String(p.post_id);
+
+    const uniqPosts = (() => {
+        const seen = new Set<string>();
+        return posts.filter((x) => {
+            const k = String(getId(x));
+            if (seen.has(k)) return false;
+            seen.add(k);
+            return true;
+        });
+    })();
 
     if (isEmpty) return <h1 className="p-4">投稿がありません</h1>;
     if (isLoading) return <div>ロード</div>;
 
     return (
         <>
-            {posts.map((post, index) => {
-                const isLast = posts.length - 1 === index;
+            {uniqPosts.map((post, index) => {
+                const isLast = uniqPosts.length - 1 === index;
                 const isFirst = index === 0;
                 const { post_user } = post;
 

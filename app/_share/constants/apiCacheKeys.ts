@@ -24,6 +24,8 @@ export const API_CACHE_KEYS = {
     friendNotifyInfinite: () => FRIEND_NOTIFY_KEY_INFINITE,
     friendNotifyCount: () => FRIEND_NOTIFY_COUNT_KEY,
 
+    friendSearch: (queryText: string) => ["friendSearch", queryText] as const,
+
     groupsData: () => Groups,
 } as const;
 

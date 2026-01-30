@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import CloseButton from "../../UI/CloseButton";
+import CloseButton from "../UI/button/CloseButton";
 
 type Props = {
     src: string;
@@ -32,7 +32,7 @@ export default function ImageModal(props: Props) {
                 alt="投稿画像"
                 onClick={() => setOpenModal(true)}
                 fill
-                className="object-cover"
+                className="object-cover hover:brightness-75 transition duration-200"
             ></Image>
             {openModal &&
                 createPortal(

@@ -1,17 +1,20 @@
 "use client";
-import useTabIndicator from "@/app/_share/hooks/useTabIndicator";
+import useTabIndicator from "@/app/_share/hooks/util/useTabIndicator";
 import { TabItem } from "@/app/_share/types/TabIndicator";
 import { NonEmptyArray } from "@/app/_share/types/util";
-import { FriendData } from "../types/friends";
-import FriendLists from "./FriendLists";
-import FriendSearch from "./FriendSearch";
+import { FriendData, FriendRequestData } from "../types/friends";
+import FriendLists from "./FriendListsTab";
+import FriendRequest from "./FriendRequestsTab";
+import FriendSearch from "./FriendSearchTab";
 
 type Props = {
-    data: FriendData[];
+    friendData: FriendData[];
+    requestsData: FriendRequestData[];
 };
 const items = [
-    { id: "view", label: "一覧" },
-    { id: "search", label: "検索・申請" },
+    { id: "view", label: "メッセージ" },
+    { id: "search", label: "検索" },
+    { id: "request", label: "申請" },
 ] as const satisfies NonEmptyArray<TabItem<string>>;
 
 type TabId = (typeof items)[number]["id"];
@@ -32,6 +35,7 @@ export default function FriendShell(props: Props) {
                 ref={wrapRef}
             >
                 {items.map((item) => {
+                    const isActive = item.id === activeId;
                     return (
                         <button
                             className="w-full h-full flex justify-center items-center"
@@ -40,7 +44,11 @@ export default function FriendShell(props: Props) {
                             type="button"
                             onClick={() => setActiveId(item.id)}
                         >
-                            <span className="text-xl text-amber-800 text-center ">
+                            <span
+                                className={`text-xl text-amber-800 text-center ${
+                                    isActive ? "font-bold" : ""
+                                }`}
+                            >
                                 {item.label}
                             </span>
                         </button>
@@ -59,7 +67,10 @@ export default function FriendShell(props: Props) {
                     }}
                 />
             </div>
-            {activeId === "view" && <FriendLists data={props.data} />}
+            {activeId === "request" && (
+                <FriendRequest data={props.requestsData} />
+            )}
+            {activeId === "view" && <FriendLists data={props.friendData} />}
             {activeId === "search" && <FriendSearch />}
         </div>
     );

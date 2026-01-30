@@ -2,14 +2,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ComponentType, useEffect } from "react";
+import FriendsIcon from "../_share/components/UI/Icon/FriendsIcon";
+import GroupIcon from "../_share/components/UI/Icon/GroupIcon";
+import HomeIcon from "../_share/components/UI/Icon/HomeIcon";
+import NotifyIcon from "../_share/components/UI/Icon/NotifyIcon";
+import PostButton from "../_share/components/UI/Icon/PostIcon";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
 import { useNotifyModal } from "../_share/provider/NotifyModal";
 import { usePostModal } from "../_share/provider/PostModal";
-import FriendsIcon from "../_share/UI/menuIcon/FriendsIcon";
-import GroupIcon from "../_share/UI/menuIcon/GroupIcon";
-import HomeIcon from "../_share/UI/menuIcon/HomeIcon";
-import NotifyIcon from "../_share/UI/menuIcon/NotifyIcon";
-import PostButton from "../_share/UI/PostButton";
 import NotificationModal from "./NotificationModal";
 
 type Item = {
@@ -63,10 +63,7 @@ export default function Menubar() {
                     item.href === "/user" ? `/user/${me?.username}` : item.href;
                 const isActive =
                     optimisticUrl === targetHref ||
-                    (path === targetHref && optimisticUrl === null) ||
-                    (item.href === "/user" &&
-                        path.startsWith("/user/") &&
-                        optimisticUrl === null);
+                    (path === targetHref && optimisticUrl === null);
                 if (item.href === "/post") {
                     return (
                         <button

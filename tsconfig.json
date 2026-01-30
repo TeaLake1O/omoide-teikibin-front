@@ -32,7 +32,7 @@
         ".next/dev/types/**/*.ts",
         "**/*.mts",
         "tailwind.config.cjs",
-        "app/_share/UI/menuIcon/HomeIcon.tsx"
+        "app/_share/components/UI/Icon/HomeIcon.tsx"
     ],
     "exclude": ["node_modules", ".next", "out", "dist", "build"]
 }

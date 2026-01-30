@@ -1,12 +1,12 @@
 "use client";
 
 import MountedModal from "@/app/_share/components/modals/MountedModal";
+import GenericButton from "@/app/_share/components/UI/button/GenericButton";
 import UserIconImage from "@/app/_share/components/UserIconImage";
 import { UNKNOWN_USER_ICON_URL } from "@/app/_share/constants/publicUrls";
-import usePickImage from "@/app/_share/hooks/usePickImage";
+import usePickImage from "@/app/_share/hooks/util/usePickImage";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import { useToast } from "@/app/_share/provider/Toast";
-import GenericButton from "@/app/_share/UI/GenericButton";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import updateProfile from "../api/updateProfile";

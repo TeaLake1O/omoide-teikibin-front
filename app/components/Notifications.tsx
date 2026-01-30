@@ -1,6 +1,6 @@
 "use client";
 
-import NotificationsShell from "../_share/components/NotificationsShell";
+import NotificationsShell from "../_share/components/domain/NotificationsShell";
 
 export default function Notifications() {
     return (

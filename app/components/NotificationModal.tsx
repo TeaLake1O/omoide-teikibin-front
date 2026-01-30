@@ -2,8 +2,8 @@
 
 import MountedModal from "@/app/_share/components/modals/MountedModal";
 import { useNotifyModal } from "@/app/_share/provider/NotifyModal";
-import NotificationsShell from "../_share/components/NotificationsShell";
-import CloseButton from "../_share/UI/CloseButton";
+import NotificationsShell from "../_share/components/domain/NotificationsShell";
+import CloseButton from "../_share/components/UI/button/CloseButton";
 
 export default function NotificationModal() {
     const { isOpenNotifyModal, closeNotifyModal } = useNotifyModal();

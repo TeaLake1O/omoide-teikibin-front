@@ -1,6 +1,6 @@
 "use client";
 
-import dateToAge from "../util/dateToAge";
+import dateToAge from "../../../util/dateToAge";
 
 type Props = {
     birthday: string;

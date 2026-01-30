@@ -1,6 +1,6 @@
 "use client";
 
-import useQueryData from "@/app/_share/hooks/useQueryDataSwr";
+import useQueryData from "@/app/_share/hooks/query/useQueryDataSwr";
 import { CurrentUserFetchResult } from "@/types/hook";
 import { Me } from "@/types/Me";
 

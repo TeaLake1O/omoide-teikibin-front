@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useIsMdUp } from "./useIsMdUp";
+import { useIsMdUp } from "../util/useIsMdUp";
 
 type Props = {
     limit?: number;

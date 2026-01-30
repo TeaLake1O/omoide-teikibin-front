@@ -1,7 +1,7 @@
 "use client";
 
-import CloseButton from "../UI/CloseButton";
-import SearchIcon from "../UI/SearchIcon";
+import CloseButton from "../button/CloseButton";
+import SearchIcon from "../Icon/SearchIcon";
 
 export default function SearchBox({
     setText,

@@ -53,7 +53,7 @@ export default function FriendLists({ data }: { data: FriendData[] }) {
                                         ? "あなた:"
                                         : name + ":"}
                                 </span>
-                                <span> {item.message_text}</span>
+                                <span>{item.message_text}</span>
                             </div>
                             <span className="text-sm mt-auto">
                                 {formatDateTime(item.send_at, true)}

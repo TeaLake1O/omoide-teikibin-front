@@ -1,17 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { memo } from "react";
-import { API_CACHE_KEYS } from "../constants/apiCacheKeys";
-import { FRIEND_NOTIFY_URL, POST_NOTIFY_URL } from "../constants/apiUrls";
-import { UNKNOWN_USER_ICON_URL } from "../constants/publicUrls";
-import useInfiniteScrollContents from "../hooks/useInfiniteScrollContents";
-import useTabIndicator from "../hooks/useTabIndicator";
-import { PostNotify } from "../types/notify";
-import { TabItem } from "../types/TabIndicator";
-import { NonEmptyArray } from "../types/util";
-import Loader from "../UI/Loader";
-import formatDateTime from "../util/formatDateTime";
+import { API_CACHE_KEYS } from "../../constants/apiCacheKeys";
+import { FRIEND_NOTIFY_URL, POST_NOTIFY_URL } from "../../constants/apiUrls";
+import { UNKNOWN_USER_ICON_URL } from "../../constants/publicUrls";
+import useInfiniteScrollContents from "../../hooks/domain/useInfiniteFeedContents";
+import useTabIndicator from "../../hooks/util/useTabIndicator";
+import { PostNotify } from "../../types/notify";
+import { TabItem } from "../../types/TabIndicator";
+import { NonEmptyArray } from "../../types/util";
+import formatDateTime from "../../util/formatDateTime";
+import Loader from "../UI/util/Loader";
 
 const items = [
     { id: "post", label: "投稿" },
@@ -132,8 +133,7 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
         apiKeyInfinite: API_CACHE_KEYS.postNotifyInfinite(),
         apiKey: API_CACHE_KEYS.postNotify(),
         enabled: activeId === "post",
-        getCursor: (n) => n.created_at,
-        getId: (n) => n.notify_id,
+        getId: (n) => String(n.notify_id),
     });
 
     if (!notifies) return null;
@@ -207,7 +207,7 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
 
 function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
     const {
-        //setLastEl,
+        setLastEl,
         isNext,
         contents: notifies,
         isLoading,
@@ -217,8 +217,7 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
         apiKey: API_CACHE_KEYS.friendNotify(),
         apiKeyInfinite: API_CACHE_KEYS.friendNotifyInfinite(),
         enabled: activeId === "friend",
-        getCursor: (n) => n.created_at,
-        getId: (n) => n.notify_id,
+        getId: (n) => String(n.notify_id),
     });
 
     if (!notifies) return null;
@@ -238,14 +237,17 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
 
     return (
         <div className="w-full flex flex-col justify-center items-center">
-            {notifies.map((notify) => {
+            {notifies.map((notify, index) => {
                 const user = notify.actor;
                 const isMessage = notify.status === "message";
+                const isLast = notifies.length - 1 === index;
                 return (
-                    <div
+                    <Link
                         key={notify.notify_id}
+                        href={isMessage ? `` : `/user/${notify.actor.username}`}
                         className={`w-full flex flex-col gap-3 border-orange-200 p-3 
                             transition-colors duration-200 hover:bg-black/10 active:bg-black/20 ${"border-b"} `}
+                        ref={isLast ? setLastEl : undefined}
                     >
                         <div className="flex mr-2 gap-5 items-center">
                             <Image
@@ -274,7 +276,7 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
                         <span className="text-sm mt-2 text-amber-800">
                             {formatDateTime(notify.created_at, true)}
                         </span>
-                    </div>
+                    </Link>
                 );
             })}
             {isNext && (

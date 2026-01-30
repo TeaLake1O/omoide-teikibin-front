@@ -1,6 +1,6 @@
 "use client";
 
-import useQueryDataSwr from "@/app/_share/hooks/useQueryDataSwr";
+import useQueryDataSwr from "@/app/_share/hooks/query/useQueryDataSwr";
 import { UserPageData, UserPageFetchResult } from "../types/userPageData";
 
 export default function useUserPageData(username: string): UserPageFetchResult {
