@@ -23,7 +23,7 @@ export function LayoutUIProvider({
     initialMe,
     children,
 }: {
-    initialMe: Me | null;
+    initialMe: Me;
     children: React.ReactNode;
 }) {
     //トグル用のrefと関数

@@ -14,7 +14,7 @@ export default async function Message({
     const url = MessageUrl(otherUsername);
 
     const data = await serverFetch<Page<MessageData>>({
-        url: url + "/?limit=6",
+        url: url + "/?limit=10",
     });
 
     return (

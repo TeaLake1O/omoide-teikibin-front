@@ -5,7 +5,7 @@ export type LayoutUI = {
     toggleHamburger: () => void;
     hamburger: boolean;
     isLoading: boolean;
-    me: Me | null;
+    me: Me;
     refresh: () => void;
     optimisticUrl: string | null;
     setOptimisticUrl: Dispatch<React.SetStateAction<string | null>>;

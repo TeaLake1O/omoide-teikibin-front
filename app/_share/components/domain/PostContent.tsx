@@ -9,6 +9,7 @@ import Link from "next/link";
 import { ApiCacheKeys } from "../../constants/apiCacheKeys";
 import { UNKNOWN_USER_ICON_URL } from "../../constants/publicUrls";
 import useInfinityFeedContents from "../../hooks/domain/useInfiniteFeedContents";
+import uniqueT from "../../util/uniqueT";
 import Loader from "../UI/util/Loader";
 import FollowButton from "./FollowButton";
 
@@ -40,17 +41,11 @@ export default function PostContent(props: PostContentProps) {
     });
 
     if (!posts) return null;
-    const getId = (p: UserPost) => String(p.post_id);
 
-    const uniqPosts = (() => {
-        const seen = new Set<string>();
-        return posts.filter((x) => {
-            const k = String(getId(x));
-            if (seen.has(k)) return false;
-            seen.add(k);
-            return true;
-        });
-    })();
+    const uniqPosts = uniqueT<UserPost>({
+        arr: posts,
+        getId: (x) => x.post_id,
+    });
 
     if (isEmpty) return <h1 className="p-4">投稿がありません</h1>;
     if (isLoading) return <div>ロード</div>;
