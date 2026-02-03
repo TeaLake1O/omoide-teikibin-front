@@ -16,7 +16,7 @@ export default function Profile(props: Props) {
     return (
         <>
             <div className="min-h-[200px] md:min-h-[300px] w-full flex flex-col gap-3">
-                <div className="mt-3 flex flex-row-reverse">
+                <div className="mt-3 flex flex-row-reverse h-8">
                     <FollowButton
                         isMe={isMe}
                         state={props.data.status}

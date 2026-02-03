@@ -122,7 +122,7 @@ export default function PostContent(props: PostContentProps) {
                         )}
                         <div className="flex justify-between">
                             <div
-                                className="justify-center"
+                                className="justify-center h-8"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <FollowButton

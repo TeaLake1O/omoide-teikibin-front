@@ -2,24 +2,21 @@
 import useTabIndicator from "@/app/_share/hooks/util/useTabIndicator";
 import { TabItem } from "@/app/_share/types/TabIndicator";
 import { NonEmptyArray } from "@/app/_share/types/util";
-import { FriendData, FriendRequestData } from "../types/friends";
+import { FriendRequestData } from "../types/friends";
 import FriendLists from "./FriendListsTab";
 import FriendRequest from "./FriendRequestsTab";
 import FriendSearch from "./FriendSearchTab";
 
 type Props = {
-    friendData: FriendData[];
     requestsData: FriendRequestData[];
 };
 const items = [
-    { id: "view", label: "メッセージ" },
+    { id: "friends", label: "フレンド一覧" },
     { id: "search", label: "検索" },
     { id: "request", label: "申請" },
 ] as const satisfies NonEmptyArray<TabItem<string>>;
 
 type TabId = (typeof items)[number]["id"];
-
-const defaultTab: TabId = "view";
 
 export default function FriendShell(props: Props) {
     const {
@@ -75,7 +72,7 @@ export default function FriendShell(props: Props) {
                 {activeId === "request" && (
                     <FriendRequest data={props.requestsData} />
                 )}
-                {activeId === "view" && <FriendLists data={props.friendData} />}
+                {activeId === "friends" && <FriendLists />}
                 {activeId === "search" && <FriendSearch />}
             </div>
         </div>

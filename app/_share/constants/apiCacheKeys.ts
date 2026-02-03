@@ -26,6 +26,10 @@ export const API_CACHE_KEYS = {
 
     friendSearch: (queryText: string) => ["friendSearch", queryText] as const,
 
+    message: (username: string) => ["message", username] as const,
+    messageInfinite: (username: string) =>
+        ["messageInfinite", username] as const,
+
     groupsData: () => Groups,
 } as const;
 

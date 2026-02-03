@@ -8,4 +8,5 @@ export type UserPost = {
     group: number;
     group_name: string;
     post_user: UserInf;
+    parent_post: number | null;
 };

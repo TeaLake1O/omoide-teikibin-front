@@ -16,7 +16,8 @@ export default function FriendRequest({ data }: { data: FriendRequestData[] }) {
                 const isLast = data.length - 1 === index;
                 const name = item.nickname ?? "名無し";
                 return (
-                    <div
+                    <Link
+                        href={`/user/${item.username}`}
                         key={item.id}
                         className={`w-full flex flex-col gap-6 border-t md:p-6 p-2 border-t-orange-200 
                             hover:bg-black/10 active:bg-black/20 ${
@@ -25,12 +26,9 @@ export default function FriendRequest({ data }: { data: FriendRequestData[] }) {
                     >
                         <div className="flex md:mr-5 md:ml-5 justify-between items-center">
                             <div className="flex flex-row items-center justify-center gap-4">
-                                <Link
-                                    href={`/user/${item.username}`}
-                                    className="h-10 w-10 aspect-square rounded-full"
-                                >
+                                <div className="h-10 w-10 aspect-square rounded-full">
                                     <UserIconImage iconUrl={item.icon_url} />
-                                </Link>
+                                </div>
                                 <span className="text-lg truncate">{name}</span>
                             </div>
                             <span className="text-sm text-amber-800 truncate">
@@ -49,7 +47,7 @@ export default function FriendRequest({ data }: { data: FriendRequestData[] }) {
                                 {formatDateTime(item.updated_at, true)}
                             </span>
                         </div>
-                    </div>
+                    </Link>
                 );
             })}
         </div>

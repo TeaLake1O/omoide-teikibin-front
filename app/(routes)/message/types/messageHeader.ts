@@ -1,0 +1,9 @@
+export type MessageHeader = {
+    message_id: number;
+    other: UserInf;
+    message_text: string;
+    send_at: string;
+    sender_id: number;
+    sender_username: string;
+    sender_nickname: string | null;
+};

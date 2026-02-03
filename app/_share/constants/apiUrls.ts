@@ -20,3 +20,8 @@ export const USER_PROFILE_URL = (username: string) =>
     `${DJANGO_URL}/accounts/api/mypage/${username}`;
 
 export const HOME_POST_URL = `${DJANGO_URL}/post/api/home`;
+
+export const MessageUrl = (username: string) =>
+    `${DJANGO_URL}/friend/api/message/${username}`;
+export const GroupUrl = (groupId: number) =>
+    `${DJANGO_URL}/post/api/group/${groupId}`;

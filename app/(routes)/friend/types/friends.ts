@@ -1,5 +1,5 @@
 import { UserInf } from "@/app/_share/types/userInf";
-
+//後で消す
 export type FriendData = {
     message_id: number;
     other: UserInf;
@@ -11,4 +11,8 @@ export type FriendData = {
 };
 export type FriendRequestData = UserInf & {
     updated_at: string;
+};
+
+export type UserSearchData = {
+    next: number;
 };
