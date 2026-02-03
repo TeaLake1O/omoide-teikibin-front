@@ -1,3 +1,5 @@
+import { UserInf } from "@/app/_share/types/userInf";
+
 export type MessageHeader = {
     message_id: number;
     other: UserInf;
