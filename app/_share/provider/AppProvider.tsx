@@ -10,7 +10,7 @@ import { PostModalProvider } from "./PostModal";
 
 type Props = {
     children: React.ReactNode;
-    initialMe: Me | null;
+    initialMe: Me;
 };
 
 export default function AppProviders({ children, initialMe }: Props) {
