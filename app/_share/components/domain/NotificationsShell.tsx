@@ -244,7 +244,11 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
                 return (
                     <Link
                         key={notify.notify_id}
-                        href={isMessage ? `` : `/user/${notify.actor.username}`}
+                        href={
+                            isMessage
+                                ? `/message/${notify.actor.username}`
+                                : `/user/${notify.actor.username}`
+                        }
                         className={`w-full flex flex-col gap-3 border-orange-200 p-3 
                             transition-colors duration-200 hover:bg-black/10 active:bg-black/20 ${"border-b"} `}
                         ref={isLast ? setLastEl : undefined}

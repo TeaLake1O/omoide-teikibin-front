@@ -9,7 +9,7 @@ import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import uniqueT from "@/app/_share/util/uniqueT";
 import Link from "next/link";
-import { useLayoutEffect, useRef } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { MessageData } from "../types/messageData";
 import SendArea from "./SendArea";
 
@@ -27,11 +27,17 @@ export default function MessageShell(props: Props) {
 
     const { me } = useLayoutUI();
 
-    useLayoutEffect(() => {
+    const scrollBottom = useCallback(() => {
         const el = scrollRef.current;
         if (!el) return;
         el.scrollTop = el.scrollHeight;
     }, []);
+
+    const pendingScrollBottomRef = useRef(false);
+
+    useLayoutEffect(() => {
+        scrollBottom();
+    }, [scrollBottom]);
 
     const {
         setLastEl: setTopEl,
@@ -51,7 +57,18 @@ export default function MessageShell(props: Props) {
     const messages = uniqueT<MessageData>({
         arr: contents,
         getId: (x) => x.id,
-    }).toReversed();
+    }).sort((a, b) => Date.parse(a.send_at) - Date.parse(b.send_at));
+
+    useLayoutEffect(() => {
+        if (!pendingScrollBottomRef.current) return;
+        requestAnimationFrame(() => {
+            scrollBottom();
+            requestAnimationFrame(scrollBottom);
+        });
+
+        pendingScrollBottomRef.current = false;
+    }, [messages.length, scrollBottom]);
+
     if (isEmpty) return null;
     if (isLoading) return null;
 
@@ -103,6 +120,8 @@ export default function MessageShell(props: Props) {
             <SendArea
                 sendUrl={`${url}/action`}
                 id={messages[0].friendship_id}
+                username={username}
+                onSendSuccess={() => (pendingScrollBottomRef.current = true)}
             />
         </div>
     );
@@ -139,13 +158,13 @@ function MessageArea({
                 )}
 
                 <div
-                    className={`w-full border border-orange-100 p-2 ${
+                    className={`w-full border border-orange-100 p-2 flex flex-col justify-center items-center ${
                         !isMe ? "bg-orange-200" : "bg-orange-50 ml-2"
                     } rounded-md`}
                 >
                     {data.message_text && <span>{data.message_text}</span>}
                     {data.message_image && (
-                        <div className="md:w-[350px] w-[200px] aspect-video">
+                        <div className="md:w-[300px] w-[200px] overflow-hidden aspect-video">
                             <ImageModal src={data.message_image} />
                         </div>
                     )}

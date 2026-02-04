@@ -4,10 +4,12 @@ export default function CloseButton({
     handleOnclick,
     color,
     noHover,
+    className,
 }: {
     handleOnclick: () => void;
     color?: string;
     noHover?: boolean;
+    className?: string;
 }) {
     return (
         <button
@@ -15,7 +17,7 @@ export default function CloseButton({
                 e.stopPropagation();
                 handleOnclick();
             }}
-            className={`w-full h-full relative group/close rounded-full 
+            className={`w-full h-full relative group/close rounded-full ${className}
                 ${
                     noHover ? "" : "hover:bg-black/20"
                 } transition-colors duration-300`}
