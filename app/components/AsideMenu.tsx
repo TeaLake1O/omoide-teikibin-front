@@ -8,6 +8,7 @@ import LogoutButton from "../_share/components/modals/LogoutModal";
 import FriendsIcon from "../_share/components/UI/Icon/FriendsIcon";
 import GroupIcon from "../_share/components/UI/Icon/GroupIcon";
 import HomeIcon from "../_share/components/UI/Icon/HomeIcon";
+import MessageIcon from "../_share/components/UI/Icon/MessageIcon";
 import MypageIcon from "../_share/components/UI/Icon/MypageIcon";
 import PostButton from "../_share/components/UI/Icon/PostIcon";
 import SettingsIcon from "../_share/components/UI/Icon/settingsIcon";
@@ -51,6 +52,13 @@ const menuNav: MenuNav[] = [
         menuName: "フレンド",
         href: "/friend",
         mdHidden: true,
+    },
+    {
+        Icon: MessageIcon,
+        alt: "message",
+        menuName: "メッセージ",
+        href: "/message",
+        mdHidden: false,
     },
     {
         Icon: MypageIcon,
@@ -140,7 +148,9 @@ export default function AsideMenu(props: Props) {
                                 : menu.href;
                         const isActive =
                             optimisticUrl === targetHref ||
-                            (path === targetHref && optimisticUrl === null);
+                            (path === targetHref && optimisticUrl === null) ||
+                            (path.startsWith("/message") &&
+                                optimisticUrl === targetHref);
 
                         return (
                             <Link
@@ -168,13 +178,7 @@ export default function AsideMenu(props: Props) {
                                                     : "h-[70%] w-[70%]"
                                             }`}
                                         >
-                                            <menu.Icon
-                                                isActive={
-                                                    isActive ||
-                                                    (!isMdUp &&
-                                                        menu.href === "/user")
-                                                }
-                                            />
+                                            <menu.Icon isActive={isActive} />
                                         </div>
                                     </div>
                                     <span className="w-full pl-8 text-1xl font-bold text-black text-left">
@@ -185,7 +189,7 @@ export default function AsideMenu(props: Props) {
                         );
                     })}
                 </nav>
-                <div className="mt-10 mb-2 mr-5 flex flex-row-reverse">
+                <div className="mt-4 mb-2 mr-5 flex flex-row-reverse">
                     <LogoutButton />
                 </div>
             </div>
