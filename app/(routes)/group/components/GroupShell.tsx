@@ -1,5 +1,6 @@
 "use client";
 
+import DefaultGroupIcon from "@/app/_share/components/UI/Icon/DefaultGroupIcon";
 import GroupIconImage from "@/app/_share/components/UserIconImage";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import formatDateTime from "@/app/_share/util/formatDateTime";
@@ -38,9 +39,15 @@ export default function GroupShell({ data }: { data: Groups[] }) {
                             <div className="flex md:mr-5 md:ml-5 justify-between items-center">
                                 <div className="flex flex-row items-center justify-center gap-4">
                                     <div className="h-10 w-10 aspect-square rounded-full">
-                                        <GroupIconImage
-                                            iconUrl={item.group_image}
-                                        />
+                                        {item.group_image ? (
+                                            <GroupIconImage
+                                                iconUrl={item.group_image}
+                                            />
+                                        ) : (
+                                            <div className="w-[80%] h-[80%">
+                                                <DefaultGroupIcon />
+                                            </div>
+                                        )}
                                     </div>
                                     <span className="text-lg truncate">
                                         {item.group_name}

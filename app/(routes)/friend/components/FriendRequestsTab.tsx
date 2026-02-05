@@ -19,9 +19,7 @@ export default function FriendRequest({ data }: { data: FriendRequestData[] }) {
                     <div
                         key={item.id}
                         className={`w-full flex flex-col gap-6 border-t md:p-6 p-2 border-t-orange-200 
-                            hover:bg-black/10 active:bg-black/20 ${
-                                isLast ? "border-b border-b-orange-200" : ""
-                            }`}
+                            ${isLast ? "border-b border-b-orange-200" : ""}`}
                     >
                         <div className="flex md:mr-5 md:ml-5 justify-between items-center">
                             <div className="flex flex-row items-center justify-center gap-4">

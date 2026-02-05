@@ -31,6 +31,8 @@ export const API_CACHE_KEYS = {
         ["messageInfinite", username] as const,
 
     groupsData: () => Groups,
+    groupPosts: (groupId: number) => ["GroupPosts", groupId],
+    groupPostsInfinite: (groupId: number) => ["GroupPostsInfinite", groupId],
 } as const;
 
 export type ApiCacheKeys = ReturnType<
