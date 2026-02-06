@@ -17,31 +17,36 @@ type Item = {
     alt: string;
     href: string;
     scale: string;
+    label: string;
 };
 const items: Item[] = [
     {
         Icon: HomeIcon,
         alt: "home",
         href: "/home",
-        scale: "w-[50%] h-[50%]",
+        scale: "w-[70%] h-[70%]",
+        label: "ホーム",
     },
     {
         Icon: GroupIcon,
         alt: "group",
         href: "/group",
-        scale: "w-[55%] h-[55%]",
+        scale: "w-[75%] h-[75%]",
+        label: "グループ",
     },
     {
         Icon: null,
         alt: "post",
         href: "/post",
         scale: "",
+        label: "投稿",
     },
     {
         Icon: FriendsIcon,
         alt: "friend",
         href: "/friend",
-        scale: "w-[45%] h-[45%]",
+        scale: "w-[65%] h-[65%]",
+        label: "フレンド",
     },
 ];
 
@@ -66,61 +71,82 @@ export default function Menubar() {
                     (path === targetHref && optimisticUrl === null);
                 if (item.href === "/post") {
                     return (
-                        <button
+                        <div
                             key={item.alt}
-                            className={`w-full h-full flex items-center justify-center group`}
-                            onContextMenu={(e) => e.preventDefault()}
-                            onClick={openPostModal}
+                            className="w-full h-full flex flex-col items-center justify-center select-none"
                         >
-                            <div
-                                className="aspect-square h-[80%] rounded-full group-active:bg-black/15 duration-300
-                                    transition-colors flex items-center justify-center"
+                            <button
+                                className={`flex items-center justify-center group`}
+                                onContextMenu={(e) => e.preventDefault()}
+                                onClick={openPostModal}
                             >
-                                <PostButton />
-                            </div>
-                        </button>
+                                <div
+                                    className="aspect-square h-10 rounded-full group-active:bg-black/15 duration-300
+                                    transition-colors flex items-center justify-center"
+                                >
+                                    <PostButton />
+                                </div>
+                            </button>
+                            <span className="text-sm font-bold text-amber-800">
+                                {item.label}
+                            </span>
+                        </div>
                     );
                 } else
                     return (
-                        <Link
+                        <div
                             key={item.alt}
-                            className={`w-full h-full flex items-center justify-center 
-                        group`}
-                            onContextMenu={(e) => e.preventDefault()}
-                            href={item.href}
-                            onClick={() => {
-                                setOptimisticUrl(targetHref);
-                                console.log(optimisticUrl);
-                            }}
+                            className="w-full h-full flex flex-col items-center justify-center select-none"
                         >
-                            <div
-                                className="aspect-square h-14 w-14 rounded-full group-active:bg-black/15 duration-300
-                                transition-colors flex items-center justify-center"
+                            <Link
+                                className={`flex items-center justify-center 
+                        group`}
+                                onContextMenu={(e) => e.preventDefault()}
+                                href={item.href}
+                                onClick={() => {
+                                    setOptimisticUrl(targetHref);
+                                    console.log(optimisticUrl);
+                                }}
                             >
-                                {item.Icon !== null ? (
-                                    <div
-                                        className={`flex justify-center items-center ${item.scale}`}
-                                    >
-                                        <item.Icon isActive={isActive} />
-                                    </div>
-                                ) : null}
-                            </div>
-                        </Link>
+                                <div
+                                    className="aspect-square h-10 w-10 rounded-full group-active:bg-black/15 duration-300
+                                transition-colors flex items-center justify-center"
+                                >
+                                    {item.Icon !== null ? (
+                                        <div
+                                            className={`flex justify-center items-center ${item.scale}`}
+                                        >
+                                            <item.Icon isActive={isActive} />
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </Link>
+                            <span className="text-[10px] font-bold text-amber-800">
+                                {item.label}
+                            </span>
+                        </div>
                     );
             })}
-            <button
-                className="w-full h-full flex items-center justify-center group"
-                onContextMenu={(e) => e.preventDefault()}
-                onClick={openNotifyModal}
-            >
-                <div
-                    className="aspect-square h-14 w-14 rounded-full group-active:bg-black/15 duration-300
-                            transition-colors flex items-center justify-center"
+            <div className="w-full h-full flex flex-col items-center justify-center select-none">
+                <button
+                    className="flex items-center justify-center group"
+                    onContextMenu={(e) => e.preventDefault()}
+                    onClick={openNotifyModal}
                 >
-                    <NotifyIcon isActive={isOpenNotifyModal} />
-                </div>
-            </button>
-            <NotificationModal />
+                    <div
+                        className="aspect-square h-10 w-10 rounded-full group-active:bg-black/15 duration-300
+                            transition-colors flex items-center justify-center"
+                    >
+                        <div className="h-[70%] w-[70%]">
+                            <NotifyIcon isActive={isOpenNotifyModal} />
+                        </div>
+                    </div>
+                </button>
+                <span className="text-[10px] font-bold text-amber-800">
+                    通知
+                </span>
+                <NotificationModal />
+            </div>
         </nav>
     );
 }
