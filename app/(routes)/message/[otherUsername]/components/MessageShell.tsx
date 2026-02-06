@@ -162,7 +162,10 @@ function MessageArea({
                     {data.message_text && <span>{data.message_text}</span>}
                     {data.message_image && (
                         <div className="md:w-[300px] w-[200px] overflow-hidden aspect-video">
-                            <ImageModal src={data.message_image} />
+                            <ImageModal
+                                src={data.message_image}
+                                text={data.message_text}
+                            />
                         </div>
                     )}
                 </div>

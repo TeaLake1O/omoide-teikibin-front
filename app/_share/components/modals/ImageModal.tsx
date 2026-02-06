@@ -59,12 +59,12 @@ export default function ImageModal(props: Props) {
                                     width={800}
                                     height={800}
                                     priority
-                                    className="md:max-w-[80vh] md:max-h-[75vh] h-auto max-h-[80vh] md:min-h-[60vh] min-h-0 object-contain"
+                                    className="md:max-w-[80vh] md:max-h-[75vh] h-auto max-h-[70vh] md:min-h-[60vh] min-h-0 object-contain"
                                 ></Image>
                             </div>
                             {props.text && (
                                 <div className="pt-6">
-                                    <span className="text-white truncate max-w-128 block">
+                                    <span className="text-white truncate md:max-w-128 pr-4 pl-4 max-w-dvw block">
                                         {props.text}
                                     </span>
                                 </div>

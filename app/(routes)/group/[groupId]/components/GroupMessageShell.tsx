@@ -163,7 +163,10 @@ function MessageArea({ data }: { data: UserPost }) {
                     )}
                     {data.post_images && (
                         <div className="md:w-[300px] w-[200px] overflow-hidden aspect-video">
-                            <ImageModal src={data.post_images} />
+                            <ImageModal
+                                src={data.post_images}
+                                text={data.post_content}
+                            />
                         </div>
                     )}
                 </div>

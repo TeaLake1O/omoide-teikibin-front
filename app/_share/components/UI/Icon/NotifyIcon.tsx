@@ -18,7 +18,7 @@ export default function NotifyIcon({ isActive }: { isActive: boolean }) {
     }
     return (
         <svg
-            className="w-[50%] h-[50%]"
+            className="w-full h-full"
             viewBox="0 0 378 462"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

@@ -47,7 +47,7 @@ export default function FriendShell(props: Props) {
                             }}
                         >
                             <span
-                                className={`text-xl text-amber-800 text-center ${
+                                className={`md:text-xl text-lg text-amber-800 text-center ${
                                     isActive ? "font-bold" : ""
                                 }`}
                             >
