@@ -33,7 +33,7 @@ export default function EditButton(props: Props) {
     const { refresh: layoutRefresh } = useLayoutUI();
 
     const { url, fileOpen, inputProps, file, imageReset } = usePickImage(
-        props.iconUrl ? props.iconUrl : "/accountsicon.png"
+        props.iconUrl ? props.iconUrl : UNKNOWN_USER_ICON_URL
     );
 
     const router = useRouter();

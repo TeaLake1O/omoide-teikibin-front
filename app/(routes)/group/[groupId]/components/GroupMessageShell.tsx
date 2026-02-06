@@ -1,5 +1,6 @@
 "use client";
 
+import DefaultGroupIcon from "@/app/_share/components/UI/Icon/DefaultGroupIcon";
 import Loader from "@/app/_share/components/UI/util/Loader";
 import UserIconImage from "@/app/_share/components/UserIconImage";
 import ImageModal from "@/app/_share/components/modals/ImageModal";
@@ -12,6 +13,7 @@ import uniqueT from "@/app/_share/util/uniqueT";
 import Link from "next/link";
 import { useCallback, useLayoutEffect, useRef } from "react";
 import { GroupMessageData } from "../types/GroupMessage";
+import GroupSettingModal from "./GroupSettingModal";
 import SendArea from "./SendArea";
 
 type Props = {
@@ -42,7 +44,7 @@ export default function GroupMessageShell(props: Props) {
         setLastEl: setTopEl,
         isNext,
         contents,
-        isEmpty,
+        //isEmpty,
         isLoading,
     } = useInfiniteFeedContents<UserPost>({
         initialData: data,
@@ -69,10 +71,22 @@ export default function GroupMessageShell(props: Props) {
     }, [messages.length, scrollBottom]);
     console.log(data);
 
-    if (isEmpty) return null;
     if (isLoading) return null;
     return (
         <div className="h-full w-full flex flex-col">
+            <div className="h-12 w-full flex bg-orange-100 border-b border-b-orange-200 items-center justify-between">
+                <div className="h-[80%] aspect-square rounded-full ml-2">
+                    {detail.group_image ? (
+                        <UserIconImage iconUrl={detail.group_image} />
+                    ) : (
+                        <DefaultGroupIcon />
+                    )}
+                </div>
+                <h3 className="text-lg text-center text-amber-800">
+                    {detail.group_name}
+                </h3>
+                <GroupSettingModal />
+            </div>
             <div
                 className="flex-1 overflow-y-auto no-scrollbar"
                 ref={scrollRef}
