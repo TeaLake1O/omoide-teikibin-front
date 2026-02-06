@@ -75,7 +75,7 @@ export default function GroupMessageShell(props: Props) {
     return (
         <div className="h-full w-full flex flex-col">
             <div className="h-12 w-full flex bg-orange-100 border-b border-b-orange-200 items-center justify-between">
-                <div className="h-[80%] w-[80%] aspect-square rounded-full ml-2">
+                <div className="h-9 w-9 aspect-square rounded-full ml-2">
                     {detail.group_image ? (
                         <UserIconImage iconUrl={detail.group_image} />
                     ) : (
