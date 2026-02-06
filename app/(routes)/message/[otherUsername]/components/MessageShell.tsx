@@ -43,7 +43,6 @@ export default function MessageShell(props: Props) {
         setLastEl: setTopEl,
         isNext,
         contents,
-        isEmpty,
         isLoading,
     } = useInfiniteFeedContents<MessageData>({
         initialData: data,
@@ -69,7 +68,6 @@ export default function MessageShell(props: Props) {
         pendingScrollBottomRef.current = false;
     }, [messages.length, scrollBottom]);
 
-    if (isEmpty) return null;
     if (isLoading) return null;
 
     return (
@@ -119,7 +117,6 @@ export default function MessageShell(props: Props) {
 
             <SendArea
                 sendUrl={`${url}/action`}
-                id={messages[0].friendship_id}
                 username={username}
                 onSendSuccess={() => (pendingScrollBottomRef.current = true)}
             />

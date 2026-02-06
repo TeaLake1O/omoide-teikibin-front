@@ -13,7 +13,7 @@ type Props = {
     me: Me | null;
 };
 
-const backButtonUrl = ["/user/", "/account", "/message/", "/group/"];
+const backButtonUrl = ["/user/", "/message/", "/group/"];
 
 export default function Header(props: Props) {
     const { toggleHamburger } = useLayoutUI();
@@ -27,7 +27,6 @@ export default function Header(props: Props) {
     const back = () => {
         window.history.back();
     };
-    console.log(getPageName(path));
 
     return (
         <header

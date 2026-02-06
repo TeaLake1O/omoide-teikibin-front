@@ -12,13 +12,12 @@ import sendMessage from "./hooks/sendMessage";
 
 type Props = {
     sendUrl: string;
-    id: number;
     username: string;
     onSendSuccess: () => void;
 };
 
 export default function SendArea(props: Props) {
-    const { sendUrl, id, username, onSendSuccess } = props;
+    const { sendUrl, username, onSendSuccess } = props;
 
     const { url, file, fileOpen, imageReset, inputProps } = usePickImage();
 
@@ -31,7 +30,7 @@ export default function SendArea(props: Props) {
 
         const fd = new FormData();
 
-        fd.append("friendship_id", String(id));
+        fd.append("other_username", String(username));
         if (file) fd.append("message_image", file);
         if (text) fd.append("message_text", text);
 

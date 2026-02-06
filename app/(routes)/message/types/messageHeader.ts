@@ -1,11 +1,10 @@
 import { UserInf } from "@/app/_share/types/userInf";
 
 export type MessageHeader = {
-    message_id: number;
+    friend_id: number;
     other: UserInf;
-    message_text: string;
-    send_at: string;
-    sender_id: number;
-    sender_username: string;
-    sender_nickname: string | null;
+    last_msg_id: 46;
+    last_msg_content: null | string;
+    last_msg_send_at: null | string;
+    last_msg_sender_id: number | string;
 };

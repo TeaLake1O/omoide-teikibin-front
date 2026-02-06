@@ -20,7 +20,7 @@ export default function MessageListsShell({ data }: { data: MessageHeader[] }) {
                 return (
                     <Link
                         href={url}
-                        key={item.message_id}
+                        key={item.friend_id}
                         className={`w-full flex flex-col gap-6 md:p-6 p-2 border-b-orange-200 border-b
                             hover:bg-black/10 active:bg-black/20`}
                     >
@@ -38,19 +38,32 @@ export default function MessageListsShell({ data }: { data: MessageHeader[] }) {
                             </span>
                         </div>
                         <div className="w-full pl-12 text-gray-500 flex justify-between gap-5 md:mb-1 mb-5">
-                            <div className=" truncate text-center">
-                                <span>
-                                    {item.sender_username === me?.username
-                                        ? "あなた:"
-                                        : name + ":"}
+                            {item.last_msg_id && (
+                                <div className=" truncate text-center">
+                                    <span>
+                                        {item.other.username === me?.username
+                                            ? "あなた:"
+                                            : name + ":"}
+                                    </span>
+
+                                    <span>
+                                        {item.last_msg_content ??
+                                            "画像を送信しました"}
+                                    </span>
+                                </div>
+                            )}
+                            {item.last_msg_send_at ? (
+                                <span className="text-sm mt-auto">
+                                    {formatDateTime(
+                                        item.last_msg_send_at,
+                                        true
+                                    )}
                                 </span>
-                                <span>
-                                    {item.message_text ?? "画像を送信しました"}
+                            ) : (
+                                <span className="text-sm mt-auto">
+                                    メッセージがありません
                                 </span>
-                            </div>
-                            <span className="text-sm mt-auto">
-                                {formatDateTime(item.send_at, true)}
-                            </span>
+                            )}
                         </div>
                     </Link>
                 );

@@ -12,8 +12,13 @@ export default function GroupShell({ data }: { data: Groups[] }) {
     const { me } = useLayoutUI();
 
     if (data.length === 0) {
-        return <div>メッセージはありません</div>;
+        return <div>グループはありません</div>;
     }
+    const groupList = [...data].sort(
+        (a, b) =>
+            Date.parse(b.last_post_created_at ?? b.created_at) -
+            Date.parse(a.last_post_created_at ?? a.created_at)
+    );
 
     return (
         <>
@@ -25,7 +30,7 @@ export default function GroupShell({ data }: { data: Groups[] }) {
                 <CreateGroup />
             </div>
             <div className="w-full min-h-0 flex flex-col items-center">
-                {data.map((item) => {
+                {groupList.map((item) => {
                     console.log(item);
                     const name =
                         item.last_post_nickname ?? item.last_post_username;
@@ -70,12 +75,18 @@ export default function GroupShell({ data }: { data: Groups[] }) {
                                         </span>
                                     </div>
                                 )}
-                                <span className="text-sm mt-auto">
-                                    {formatDateTime(
-                                        item.last_post_created_at,
-                                        true
-                                    )}
-                                </span>
+                                {item.last_post_created_at ? (
+                                    <span className="text-sm mt-auto">
+                                        {formatDateTime(
+                                            item.last_post_created_at,
+                                            true
+                                        )}
+                                    </span>
+                                ) : (
+                                    <span className="text-sm mt-auto">
+                                        メッセージがありません
+                                    </span>
+                                )}
                             </div>
                         </Link>
                     );

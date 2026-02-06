@@ -6,6 +6,7 @@ import { Groups } from "./types/Group";
 export default async function Group() {
     const requests = await serverFetch<Groups[]>({
         url: `${DJANGO_URL}/post/api/group`,
+        cache: "no-store",
     });
     return <GroupShell data={requests} />;
 }
