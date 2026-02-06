@@ -59,7 +59,7 @@ export default function ImageModal(props: Props) {
                                     width={800}
                                     height={800}
                                     priority
-                                    className="md:max-w-[80vh] md:max-h-[75vh] h-auto max-h-[70vh] md:min-h-[60vh] min-h-0 object-contain"
+                                    className="md:max-w-[80vh] md:max-h-[75vh] max-h-[70vh] md:min-h-[60vh] min-h-0 object-contain"
                                 ></Image>
                             </div>
                             {props.text && (
