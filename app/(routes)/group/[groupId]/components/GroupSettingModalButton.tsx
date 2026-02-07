@@ -147,7 +147,7 @@ function GroupSetting({
     return (
         <div className="w-full flex flex-col justify-center items-center">
             <h3 className="mt-3 text-lg text-amber-800">メンバー</h3>
-            <div className="w-[80%] mt-2 max-h-48 flex justify-center items-center">
+            <div className="w-[80%] mt-2 max-h-36 flex justify-center items-center">
                 <FriendListView result={data} />
             </div>
             <div className=" border border-orange-800 rounded-md mt-3 w-full flex flex-col p-2 justify-center items-center">
