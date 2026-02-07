@@ -1,9 +1,18 @@
-import AppSettings from "./components/AppSettings";
+import { serverFetch } from "@/app/servers/serverFetch";
+import { DJANGO_URL } from "@/config";
+import SettingShell from "./components/SettingShell";
+import { AccountsData } from "./types/accountsData";
 
-export default function accounts() {
+export default async function Setting() {
+    const data = await serverFetch<AccountsData>({
+        url: `${DJANGO_URL}/accounts/api/me/detail`,
+        tag: `accounts`,
+        cache: "no-store",
+    });
+
     return (
-        <div className="h-full w-full flex flex-col min-h-0">
-            <AppSettings />
+        <div className="h-full w-full">
+            <SettingShell data={data} />
         </div>
     );
 }

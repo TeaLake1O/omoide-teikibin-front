@@ -13,7 +13,7 @@ type Props = {
     data: AccountsData;
 };
 
-export default async function Account(props: Props) {
+export default async function AccountInfo(props: Props) {
     const { username, email, date_joined } = props.data;
     const dateJoined = date_joined.replaceAll("-", "/");
 

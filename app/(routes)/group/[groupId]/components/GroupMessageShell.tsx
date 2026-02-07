@@ -13,7 +13,7 @@ import uniqueT from "@/app/_share/util/uniqueT";
 import Link from "next/link";
 import { useCallback, useLayoutEffect, useRef } from "react";
 import { GroupMessageData } from "../types/GroupMessage";
-import GroupSettingModal from "./GroupSettingModal";
+import GroupSettingModal from "./GroupSettingModalButton";
 import SendArea from "./SendArea";
 
 type Props = {
@@ -85,7 +85,7 @@ export default function GroupMessageShell(props: Props) {
                 <h3 className="text-lg text-center text-amber-800">
                     {detail.group_name}
                 </h3>
-                <GroupSettingModal />
+                <GroupSettingModal detail={detail} />
             </div>
             <div
                 className="flex-1 overflow-y-auto no-scrollbar"

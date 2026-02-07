@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ComponentType, useEffect } from "react";
 import { Me } from "../../types/Me";
-import LogoutButton from "../_share/components/modals/LogoutModal";
 import FriendsIcon from "../_share/components/UI/Icon/FriendsIcon";
 import GroupIcon from "../_share/components/UI/Icon/GroupIcon";
 import HomeIcon from "../_share/components/UI/Icon/HomeIcon";
@@ -189,9 +188,9 @@ export default function AsideMenu(props: Props) {
                         );
                     })}
                 </nav>
-                <div className="mt-4 mb-2 mr-5 flex flex-row-reverse">
+                {/*<div className="mt-4 mb-2 mr-5 flex flex-row-reverse">
                     <LogoutButton />
-                </div>
+                </div>*/}
             </div>
             <PostModal />
         </aside>

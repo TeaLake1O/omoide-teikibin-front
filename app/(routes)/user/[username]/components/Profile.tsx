@@ -108,8 +108,8 @@ function ProfileBlockBottom({
                 </div>
                 <GenericLink
                     height="h-6"
-                    href="/account"
-                    name="アカウント情報"
+                    href="/setting"
+                    name="設定"
                     textSize="text-sm"
                     hidden={!isMe}
                 />
