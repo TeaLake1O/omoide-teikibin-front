@@ -122,7 +122,7 @@ function GroupSetting({
             showToast("グループ名を入力してください");
             return;
         }
-        showToast("作成中...");
+        showToast("設定中...");
         const fd = new FormData();
         fd.append("group_name", text);
         if (file) fd.append("group_image", file);
