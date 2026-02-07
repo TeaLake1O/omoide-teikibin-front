@@ -217,7 +217,7 @@ function GroupSetting({
 
 function FriendListView({ result }: { result: Member[] | null }) {
     return (
-        <div className="w-[90%] h-full flex flex-col p-1 overflow-y-auto scrollbar-slim border border-orange-300 bg-white">
+        <div className="w-[90%] h-full flex flex-col p-1 overflow-y-scroll scrollbar-slim border border-orange-300 bg-white">
             {result &&
                 result.map((item) => {
                     const user = item.member_info;
