@@ -9,6 +9,7 @@ import { groupMemberUrl } from "@/app/_share/constants/apiUrls";
 import useQueryData from "@/app/_share/hooks/query/useQueryData";
 import usePickImage from "@/app/_share/hooks/util/usePickImage";
 import { useToast } from "@/app/_share/provider/Toast";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPortal } from "react-dom";
@@ -146,7 +147,7 @@ function GroupSetting({
     return (
         <div className="w-full flex flex-col justify-center items-center">
             <h3 className="mt-3 text-lg text-amber-800">メンバー</h3>
-            <div className="w-[80%] mt-2 h-[30%] flex justify-center items-center">
+            <div className="w-[80%] mt-2 max-h-48 flex justify-center items-center">
                 <FriendListView result={data} />
             </div>
             <div className=" border border-orange-800 rounded-md mt-3 w-full flex flex-col p-2 justify-center items-center">
@@ -216,14 +217,18 @@ function GroupSetting({
 
 function FriendListView({ result }: { result: Member[] | null }) {
     return (
-        <div className="w-[90%] h-full flex flex-col p-1 overflow-y-scroll scrollbar-slim border border-orange-300 bg-white">
+        <div className="w-[90%] h-full flex flex-col p-1 overflow-y-auto scrollbar-slim border border-orange-300 bg-white">
             {result &&
                 result.map((item) => {
                     const user = item.member_info;
                     const name = user.nickname ?? user.username;
 
                     return (
-                        <div key={item.member} className="w-full flex">
+                        <Link
+                            href={`/user/${user.username}`}
+                            key={item.member}
+                            className="w-full flex"
+                        >
                             <div className="w-full md:h-10 h-16  flex">
                                 <div
                                     className={`w-full h-full hover:bg-gray-300 active:bg-gray-300
@@ -247,7 +252,7 @@ function FriendListView({ result }: { result: Member[] | null }) {
                                     <div className="w-full min-h-0 text-gray-500 flex justify-between gap-5 md:mb-1"></div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     );
                 })}
         </div>
