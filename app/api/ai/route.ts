@@ -1,0 +1,93 @@
+import OpenAI from "openai";
+import sharp from "sharp";
+export const runtime = "nodejs";
+
+const MAX_BYTES = 5 * 1024 * 1024;
+
+async function toUnder5MB(
+    input: Buffer,
+): Promise<{ buf: Buffer; mime: string }> {
+    let width = 2000;
+    let quality = 80;
+
+    for (let i = 0; i < 8; i++) {
+        const out = await sharp(input, { failOn: "none" })
+            .rotate()
+            .resize({ width, withoutEnlargement: true })
+            .jpeg({ quality, mozjpeg: true })
+            .toBuffer();
+
+        if (out.length <= MAX_BYTES) return { buf: out, mime: "image/jpeg" };
+
+        quality = Math.max(30, quality - 10);
+        width = Math.max(600, Math.floor(width * 0.85));
+    }
+
+    const out = await sharp(input, { failOn: "none" })
+        .rotate()
+        .resize({ width: 600, withoutEnlargement: true })
+        .jpeg({ quality: 30, mozjpeg: true })
+        .toBuffer();
+
+    return { buf: out, mime: "image/jpeg" };
+}
+
+const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+function toDataUrl(buf: Buffer, mime: string) {
+    return `data:${mime};base64,${buf.toString("base64")}`;
+}
+
+export async function POST(req: Request) {
+    try {
+        const form = await req.formData();
+        const file = form.get("image");
+        const text = String(form.get("text") ?? "");
+
+        if (!(file instanceof File)) {
+            return Response.json(
+                { error: "image is required" },
+                { status: 400 },
+            );
+        }
+        const ab = await file.arrayBuffer();
+        const inputBuf = Buffer.from(ab);
+        const { buf, mime } =
+            inputBuf.length > MAX_BYTES
+                ? await toUnder5MB(inputBuf)
+                : { buf: inputBuf, mime: file.type || "image/png" };
+        const dataUrl = toDataUrl(buf, mime);
+
+        const res = await client.responses.create({
+            model: "gpt-5-mini",
+            max_output_tokens: 1200,
+            input: [
+                {
+                    role: "system",
+                    content:
+                        "あなたは画像分析者。画像を見て感想を50文字以内で生成して。",
+                },
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "input_text",
+                            text: `カスタム指示:\n${text}`,
+                        },
+                        {
+                            type: "input_image",
+                            image_url: dataUrl,
+                            detail: "auto",
+                        },
+                    ],
+                },
+            ],
+        });
+
+        return Response.json({ text: res.output_text });
+    } catch (e) {
+        return Response.json({ error: "internal error" }, { status: 500 });
+    }
+}

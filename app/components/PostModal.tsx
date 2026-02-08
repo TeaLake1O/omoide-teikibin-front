@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import createPost from "../_share/api/createPost";
 import CloseButton from "../_share/components/UI/button/CloseButton";
 import GenericButton from "../_share/components/UI/button/GenericButton";
+import Loader from "../_share/components/UI/util/Loader";
 import usePickImage from "../_share/hooks/util/usePickImage";
 import { usePostModal } from "../_share/provider/PostModal";
 import { useToast } from "../_share/provider/Toast";
@@ -18,12 +19,35 @@ export default function PostModal() {
     const { url, inputProps, file, imageReset } = usePickImage();
     const { showToast } = useToast();
 
+    const [isLoading, setIsLoading] = useState(false);
+    const isLoadingRef = useRef(false);
+
     const [PostText, setPostText] = useState("");
     const [PostGroup, setPostGroup] = useState("");
 
     const qc = useQueryClient();
 
     const isPosted = useRef(false);
+
+    const genText = async () => {
+        if (!file) return showToast("画像を選択してください");
+        if (isLoadingRef.current) return;
+
+        const fd = new FormData();
+        fd.append("image", file);
+        fd.append("text", PostText);
+        setIsLoading(true);
+        isLoadingRef.current = true;
+        const res = await fetch("/api/ai", {
+            method: "POST",
+            body: fd,
+        });
+        setIsLoading(false);
+        isLoadingRef.current = false;
+
+        const json = await res.json();
+        setPostText(json.text);
+    };
 
     const submit = async () => {
         if (isPosted.current) return;
@@ -47,7 +71,7 @@ export default function PostModal() {
 
         showToast(
             res.status === "success" ? "投稿しました" : "エラーが発生しました",
-            "text-black"
+            "text-black",
         );
         reset();
     };
@@ -169,9 +193,27 @@ export default function PostModal() {
                                     value={PostText}
                                 ></textarea>
                             </label>
+                            <div className="flex flex-row gap-3">
+                                <GenericButton
+                                    handleOnclick={() => genText()}
+                                    height="h-8"
+                                    textSize="text-sm"
+                                    name="投稿文を生成"
+                                />
+                                {isLoading && (
+                                    <>
+                                        <div className="h-6 aspect-square">
+                                            <Loader />
+                                        </div>
+                                        <span className="text-amber-800 text-sm">
+                                            生成中...
+                                        </span>
+                                    </>
+                                )}
+                            </div>
                         </form>
                     </div>,
-                    document.getElementById("modal-root")!
+                    document.getElementById("modal-root")!,
                 )}
         </>
     );
