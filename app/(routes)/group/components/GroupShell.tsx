@@ -11,13 +11,10 @@ import CreateGroup from "./CreateGroup";
 export default function GroupShell({ data }: { data: Groups[] }) {
     const { me } = useLayoutUI();
 
-    if (data.length === 0) {
-        return <div>グループはありません</div>;
-    }
     const groupList = [...data].sort(
         (a, b) =>
             Date.parse(b.last_post_created_at ?? b.created_at) -
-            Date.parse(a.last_post_created_at ?? a.created_at)
+            Date.parse(a.last_post_created_at ?? a.created_at),
     );
 
     return (
@@ -79,7 +76,7 @@ export default function GroupShell({ data }: { data: Groups[] }) {
                                     <span className="text-sm mt-auto">
                                         {formatDateTime(
                                             item.last_post_created_at,
-                                            true
+                                            true,
                                         )}
                                     </span>
                                 ) : (
