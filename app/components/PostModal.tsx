@@ -46,6 +46,7 @@ export default function PostModal() {
         isLoadingRef.current = false;
 
         const json = await res.json();
+        console.log(json);
         setPostText(json.text);
     };
 
@@ -88,7 +89,10 @@ export default function PostModal() {
                 createPortal(
                     <div
                         className="fixed inset-0 z-[9990] bg-black/60 flex justify-center items-center"
-                        onClick={closePostModal}
+                        onClick={() => {
+                            closePostModal();
+                            reset();
+                        }}
                     >
                         <form
                             className="md:h-full md:max-w-[40%] pl-10 pr-10 overflow-y-auto no-scrollbar

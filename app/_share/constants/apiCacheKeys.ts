@@ -8,7 +8,6 @@ const FRIEND_NOTIFY_KEY_INFINITE = ["friendNotifyInfinite"] as const;
 const FRIEND_NOTIFY_COUNT_KEY = ["friendNotifyCount"] as const;
 const Groups = ["Groups"] as const;
 const INVITE_FRIEND = ["InviteFriend"] as const;
-const GROUP_MEMBER = ["GroupMember"] as const;
 
 export const API_CACHE_KEYS = {
     homePost: () => HOME_POST_KEY,
@@ -36,7 +35,7 @@ export const API_CACHE_KEYS = {
     groupPosts: (groupId: number) => ["GroupPosts", groupId],
     groupPostsInfinite: (groupId: number) => ["GroupPostsInfinite", groupId],
 
-    groupMember: () => GROUP_MEMBER,
+    groupMember: (groupId: number) => ["GroupMember", groupId],
 
     inviteFriend: () => INVITE_FRIEND,
 } as const;

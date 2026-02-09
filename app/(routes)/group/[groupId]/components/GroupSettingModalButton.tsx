@@ -96,7 +96,6 @@ function GroupSetting({
     close: () => void;
     detail: GroupMessageData;
 }) {
-    console.log(detail);
     const [text, setText] = useState(detail.group_name);
     const { url, fileOpen, inputProps, file, imageReset } = usePickImage(
         detail.group_image ?? undefined,
@@ -105,7 +104,7 @@ function GroupSetting({
     const result = useQueryData<Member[]>({
         url: groupMemberUrl,
         enabled: true,
-        queryKey: API_CACHE_KEYS.groupMember(),
+        queryKey: API_CACHE_KEYS.groupMember(detail.id),
     });
     const data = result.data;
 

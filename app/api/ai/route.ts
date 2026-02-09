@@ -1,10 +1,13 @@
 import OpenAI from "openai";
+import { zodTextFormat } from "openai/helpers/zod";
 import sharp from "sharp";
+import { z } from "zod";
+
 export const runtime = "nodejs";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
-async function toUnder5MB(
+async function imageResize(
     input: Buffer,
 ): Promise<{ buf: Buffer; mime: string }> {
     let width = 2000;
@@ -32,13 +35,15 @@ async function toUnder5MB(
     return { buf: out, mime: "image/jpeg" };
 }
 
-const client = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 function toDataUrl(buf: Buffer, mime: string) {
     return `data:${mime};base64,${buf.toString("base64")}`;
 }
+
+const ShortText = z.object({
+    text: z.string().min(10).max(50),
+});
 
 export async function POST(req: Request) {
     try {
@@ -52,30 +57,30 @@ export async function POST(req: Request) {
                 { status: 400 },
             );
         }
+
         const ab = await file.arrayBuffer();
         const inputBuf = Buffer.from(ab);
         const { buf, mime } =
             inputBuf.length > MAX_BYTES
-                ? await toUnder5MB(inputBuf)
+                ? await imageResize(inputBuf)
                 : { buf: inputBuf, mime: file.type || "image/png" };
+
         const dataUrl = toDataUrl(buf, mime);
 
-        const res = await client.responses.create({
+        const res = await client.responses.parse({
             model: "gpt-5-mini",
-            max_output_tokens: 1200,
+            max_output_tokens: 200,
+            reasoning: { effort: "minimal" },
             input: [
                 {
                     role: "system",
                     content:
-                        "あなたは画像分析者。画像を見て感想を50文字以内で生成して。",
+                        "入力テキストの指示に従って10文字以上、50文字以内で出力して。特に指示がない場合や具体的でない場合は感想を出力して。",
                 },
                 {
                     role: "user",
                     content: [
-                        {
-                            type: "input_text",
-                            text: `カスタム指示:\n${text}`,
-                        },
+                        { type: "input_text", text: `カスタム指示:\n${text}` },
                         {
                             type: "input_image",
                             image_url: dataUrl,
@@ -84,10 +89,20 @@ export async function POST(req: Request) {
                     ],
                 },
             ],
+            text: {
+                format: zodTextFormat(ShortText, "short_text"),
+            },
         });
 
-        return Response.json({ text: res.output_text });
-    } catch (e) {
-        return Response.json({ error: "internal error" }, { status: 500 });
+        if (!res.output_parsed) {
+            return Response.json(
+                { error: "model returned no parsed output" },
+                { status: 502 },
+            );
+        }
+
+        return Response.json({ text: res.output_parsed.text ?? "" });
+    } catch {
+        return Response.json({ text: `` });
     }
 }
