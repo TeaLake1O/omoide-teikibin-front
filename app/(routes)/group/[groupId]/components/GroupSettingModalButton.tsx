@@ -102,7 +102,7 @@ function GroupSetting({
     );
 
     const result = useQueryData<Member[]>({
-        url: groupMemberUrl,
+        url: groupMemberUrl(detail.id),
         enabled: true,
         queryKey: API_CACHE_KEYS.groupMember(detail.id),
     });

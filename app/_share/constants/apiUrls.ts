@@ -28,4 +28,5 @@ export const GroupUrl = (groupId: number) =>
 
 export const InviteFriendUrl = `${DJANGO_URL}/post/api/group/create`;
 
-export const groupMemberUrl = `${DJANGO_URL}/post/api/group/1/member`;
+export const groupMemberUrl = (groupId: number) =>
+    `${DJANGO_URL}/post/api/group/${groupId}/member`;
