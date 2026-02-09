@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { memo } from "react";
 import { API_CACHE_KEYS } from "../../constants/apiCacheKeys";
 import { FRIEND_NOTIFY_URL, POST_NOTIFY_URL } from "../../constants/apiUrls";
@@ -135,6 +136,7 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
         enabled: activeId === "post",
         getId: (n) => String(n.notify_id),
     });
+    const router = useRouter();
 
     if (!notifies) return null;
     if (isEmpty) return <h1>通知がありません</h1>;
@@ -156,7 +158,8 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
                 const isLast = notifies.length - 1 === index;
                 const user = notify.actor;
                 return (
-                    <div
+                    <Link
+                        href={`/group/${notify.post_detail?.group}`}
                         key={notify.notify_id}
                         ref={isLast ? setLastEl : undefined}
                         className="w-full border-b p-3 border-b-orange-200 hover:bg-black/10 active:bg-black/20 transition-colors duration-200"
@@ -191,7 +194,7 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
                         <span className="text-sm text-amber-800">
                             {formatDateTime(notify.created_at, true)}
                         </span>
-                    </div>
+                    </Link>
                 );
             })}
             {isNext && (

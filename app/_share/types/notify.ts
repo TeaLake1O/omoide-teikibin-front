@@ -2,6 +2,7 @@ type PostDetail = {
     post_id: string;
     post_content: string | null;
     post_images: string;
+    group: number;
 };
 
 export type PostNotify = {

@@ -103,7 +103,10 @@ export default function PostModal() {
                                 <div className="w-24">
                                     <div className="relative h-10 aspect-square ml-1">
                                         <CloseButton
-                                            handleOnclick={closePostModal}
+                                            handleOnclick={() => {
+                                                closePostModal();
+                                                reset();
+                                            }}
                                             color="bg-black"
                                         />
                                     </div>

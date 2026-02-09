@@ -2,6 +2,8 @@
 
 import CloseButton from "@/app/_share/components/UI/button/CloseButton";
 import GenericButton from "@/app/_share/components/UI/button/GenericButton";
+import CheckIcon from "@/app/_share/components/UI/Icon/CheckIcon";
+import CloseIcon from "@/app/_share/components/UI/Icon/CloseIcon";
 import PhotoIcon from "@/app/_share/components/UI/Icon/PhotoIcon";
 import UserIconImage from "@/app/_share/components/UserIconImage";
 import { API_CACHE_KEYS } from "@/app/_share/constants/apiCacheKeys";
@@ -47,7 +49,7 @@ function ModalWindow({
 
     const toggle = (id: number) => {
         setSelectedIds((prev) =>
-            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
         );
     };
 
@@ -58,7 +60,7 @@ function ModalWindow({
     });
     const result = inviteFriend.data
         ? [...inviteFriend.data].sort(
-              (a, b) => Date.parse(b.friend_date) - Date.parse(a.friend_date)
+              (a, b) => Date.parse(b.friend_date) - Date.parse(a.friend_date),
           )
         : null;
 
@@ -97,7 +99,7 @@ function ModalWindow({
             res.status === "success"
                 ? "グループを作成しました。"
                 : "エラーが発生しました",
-            "text-black"
+            "text-black",
         );
     };
 
@@ -207,7 +209,7 @@ function ModalWindow({
                             </div>
                         </form>
                     </div>,
-                    document.getElementById("modal-root")!
+                    document.getElementById("modal-root")!,
                 )}
         </>
     );
@@ -237,8 +239,16 @@ function FriendListView({
                                 className="w-full md:h-10 h-16  flex"
                             >
                                 <UserView user={user} checked={checked}>
-                                    <div className="w-12 aspect-square">
-                                        {checked ? "✓" : "×"}
+                                    <div className="w-12 aspect-square flex justify-center items-center">
+                                        {checked ? (
+                                            <div className="h-6 w-6">
+                                                <CheckIcon />
+                                            </div>
+                                        ) : (
+                                            <div className="h-6 w-6">
+                                                <CloseIcon />
+                                            </div>
+                                        )}
                                     </div>
                                 </UserView>
                             </button>
@@ -269,7 +279,7 @@ function UserView({
                 checked ? "bg-gray-200" : "bg-white "
             }`}
         >
-            <div className="flex md:mr-5 md:ml-5 justify-between items-center">
+            <div className="flex mr-5 ml-5 justify-between items-center">
                 <div className="flex flex-row items-center justify-center gap-4">
                     <div className="w-7 aspect-square rounded-full">
                         <UserIconImage iconUrl={user.icon_url} />

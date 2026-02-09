@@ -6,6 +6,7 @@ import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import { FRONT_URL } from "@/config";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ApiCacheKeys } from "../../constants/apiCacheKeys";
 import { UNKNOWN_USER_ICON_URL } from "../../constants/publicUrls";
 import useInfinityFeedContents from "../../hooks/domain/useInfiniteFeedContents";
@@ -40,6 +41,8 @@ export default function PostContent(props: PostContentProps) {
         getId: (p) => String(p.post_id),
     });
 
+    const router = useRouter();
+
     if (!posts) return null;
 
     const uniqPosts = uniqueT<UserPost>({
@@ -64,16 +67,16 @@ export default function PostContent(props: PostContentProps) {
                     isFirst ? "border-none" : "border-t"
                 }`}
                         key={post.post_id}
-                        onClick={() => console.log("click")}
+                        onClick={() => {
+                            router.push(`/group/${post.group}`);
+                        }}
                         ref={isLast ? setLastEl : undefined}
                     >
-                        <div
-                            className="flex flex-row items-center mb-3"
-                            onClick={(e) => e.stopPropagation()}
-                        >
+                        <div className="flex flex-row items-center mb-3">
                             <Link
                                 className="w-12 h-12 aspect-square rounded-full group"
                                 href={`${FRONT_URL}/user/${post_user.username}`}
+                                onClick={(e) => e.stopPropagation()}
                             >
                                 <UserIconImage
                                     iconUrl={
@@ -86,6 +89,7 @@ export default function PostContent(props: PostContentProps) {
                             <div className="flex gap-5 ml-7 justify-between items-center w-full">
                                 <Link
                                     href={`${FRONT_URL}/user/${post_user.username}`}
+                                    onClick={(e) => e.stopPropagation()}
                                 >
                                     <span className="hover:border-b text-lg font-semibold">
                                         {post.post_user.nickname ??
