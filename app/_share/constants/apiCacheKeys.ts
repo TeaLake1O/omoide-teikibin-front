@@ -38,6 +38,7 @@ export const API_CACHE_KEYS = {
     groupMember: (groupId: number) => ["GroupMember", groupId],
 
     inviteFriend: () => INVITE_FRIEND,
+    comments: (postId: string) => ["Comments", postId],
 } as const;
 
 export type ApiCacheKeys = ReturnType<

@@ -135,7 +135,7 @@ function MessageArea({
 }) {
     const other = data.sender_inf;
     const isMe = other.username !== username;
-    const name = isMe ? null : other.nickname ?? username;
+    const name = isMe ? null : (other.nickname ?? username);
 
     return (
         <div

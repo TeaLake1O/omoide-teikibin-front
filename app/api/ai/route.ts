@@ -100,6 +100,7 @@ export async function POST(req: Request) {
                 { status: 502 },
             );
         }
+        console.log(text);
 
         return Response.json({ text: res.output_parsed.text ?? "" });
     } catch {

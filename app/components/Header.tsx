@@ -13,7 +13,7 @@ type Props = {
     me: Me | null;
 };
 
-const backButtonUrl = ["/user/", "/message/", "/group/"];
+const backButtonUrl = ["/user/", "/message/", "/group/", "/post/"];
 
 export default function Header(props: Props) {
     const { toggleHamburger } = useLayoutUI();

@@ -4,6 +4,7 @@ import CloseButton from "@/app/_share/components/UI/button/CloseButton";
 import PhotoIcon from "@/app/_share/components/UI/Icon/PhotoIcon";
 import SendIcon from "@/app/_share/components/UI/Icon/SendIcon";
 import { API_CACHE_KEYS } from "@/app/_share/constants/apiCacheKeys";
+import useHotKey from "@/app/_share/hooks/util/useHotKey";
 import usePickImage from "@/app/_share/hooks/util/usePickImage";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
@@ -22,6 +23,8 @@ export default function SendArea(props: Props) {
     const { url, file, fileOpen, imageReset, inputProps } = usePickImage();
 
     const [text, setText] = useState("");
+
+    const [isInput, setIsInput] = useState(false);
 
     const qc = useQueryClient();
 
@@ -53,6 +56,8 @@ export default function SendArea(props: Props) {
         }
     };
 
+    useHotKey({ callback: submit, key: "Enter", enabled: isInput || !!file });
+
     return (
         <div
             className="w-full border border-orange-200 h-16 md:h-20 
@@ -67,6 +72,8 @@ export default function SendArea(props: Props) {
                     placeholder="メッセージを送信"
                     value={text}
                     onChange={(e) => setText(e.currentTarget.value)}
+                    onFocus={() => setIsInput(true)}
+                    onBlur={() => setIsInput(false)}
                 />
                 {url && (
                     <div className="flex h-full w-[15%] justify-center items-center">
@@ -87,6 +94,7 @@ export default function SendArea(props: Props) {
                 <button
                     type="button"
                     onClick={() => fileOpen()}
+                    onPointerDown={(e) => e.preventDefault()}
                     className="md:h-[70%] h-[80%] aspect-square rounded-full flex justify-center items-center 
                     hover:bg-black/10 active:bg-black/10 transition-colors duration-200"
                 >

@@ -6,6 +6,8 @@ export default function getPageName(rawUrl: string | null) {
             return "/message/";
         } else if (rawUrl?.startsWith("/group/")) {
             return "/group/";
+        } else if (rawUrl?.startsWith("/post/")) {
+            return "/post/";
         } else return rawUrl;
     })();
 
@@ -13,7 +15,6 @@ export default function getPageName(rawUrl: string | null) {
         "/home": "ホーム",
         "/group": "グループ",
         "/group/": "グループ",
-        "/post": "投稿",
         "/friend": "フレンド",
         "/user": rawUrl !== null ? rawUrl.slice(6) + "のユーザページ" : "Error",
         "/setting": "設定",
@@ -22,6 +23,7 @@ export default function getPageName(rawUrl: string | null) {
             rawUrl !== null ? rawUrl.slice(9) + "とのメッセージ" : "Error",
         "/message": "メッセージ",
         "/not-found": "Not Found",
+        "/post/": "投稿詳細",
     };
     if (url !== null) {
         return pageName[url];

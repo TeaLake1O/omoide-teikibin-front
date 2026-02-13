@@ -15,7 +15,7 @@ import { useToast } from "../_share/provider/Toast";
 
 export default function PostModal() {
     const { isOpenPostModal, closePostModal } = usePostModal();
-    const res = useGroupsData(isOpenPostModal);
+    const res = useGroupsData(true);
     const { url, inputProps, file, imageReset } = usePickImage();
     const { showToast } = useToast();
 
@@ -183,23 +183,6 @@ export default function PostModal() {
                                     />
                                 </label>
                             </div>
-                            <label className="bg-white w-full">
-                                <div className="flex justify-between p-3 pb-0">
-                                    <span className="text-sm text-gray-400">
-                                        投稿文
-                                    </span>
-                                    <span className="text-gray-400 text-sm">
-                                        {PostText.length}文字
-                                    </span>
-                                </div>
-                                <textarea
-                                    className="pl-2 pr-2 focus:outline-none mt-2 w-full overflow-y-auto resize-none min-h-24"
-                                    onChange={(e) =>
-                                        setPostText(e.currentTarget.value)
-                                    }
-                                    value={PostText}
-                                ></textarea>
-                            </label>
                             <div className="flex flex-row gap-3">
                                 <GenericButton
                                     handleOnclick={() => genText()}
@@ -218,6 +201,23 @@ export default function PostModal() {
                                     </>
                                 )}
                             </div>
+                            <label className="bg-white w-full">
+                                <div className="flex justify-between p-3 pb-0">
+                                    <span className="text-sm text-gray-400">
+                                        投稿文
+                                    </span>
+                                    <span className="text-gray-400 text-sm">
+                                        {PostText.length}文字
+                                    </span>
+                                </div>
+                                <textarea
+                                    className="pl-2 pr-2 focus:outline-none mt-2 w-full overflow-y-auto resize-none min-h-24"
+                                    onChange={(e) =>
+                                        setPostText(e.currentTarget.value)
+                                    }
+                                    value={PostText}
+                                ></textarea>
+                            </label>
                         </form>
                     </div>,
                     document.getElementById("modal-root")!,

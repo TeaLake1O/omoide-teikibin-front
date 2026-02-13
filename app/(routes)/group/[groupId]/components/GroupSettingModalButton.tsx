@@ -2,6 +2,8 @@
 
 import CloseButton from "@/app/_share/components/UI/button/CloseButton";
 import GenericButton from "@/app/_share/components/UI/button/GenericButton";
+import CheckIcon from "@/app/_share/components/UI/Icon/CheckIcon";
+import CloseIcon from "@/app/_share/components/UI/Icon/CloseIcon";
 import PhotoIcon from "@/app/_share/components/UI/Icon/PhotoIcon";
 import UserIconImage from "@/app/_share/components/UserIconImage";
 import { API_CACHE_KEYS } from "@/app/_share/constants/apiCacheKeys";
@@ -9,10 +11,12 @@ import { groupMemberUrl } from "@/app/_share/constants/apiUrls";
 import useQueryData from "@/app/_share/hooks/query/useQueryData";
 import usePickImage from "@/app/_share/hooks/util/usePickImage";
 import { useToast } from "@/app/_share/provider/Toast";
+import { UserInf } from "@/app/_share/types/userInf";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { InviteFriend } from "../../types/Group";
 import { GroupMessageData, Member } from "../types/GroupMessage";
 import updateGroup from "./hooks/updateGroup";
 
@@ -100,13 +104,20 @@ function GroupSetting({
     const { url, fileOpen, inputProps, file, imageReset } = usePickImage(
         detail.group_image ?? undefined,
     );
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-    const result = useQueryData<Member[]>({
+    const toggle = (id: number) => {
+        setSelectedIds((prev) =>
+            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+        );
+    };
+
+    const member = useQueryData<Member[]>({
         url: groupMemberUrl(detail.id),
         enabled: true,
         queryKey: API_CACHE_KEYS.groupMember(detail.id),
     });
-    const data = result.data;
+    const data = member.data;
 
     const reset = () => {
         setText("");
@@ -141,7 +152,7 @@ function GroupSetting({
         );
     };
 
-    if (result.isError || result.isLoading) return null;
+    if (member.isError || member.isLoading) return null;
 
     return (
         <div className="w-full flex flex-col justify-center items-center">
@@ -254,6 +265,87 @@ function FriendListView({ result }: { result: Member[] | null }) {
                         </Link>
                     );
                 })}
+        </div>
+    );
+}
+
+function AddFriendListView({
+    result,
+    selectedIds,
+    toggle,
+}: {
+    result: InviteFriend[] | null;
+    selectedIds: number[];
+    toggle: (id: number) => void;
+}) {
+    return (
+        <div className="w-[90%] h-full flex flex-col overflow-y-scroll scrollbar-slim border border-orange-300 bg-white">
+            {result && result.length > 0 ? (
+                result.map((item) => {
+                    const user = item.other;
+                    const checked = selectedIds.includes(user.id);
+
+                    return (
+                        <div key={item.friend_id} className="w-full flex">
+                            <button
+                                type="button"
+                                onClick={() => toggle(user.id)}
+                                className="w-full md:h-10 h-16  flex"
+                            >
+                                <UserView user={user} checked={checked}>
+                                    <div className="w-12 aspect-square flex justify-center items-center">
+                                        {checked ? (
+                                            <div className="h-6 w-6">
+                                                <CheckIcon />
+                                            </div>
+                                        ) : (
+                                            <div className="h-6 w-6">
+                                                <CloseIcon />
+                                            </div>
+                                        )}
+                                    </div>
+                                </UserView>
+                            </button>
+                        </div>
+                    );
+                })
+            ) : (
+                <span>追加できるフレンドがいません</span>
+            )}
+        </div>
+    );
+}
+
+function UserView({
+    user,
+    checked,
+    children,
+}: {
+    user: UserInf;
+    checked: boolean;
+    children: React.ReactNode;
+}) {
+    const name = user.nickname ?? "名無し";
+    return (
+        <div
+            className={`w-full h-full hover:bg-gray-300 active:bg-gray-300
+            border flex flex-col justify-center border-gray-300 ${
+                checked ? "bg-gray-200" : "bg-white "
+            }`}
+        >
+            <div className="flex mr-5 ml-5 justify-between items-center">
+                <div className="flex flex-row items-center justify-center gap-4">
+                    <div className="w-7 aspect-square rounded-full">
+                        <UserIconImage iconUrl={user.icon_url} />
+                    </div>
+                    <span className="text-lg truncate">{name}</span>
+                </div>
+                <span className="text-sm text-amber-800 truncate">
+                    @{user.username}
+                </span>
+                {children}
+            </div>
+            <div className="w-full min-h-0 text-gray-500 flex justify-between gap-5 md:mb-1"></div>
         </div>
     );
 }
