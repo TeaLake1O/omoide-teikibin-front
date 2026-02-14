@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function usePickImage(initialUrl?: string) {
+export default function usePickImage(initialUrl?: string, isCapture?: boolean) {
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [url, setUrl] = useState(initialUrl);
     const [filename, setFilename] = useState("");
@@ -36,6 +36,7 @@ export default function usePickImage(initialUrl?: string) {
         accept: "image/*",
         onChange,
         style: { display: "none" } as const,
+        capture: isCapture,
     };
 
     const imageReset = () => {

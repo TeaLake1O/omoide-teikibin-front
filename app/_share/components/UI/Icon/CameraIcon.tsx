@@ -3,7 +3,7 @@
 export default function CameraIcon() {
     return (
         <svg
-            className="w-full h-full"
+            className="w-full h-full active:scale-90 transition-transform duration-200"
             viewBox="0 0 550 471"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
