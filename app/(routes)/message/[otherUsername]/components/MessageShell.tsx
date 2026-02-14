@@ -5,6 +5,7 @@ import Loader from "@/app/_share/components/UI/util/Loader";
 import UserIconImage from "@/app/_share/components/UserIconImage";
 import { API_CACHE_KEYS } from "@/app/_share/constants/apiCacheKeys";
 import useInfiniteFeedContents from "@/app/_share/hooks/domain/useInfiniteFeedContents";
+import useNowTime from "@/app/_share/hooks/util/useNowTime";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import uniqueT from "@/app/_share/util/uniqueT";
@@ -68,6 +69,8 @@ export default function MessageShell(props: Props) {
         pendingScrollBottomRef.current = false;
     }, [messages.length, scrollBottom]);
 
+    const now = useNowTime(10000);
+
     if (isLoading) return null;
 
     return (
@@ -99,6 +102,7 @@ export default function MessageShell(props: Props) {
                                     data={item}
                                     username={me.username}
                                     isAboveSender={isAboveSender}
+                                    now={now}
                                 />
                             </div>
                         );
@@ -109,6 +113,7 @@ export default function MessageShell(props: Props) {
                                 data={item}
                                 username={me.username}
                                 isAboveSender={isAboveSender}
+                                now={now}
                             />
                         </div>
                     );
@@ -128,10 +133,12 @@ function MessageArea({
     data,
     username,
     isAboveSender,
+    now,
 }: {
     data: MessageData;
     username: string;
     isAboveSender: boolean;
+    now: number;
 }) {
     const other = data.sender_inf;
     const isMe = other.username !== username;
@@ -170,7 +177,7 @@ function MessageArea({
                     )}
                 </div>
                 <span className="text-gray-400 text-[10px] w-full text-right">
-                    {formatDateTime(data.send_at, true)}
+                    {formatDateTime(data.send_at, true, now)}
                 </span>
             </div>
         </div>

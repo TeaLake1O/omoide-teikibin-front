@@ -2,6 +2,7 @@
 
 import DefaultGroupIcon from "@/app/_share/components/UI/Icon/DefaultGroupIcon";
 import GroupIconImage from "@/app/_share/components/UserIconImage";
+import useNowTime from "@/app/_share/hooks/util/useNowTime";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import Link from "next/link";
@@ -16,6 +17,8 @@ export default function GroupShell({ data }: { data: Groups[] }) {
             Date.parse(b.last_post_created_at ?? b.created_at) -
             Date.parse(a.last_post_created_at ?? a.created_at),
     );
+
+    const now = useNowTime();
 
     return (
         <>
@@ -77,6 +80,8 @@ export default function GroupShell({ data }: { data: Groups[] }) {
                                         {formatDateTime(
                                             item.last_post_created_at,
                                             true,
+                                            //特に意味ないけどDate.now()の計算をひとつにするため
+                                            now,
                                         )}
                                     </span>
                                 ) : (

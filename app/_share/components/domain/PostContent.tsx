@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { ApiCacheKeys } from "../../constants/apiCacheKeys";
 import { UNKNOWN_USER_ICON_URL } from "../../constants/publicUrls";
 import useInfinityFeedContents from "../../hooks/domain/useInfiniteFeedContents";
+import useNowTime from "../../hooks/util/useNowTime";
 import uniqueT from "../../util/uniqueT";
 import Loader from "../UI/util/Loader";
 import FollowButton from "./FollowButton";
@@ -42,6 +43,7 @@ export default function PostContent(props: PostContentProps) {
     });
 
     const router = useRouter();
+    const now = useNowTime();
 
     if (!posts) return null;
 
@@ -138,7 +140,7 @@ export default function PostContent(props: PostContentProps) {
                                 />
                             </div>
                             <span className="text-xs text-gray-500 mt-auto ml-auto">
-                                {formatDateTime(post.created_at, true)}
+                                {formatDateTime(post.created_at, true, now)}
                             </span>
                         </div>
                     </div>

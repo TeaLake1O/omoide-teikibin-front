@@ -1,5 +1,3 @@
-"use client";
-
 export default function NotifyIcon({ isActive }: { isActive: boolean }) {
     if (!isActive) {
         return (

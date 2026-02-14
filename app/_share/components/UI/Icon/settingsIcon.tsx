@@ -1,4 +1,3 @@
-"use client";
 export default function SettingsIcon({ isActive }: { isActive: boolean }) {
     if (isActive) {
         return (

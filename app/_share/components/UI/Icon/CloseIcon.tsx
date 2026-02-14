@@ -1,5 +1,3 @@
-"use client";
-
 export default function CloseIcon() {
     return (
         <div className="h-full w-full relative">

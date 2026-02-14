@@ -1,5 +1,3 @@
-"use client";
-
 export default function FriendsIcon({ isActive }: { isActive: boolean }) {
     return (
         <svg

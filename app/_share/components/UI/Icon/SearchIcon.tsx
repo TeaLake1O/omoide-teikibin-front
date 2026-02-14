@@ -1,5 +1,3 @@
-"use clint";
-
 export default function SearchIcon() {
     return (
         <svg

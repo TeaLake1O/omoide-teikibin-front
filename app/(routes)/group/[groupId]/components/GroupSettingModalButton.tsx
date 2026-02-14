@@ -7,11 +7,15 @@ import CloseIcon from "@/app/_share/components/UI/Icon/CloseIcon";
 import PhotoIcon from "@/app/_share/components/UI/Icon/PhotoIcon";
 import UserIconImage from "@/app/_share/components/UserIconImage";
 import { API_CACHE_KEYS } from "@/app/_share/constants/apiCacheKeys";
-import { groupMemberUrl } from "@/app/_share/constants/apiUrls";
+import {
+    groupMemberUrl,
+    InviteFriendListUrl,
+} from "@/app/_share/constants/apiUrls";
 import useQueryData from "@/app/_share/hooks/query/useQueryData";
 import usePickImage from "@/app/_share/hooks/util/usePickImage";
 import { useToast } from "@/app/_share/provider/Toast";
 import { UserInf } from "@/app/_share/types/userInf";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -119,13 +123,22 @@ function GroupSetting({
     });
     const data = member.data;
 
+    const inviteFriendResult = useQueryData<InviteFriend[]>({
+        url: InviteFriendListUrl(detail.id),
+        enabled: true,
+        queryKey: API_CACHE_KEYS.inviteFriendList(detail.id),
+    });
+
     const reset = () => {
+        setSelectedIds([]);
         setText("");
         imageReset();
     };
     const { showToast } = useToast();
 
     const router = useRouter();
+
+    const queryClient = useQueryClient();
 
     const submit = async () => {
         if (!text) {
@@ -137,8 +150,19 @@ function GroupSetting({
         fd.append("group_name", text);
         if (file) fd.append("group_image", file);
 
+        if (selectedIds.length !== 0)
+            selectedIds.forEach((item) => {
+                fd.append("send_ids", String(item));
+            });
+
         const res = await updateGroup({ group: detail.id, data: fd });
         if (res.status === "success") {
+            queryClient.invalidateQueries({
+                queryKey: API_CACHE_KEYS.inviteFriendList(detail.id),
+            });
+            queryClient.invalidateQueries({
+                queryKey: API_CACHE_KEYS.groupMember(detail.id),
+            });
             router.refresh();
         }
 
@@ -200,6 +224,11 @@ function GroupSetting({
                         name="nickname"
                     />
                 </label>
+                <AddFriendListView
+                    result={inviteFriendResult.data}
+                    toggle={toggle}
+                    selectedIds={selectedIds}
+                />
 
                 <div className="w-full mt-7 mr-5 ml-5 flex justify-between items-center ">
                     <GenericButton
@@ -279,7 +308,7 @@ function AddFriendListView({
     toggle: (id: number) => void;
 }) {
     return (
-        <div className="w-[90%] h-full flex flex-col overflow-y-scroll scrollbar-slim border border-orange-300 bg-white">
+        <div className="w-[90%] mt-5 h-full flex flex-col overflow-y-scroll scrollbar-slim border border-orange-300 bg-white">
             {result && result.length > 0 ? (
                 result.map((item) => {
                     const user = item.other;

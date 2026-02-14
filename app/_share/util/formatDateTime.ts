@@ -1,14 +1,13 @@
-"use client";
-
 export default function formatDateTime(
     time: string,
-    onlyDate: boolean
+    onlyDate: boolean,
+    nowMs?: number,
 ): string {
-    const now = new Date();
+    const now = nowMs ?? Date.now();
 
     const d = new Date(time);
 
-    const diff = now.getTime() - d.getTime();
+    const diff = now - d.getTime();
 
     if (diff < 0) return "Error";
     else if (diff < 60_000) {
@@ -24,14 +23,14 @@ export default function formatDateTime(
         if (onlyDate) {
             return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(
                 2,
-                "0"
+                "0",
             )}/${String(d.getDate()).padStart(2, "0")}`;
         } else {
             return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(
                 2,
-                "0"
+                "0",
             )}/${String(d.getDate()).padStart(2, "0")} ${String(
-                d.getHours()
+                d.getHours(),
             ).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
         }
     }

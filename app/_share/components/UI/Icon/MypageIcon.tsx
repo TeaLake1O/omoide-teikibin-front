@@ -1,4 +1,3 @@
-"use client";
 export default function MypageIcon({ isActive }: { isActive: boolean }) {
     if (isActive) {
         return (

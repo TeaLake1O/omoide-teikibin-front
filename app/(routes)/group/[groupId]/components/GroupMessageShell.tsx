@@ -6,6 +6,7 @@ import UserIconImage from "@/app/_share/components/UserIconImage";
 import ImageModal from "@/app/_share/components/modals/ImageModal";
 import { API_CACHE_KEYS } from "@/app/_share/constants/apiCacheKeys";
 import useInfiniteFeedContents from "@/app/_share/hooks/domain/useInfiniteFeedContents";
+import useNowTime from "@/app/_share/hooks/util/useNowTime";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import { UserPost } from "@/app/_share/types/userPost";
 import formatDateTime from "@/app/_share/util/formatDateTime";
@@ -70,6 +71,7 @@ export default function GroupMessageShell(props: Props) {
         pendingScrollBottomRef.current = false;
     }, [messages.length, scrollBottom]);
     console.log(data);
+    const now = useNowTime(10000);
 
     if (isLoading) return null;
     return (
@@ -107,7 +109,7 @@ export default function GroupMessageShell(props: Props) {
                                     </div>
                                 )}
 
-                                <MessageArea data={item} />
+                                <MessageArea data={item} now={now} />
                             </div>
                         );
                     }
@@ -116,7 +118,7 @@ export default function GroupMessageShell(props: Props) {
                             key={item.post_id}
                             className="w-full flex flex-col p-2"
                         >
-                            <MessageArea data={item} />
+                            <MessageArea data={item} now={now} />
                         </div>
                     );
                 })}
@@ -128,7 +130,7 @@ export default function GroupMessageShell(props: Props) {
         </div>
     );
 }
-function MessageArea({ data }: { data: UserPost }) {
+function MessageArea({ data, now }: { data: UserPost; now: number }) {
     const { me } = useLayoutUI();
     const user = data.post_user;
     const isMe = user.username === me.username;
@@ -171,7 +173,7 @@ function MessageArea({ data }: { data: UserPost }) {
                     )}
                 </div>
                 <span className="text-gray-400 text-[10px] w-full text-right">
-                    {formatDateTime(data.created_at, true)}
+                    {formatDateTime(data.created_at, true, now)}
                 </span>
             </div>
         </div>

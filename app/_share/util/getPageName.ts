@@ -24,6 +24,7 @@ export default function getPageName(rawUrl: string | null) {
         "/message": "メッセージ",
         "/not-found": "Not Found",
         "/post/": "投稿詳細",
+        "/camera": "写真撮影",
     };
     if (url !== null) {
         return pageName[url];

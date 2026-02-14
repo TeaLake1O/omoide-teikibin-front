@@ -1,4 +1,3 @@
-"use client";
 export default function HomeIcon({ isActive }: { isActive: boolean }) {
     return (
         <svg

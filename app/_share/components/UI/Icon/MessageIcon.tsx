@@ -1,5 +1,3 @@
-"use client";
-
 export default function MessageIcon({ isActive }: { isActive: boolean }) {
     if (isActive)
         return (

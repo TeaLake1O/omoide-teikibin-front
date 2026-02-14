@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { memo } from "react";
 import { API_CACHE_KEYS } from "../../constants/apiCacheKeys";
 import { FRIEND_NOTIFY_URL, POST_NOTIFY_URL } from "../../constants/apiUrls";
 import { UNKNOWN_USER_ICON_URL } from "../../constants/publicUrls";
 import useInfiniteScrollContents from "../../hooks/domain/useInfiniteFeedContents";
+import useNowTime from "../../hooks/util/useNowTime";
 import useTabIndicator from "../../hooks/util/useTabIndicator";
 import { PostNotify } from "../../types/notify";
 import { TabItem } from "../../types/TabIndicator";
@@ -36,6 +36,8 @@ export default function NotificationsShell() {
         activeId,
         isCalcComplete,
     } = useTabIndicator<NotifyId>({ items: items });
+
+    const now = useNowTime(10_000);
 
     return (
         <div className="h-full w-full flex flex-col min-h-0">
@@ -100,29 +102,37 @@ export default function NotificationsShell() {
                     }}
                 />
             </div>
-            <NotificationBody activeId={activeId} />
+            <NotificationBody activeId={activeId} now={now} />
         </div>
     );
 }
 
 const NotificationBody = memo(function notificationBody({
     activeId,
+    now,
 }: {
     activeId: NotifyId;
+    now: number;
 }) {
     return (
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden scrollbar-slim">
             {activeId === "post" && (
-                <PostNotificationContents activeId={activeId} />
+                <PostNotificationContents activeId={activeId} now={now} />
             )}
             {activeId === "friend" && (
-                <FriendNotificationContents activeId={activeId} />
+                <FriendNotificationContents activeId={activeId} now={now} />
             )}
         </div>
     );
 });
 
-function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
+function PostNotificationContents({
+    activeId,
+    now,
+}: {
+    activeId: NotifyId;
+    now: number;
+}) {
     const {
         setLastEl,
         isNext,
@@ -136,7 +146,6 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
         enabled: activeId === "post",
         getId: (n) => String(n.notify_id),
     });
-    const router = useRouter();
 
     if (!notifies) return null;
     if (isEmpty) return <h1>通知がありません</h1>;
@@ -192,7 +201,7 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
                             </div>
                         </div>
                         <span className="text-sm text-amber-800">
-                            {formatDateTime(notify.created_at, true)}
+                            {formatDateTime(notify.created_at, true, now)}
                         </span>
                     </Link>
                 );
@@ -208,7 +217,13 @@ function PostNotificationContents({ activeId }: { activeId: NotifyId }) {
     );
 }
 
-function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
+function FriendNotificationContents({
+    activeId,
+    now,
+}: {
+    activeId: NotifyId;
+    now: number;
+}) {
     const {
         setLastEl,
         isNext,
@@ -281,7 +296,7 @@ function FriendNotificationContents({ activeId }: { activeId: NotifyId }) {
                             </span>
                         )}
                         <span className="text-sm mt-2 text-amber-800">
-                            {formatDateTime(notify.created_at, true)}
+                            {formatDateTime(notify.created_at, true, now)}
                         </span>
                     </Link>
                 );

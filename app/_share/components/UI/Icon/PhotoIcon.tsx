@@ -1,5 +1,3 @@
-"use client";
-
 export default function PhotoIcon({ isBlack }: { isBlack?: boolean }) {
     return (
         <svg

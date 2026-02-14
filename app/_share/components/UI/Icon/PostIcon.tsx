@@ -1,5 +1,3 @@
-"use client";
-
 export default function PostButton({ isAside }: { isAside?: boolean }) {
     return (
         <div

@@ -1,6 +1,7 @@
 "use client";
 
 import UserIconImage from "@/app/_share/components/UserIconImage";
+import useNowTime from "@/app/_share/hooks/util/useNowTime";
 import { useLayoutUI } from "@/app/_share/provider/LayoutUI";
 import formatDateTime from "@/app/_share/util/formatDateTime";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import { MessageHeader } from "../types/messageHeader";
 
 export default function MessageListsShell({ data }: { data: MessageHeader[] }) {
     const { me } = useLayoutUI();
+    const now = useNowTime();
     if (data.length === 0) {
         return <div>メッセージはありません</div>;
     }
@@ -56,7 +58,8 @@ export default function MessageListsShell({ data }: { data: MessageHeader[] }) {
                                 <span className="text-sm mt-auto">
                                     {formatDateTime(
                                         item.last_msg_send_at,
-                                        true
+                                        true,
+                                        now,
                                     )}
                                 </span>
                             ) : (
