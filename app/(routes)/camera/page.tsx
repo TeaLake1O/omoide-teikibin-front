@@ -5,12 +5,15 @@ import CameraIcon from "@/app/_share/components/UI/Icon/CameraIcon";
 import PhotoIcon from "@/app/_share/components/UI/Icon/PhotoIcon";
 import usePickImage from "@/app/_share/hooks/util/usePickImage";
 import { usePostModal } from "@/app/_share/provider/PostModal";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Video from "./components/CameraModal";
 
 export default function Camera() {
     const { file, fileOpen, inputProps } = usePickImage();
 
     const { setInitialImage, openPostModal, resetInitialData } = usePostModal();
+
+    const [isWebCameraOpen, setIsWebCameraOpen] = useState(false);
 
     const isSelect = useRef(false);
 
@@ -52,11 +55,15 @@ export default function Camera() {
             </div>
             <div className="w-full flex mt-15 pr-10 pl-10 justify-center items-center gap-8">
                 <GenericButton
-                    handleOnclick={() => console.log()}
+                    handleOnclick={() => setIsWebCameraOpen(true)}
                     name="ブラウザカメラ"
                     height="h-8"
                     textSize="text-lg"
                     textColor="text-amber-800"
+                />
+                <Video
+                    isOpen={isWebCameraOpen}
+                    setIsOpen={setIsWebCameraOpen}
                 />
             </div>
             <input {...inputProps} />
