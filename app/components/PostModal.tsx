@@ -3,7 +3,7 @@
 import useGroupsData from "@/hooks/useGroupsData";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import createPost from "../_share/api/createPost";
 import CloseButton from "../_share/components/UI/button/CloseButton";
@@ -14,10 +14,32 @@ import { usePostModal } from "../_share/provider/PostModal";
 import { useToast } from "../_share/provider/Toast";
 
 export default function PostModal() {
-    const { isOpenPostModal, closePostModal } = usePostModal();
+    const { isOpenPostModal, closePostModal, initialImage, resetInitialData } =
+        usePostModal();
     const res = useGroupsData(true);
     const { url, inputProps, file, imageReset } = usePickImage();
     const { showToast } = useToast();
+
+    const providerFile = initialImage();
+
+    const imageData = file ?? providerFile;
+
+    const providerUrl = useMemo(() => {
+        if (!providerFile) return null;
+        return URL.createObjectURL(providerFile);
+    }, [providerFile]);
+
+    useEffect(() => {
+        if (!providerUrl) return;
+        return () => URL.revokeObjectURL(providerUrl);
+    }, [providerUrl]);
+
+    useEffect(() => {
+        if (!file) return;
+        resetInitialData();
+    }, [file, resetInitialData]);
+
+    const preViewUrl = file ? url : providerUrl;
 
     const [isLoading, setIsLoading] = useState(false);
     const isLoadingRef = useRef(false);
@@ -30,11 +52,11 @@ export default function PostModal() {
     const isPosted = useRef(false);
 
     const genText = async () => {
-        if (!file) return showToast("画像を選択してください");
+        if (!imageData) return showToast("画像を選択してください");
         if (isLoadingRef.current) return;
 
         const fd = new FormData();
-        fd.append("image", file);
+        fd.append("image", imageData);
         fd.append("text", PostText);
         setIsLoading(true);
         isLoadingRef.current = true;
@@ -54,7 +76,7 @@ export default function PostModal() {
         if (isPosted.current) return;
 
         if (!PostGroup) return showToast("グループを選択してください");
-        if (!file) return showToast("画像が選択されていません");
+        if (!imageData) return showToast("画像が選択されていません");
         isPosted.current = true;
 
         showToast("投稿中...");
@@ -63,8 +85,10 @@ export default function PostModal() {
         const fd = new FormData();
 
         fd.append("group", PostGroup);
-        fd.append("post_images", file);
+        fd.append("post_images", imageData);
         if (PostText) fd.append("post_content", PostText);
+
+        resetInitialData();
 
         const res = await createPost(fd);
 
@@ -81,6 +105,7 @@ export default function PostModal() {
         imageReset();
         setPostGroup("");
         setPostText("");
+        resetInitialData();
         isPosted.current = false;
     };
     return (
@@ -169,9 +194,9 @@ export default function PostModal() {
                                         height={60}
                                         className="w-[10%] z-50"
                                     />
-                                    {url && (
+                                    {preViewUrl && (
                                         <Image
-                                            src={url}
+                                            src={preViewUrl}
                                             alt="投稿画像"
                                             fill
                                             className="z-45 object-contain"

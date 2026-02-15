@@ -15,6 +15,11 @@ export type PostModal = {
     closePostModal: () => void;
     openPostModal: () => void;
     isOpenPostModal: boolean;
+
+    setInitialImage: (item: File | null) => void;
+    initialImage: () => File | null;
+
+    resetInitialData: () => void;
 };
 
 export type NotifyModal = {
