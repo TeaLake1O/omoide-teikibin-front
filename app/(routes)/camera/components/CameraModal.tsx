@@ -2,10 +2,11 @@
 
 import CloseButton from "@/app/_share/components/UI/button/CloseButton";
 import GenericButton from "@/app/_share/components/UI/button/GenericButton";
+import ToggleIcon from "@/app/_share/components/UI/Icon/ToggleIcon";
 import { useIsMdUp } from "@/app/_share/hooks/util/useIsMdUp";
 import { usePostModal } from "@/app/_share/provider/PostModal";
 import Image from "next/image";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type Props = {
@@ -41,9 +42,24 @@ function Camera({ close }: { close: () => void }) {
 
     const cancelled = useRef(false);
 
-    const [photoUrl, setPhotoUrl] = useState<string | null>(null);
-
+    const [photoUrl, _setPhotoUrl] = useState<string | null>(null);
+    const setPhotoUrl = (url: string | null) => {
+        _setPhotoUrl((prev) => {
+            if (prev) URL.revokeObjectURL(prev);
+            return url;
+        });
+    };
     const isMdUp = useIsMdUp();
+    const [facingSelect, setFacingSelect] = useState<"user" | "environment">(
+        "environment",
+    );
+    const effectiveFacing = isMdUp ? "user" : facingSelect;
+
+    const toggleFacing = () => {
+        if (facingSelect === "environment") setFacingSelect("user");
+        else setFacingSelect("environment");
+    };
+
     const { setInitialImage, openPostModal } = usePostModal();
 
     const capture = async (): Promise<File | null> => {
@@ -63,8 +79,10 @@ function Camera({ close }: { close: () => void }) {
         if (!ctx) return null;
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, w, h);
-        ctx.translate(w, 0);
-        ctx.scale(-1, 1);
+        if (effectiveFacing === "user") {
+            ctx.translate(w, 0);
+            ctx.scale(-1, 1);
+        }
 
         ctx.drawImage(video, 0, 0, w, h);
 
@@ -78,50 +96,49 @@ function Camera({ close }: { close: () => void }) {
         });
     };
 
-    const captureButtonOnClick = async () => {
-        const file = await capture();
-        if (!file) return;
-        const url = URL.createObjectURL(file);
-        setPhotoUrl(url);
-        setInitialImage(file);
-    };
+    const stopShooting = useCallback(() => {
+        const video = videoRef.current;
+
+        if (video) {
+            video.pause();
+            video.srcObject = null;
+        }
+        streamRef.current?.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+    }, []);
+
+    const startShooting = useCallback(async () => {
+        stopShooting();
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: effectiveFacing } },
+            audio: false,
+        });
+        if (cancelled.current) {
+            stream.getTracks().forEach((t) => t.stop());
+            return;
+        }
+
+        streamRef.current = stream;
+
+        const video = videoRef.current;
+        if (!video) return;
+        video.srcObject = stream;
+        await video.play();
+    }, [effectiveFacing, stopShooting]);
 
     useEffect(() => {
         cancelled.current = false;
-        (async () => {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: false,
-            });
-            if (cancelled.current) {
-                streamRef.current?.getTracks().forEach((t) => t.stop());
-                streamRef.current = null;
-                return;
-            }
-            streamRef.current = stream;
-
-            const video = videoRef.current;
-            if (!video) return;
-
-            video.srcObject = stream;
-            await video.play();
-        })();
-
+        if (photoUrl) {
+            stopShooting();
+            return () => {};
+        }
+        startShooting();
         return () => {
             cancelled.current = true;
-            streamRef.current?.getTracks().forEach((t) => t.stop());
-            streamRef.current = null;
+            stopShooting();
         };
-    }, []);
-
-    useEffect(() => {
-        const video = videoRef.current;
-        const stream = streamRef.current;
-        if (!video || !stream) return;
-
-        video.srcObject = stream;
-        video.play();
-    }, [photoUrl, isMdUp]);
+    }, [effectiveFacing, startShooting, photoUrl, stopShooting]);
 
     if (isMdUp)
         return (
@@ -134,6 +151,7 @@ function Camera({ close }: { close: () => void }) {
                 openPostModal={openPostModal}
                 setPhotoUrl={setPhotoUrl}
                 setInitialImage={setInitialImage}
+                isUser={effectiveFacing === "user"}
             />
         );
 
@@ -147,6 +165,8 @@ function Camera({ close }: { close: () => void }) {
             openPostModal={openPostModal}
             setPhotoUrl={setPhotoUrl}
             setInitialImage={setInitialImage}
+            toggle={toggleFacing}
+            isUser={effectiveFacing === "user"}
         />
     );
 }
@@ -160,6 +180,7 @@ function MdUpCameraContent(props: {
     setPhotoUrl: (url: string | null) => void;
     setInitialImage: (file: File | null) => void;
     openPostModal: () => void;
+    isUser: boolean;
 }) {
     const {
         close,
@@ -170,8 +191,8 @@ function MdUpCameraContent(props: {
         setInitialImage,
         openPostModal,
         canvasRef,
+        isUser,
     } = props;
-
     return (
         <div
             className="md:h-[85%] md:w-[50%] h-full w-full bg-orange-100 rounded-md flex flex-col items-center"
@@ -187,7 +208,7 @@ function MdUpCameraContent(props: {
             {!photoUrl ? (
                 <>
                     <video
-                        className="w-[80%] mb-5 aspect-video bg-black mt-3 -scale-x-100"
+                        className={`w-[80%] mb-5 aspect-video bg-black mt-3 ${isUser ? "-scale-x-100" : ""}`}
                         ref={videoRef}
                         muted
                         playsInline
@@ -219,8 +240,6 @@ function MdUpCameraContent(props: {
                         <GenericButton
                             handleOnclick={() => {
                                 setPhotoUrl(null);
-                                const video = videoRef.current;
-                                if (video) (async () => await video.play())();
                             }}
                             textSize="text-base"
                             height="h-8"
@@ -255,6 +274,8 @@ function MdDownCameraContent(props: {
     setPhotoUrl: (url: string | null) => void;
     setInitialImage: (file: File | null) => void;
     openPostModal: () => void;
+    toggle: () => void;
+    isUser: boolean;
 }) {
     const {
         close,
@@ -265,6 +286,8 @@ function MdDownCameraContent(props: {
         setInitialImage,
         openPostModal,
         canvasRef,
+        toggle,
+        isUser,
     } = props;
 
     return (
@@ -273,9 +296,7 @@ function MdDownCameraContent(props: {
             onClick={(e) => e.stopPropagation()}
         >
             <div className="w-full justify-between flex items-center">
-                <div className="h-10 w-10 aspect-square">
-                    <CloseButton handleOnclick={close} color="bg-white" />
-                </div>
+                <div className="h-10 w-10 " />
                 <h3 className="text-xl text-white">写真</h3>
                 <div className="h-10 w-10 aspect-square" />
             </div>
@@ -283,8 +304,10 @@ function MdDownCameraContent(props: {
                 {!photoUrl ? (
                     <>
                         <video
-                            className="w-full h-full object-contain bg-black -scale-x-100"
+                            className={`w-full h-full object-contain bg-black ${isUser ? "-scale-x-100" : ""}`}
                             ref={videoRef}
+                            muted
+                            playsInline
                         />
                     </>
                 ) : (
@@ -301,7 +324,12 @@ function MdDownCameraContent(props: {
             <div className="h-24 bg-black w-full flex items-center justify-between">
                 {!photoUrl ? (
                     <>
-                        <div className="w-16" />
+                        <div className="w-16 h-16 p-3">
+                            <CloseButton
+                                handleOnclick={close}
+                                color="bg-white"
+                            />
+                        </div>
                         <button
                             className="h-16 w-16 aspect-square rounded-full active:scale-[90%] bg-white transition-transform duration-100"
                             onClick={async () => {
@@ -312,15 +340,15 @@ function MdDownCameraContent(props: {
                                 setInitialImage(file);
                             }}
                         />
-                        <div className="w-16" />
+                        <button className="w-16 h-16 p-4" onClick={toggle}>
+                            <ToggleIcon />
+                        </button>
                     </>
                 ) : (
                     <>
                         <button
                             onClick={() => {
                                 setPhotoUrl(null);
-                                const video = videoRef.current;
-                                if (video) (async () => await video.play())();
                             }}
                             className="ml-5 w-16 text-lg rounded-full active:bg-gray-700 text-white transition-color duration-100"
                         >

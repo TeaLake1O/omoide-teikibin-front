@@ -10,7 +10,7 @@ import HomeIcon from "../_share/components/UI/Icon/HomeIcon";
 import MessageIcon from "../_share/components/UI/Icon/MessageIcon";
 import MypageIcon from "../_share/components/UI/Icon/MypageIcon";
 import PostButton from "../_share/components/UI/Icon/PostIcon";
-import SettingsIcon from "../_share/components/UI/Icon/settingsIcon";
+import SettingsIcon from "../_share/components/UI/Icon/SettingsIcon";
 import UserIcon from "../_share/components/UserIconImage";
 import { useIsMdUp } from "../_share/hooks/util/useIsMdUp";
 import { useLayoutUI } from "../_share/provider/LayoutUI";
@@ -115,7 +115,7 @@ export default function AsideMenu(props: Props) {
                             href={`/user/${props.user?.username}`}
                             onClick={() => {
                                 setOptimisticUrl(
-                                    `/user/${props.user?.username}`
+                                    `/user/${props.user?.username}`,
                                 );
                                 changeHamburger();
                             }}
