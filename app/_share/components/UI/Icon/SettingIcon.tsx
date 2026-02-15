@@ -1,4 +1,4 @@
-export default function SettingsIcon({ isActive }: { isActive: boolean }) {
+export default function SettingIcon({ isActive }: { isActive: boolean }) {
     if (isActive) {
         return (
             <svg
