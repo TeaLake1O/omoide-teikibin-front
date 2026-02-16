@@ -5,6 +5,17 @@ import LayoutShell from "./components/LayoutShell";
 import "./globals.css";
 import { serverFetch } from "./servers/serverFetch";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    manifest: "/manifest.webmanifest",
+    applicationName: "おもいで定期便",
+    icons: {
+        icon: "/favicon.ico",
+        shortcut: "/favicon.ico",
+    },
+};
+
 export default async function RootLayout({
     children,
 }: {
