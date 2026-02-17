@@ -32,7 +32,7 @@ export default function Header(props: Props) {
     const isMdUp = useIsMdUp();
 
     const headerClass = isMdUp
-        ? "w-full bg-orange-100 border-orange-200 overflow-hidden flex items-center transition-[height,transform] duration-400 " +
+        ? "w-full bg-orange-100 border-orange-200 overflow-hidden flex items-center transition-[opacity,transform] duration-400 " +
           (props.isDown
               ? "h-0 opacity-0 border-b-0 pointer-events-none"
               : "h-16 opacity-100 border-b pointer-events-auto") +
