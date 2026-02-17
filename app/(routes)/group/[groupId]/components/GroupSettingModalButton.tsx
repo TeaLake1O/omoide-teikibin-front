@@ -238,14 +238,14 @@ function GroupSetting({
                         }}
                         name="キャンセル"
                         textSize="text-sm"
-                        height="h-6"
+                        height="h-8"
                         type="button"
                     />
                     <GenericButton
                         handleOnclick={submit}
                         name="変更"
                         textSize="text-sm"
-                        height="h-6"
+                        height="h-8"
                         type="button"
                     />
                 </div>

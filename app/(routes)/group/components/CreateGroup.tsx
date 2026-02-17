@@ -196,14 +196,14 @@ function ModalWindow({
                                     }}
                                     name="キャンセル"
                                     textSize="text-sm"
-                                    height="h-10"
+                                    height="h-8"
                                     type="button"
                                 />
                                 <GenericButton
                                     handleOnclick={submit}
                                     name="作成"
                                     textSize="text-sm"
-                                    height="h-10"
+                                    height="h-8"
                                     type="button"
                                 />
                             </div>
