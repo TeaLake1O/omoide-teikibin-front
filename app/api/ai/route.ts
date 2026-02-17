@@ -69,7 +69,7 @@ export async function POST(req: Request) {
 
         const res = await client.responses.parse({
             model: "gpt-5-mini",
-            max_output_tokens: 400,
+            max_output_tokens: 250,
             reasoning: { effort: "low" },
             input: [
                 {
