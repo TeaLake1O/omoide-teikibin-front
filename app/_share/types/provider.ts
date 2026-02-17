@@ -9,6 +9,7 @@ export type LayoutUI = {
     refresh: () => void;
     optimisticUrl: string | null;
     setOptimisticUrl: Dispatch<React.SetStateAction<string | null>>;
+    closeHamburger: () => void;
 };
 
 export type PostModal = {

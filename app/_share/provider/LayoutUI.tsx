@@ -48,6 +48,7 @@ export function LayoutUIProvider({
             setOptimisticUrl,
             hamburger,
             isLoading,
+            closeHamburger: () => setHamburger(false),
         };
     }, [
         effectiveMe,

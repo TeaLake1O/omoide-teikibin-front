@@ -12,12 +12,15 @@ import GenericButton from "../_share/components/UI/button/GenericButton";
 import CameraIcon from "../_share/components/UI/Icon/CameraIcon";
 import Loader from "../_share/components/UI/util/Loader";
 import usePickImage from "../_share/hooks/util/usePickImage";
+import { useLayoutUI } from "../_share/provider/LayoutUI";
 import { usePostModal } from "../_share/provider/PostModal";
 import { useToast } from "../_share/provider/Toast";
 
 export default function PostModal() {
     const { isOpenPostModal, closePostModal, initialImage, resetInitialData } =
         usePostModal();
+
+    const closeHamburger = useLayoutUI().closeHamburger;
     const res = useGroupsData(true);
     const { url, inputProps, file, imageReset } = usePickImage();
     const { showToast } = useToast();
@@ -189,7 +192,10 @@ export default function PostModal() {
                                     <Link
                                         href={"/camera"}
                                         className="h-6"
-                                        onClick={() => closePostModal()}
+                                        onClick={() => {
+                                            closePostModal();
+                                            closeHamburger();
+                                        }}
                                     >
                                         <CameraIcon />
                                     </Link>
