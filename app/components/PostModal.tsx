@@ -194,6 +194,7 @@ export default function PostModal() {
                                         className="h-6 aspect-square"
                                         onClick={() => {
                                             closePostModal();
+                                            reset();
                                             closeHamburger();
                                         }}
                                     >

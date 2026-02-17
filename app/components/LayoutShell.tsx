@@ -1,6 +1,5 @@
 "use client";
 
-import Script from "next/script";
 import { ReactNode, useEffect, useState } from "react";
 import { LoadingScreen } from "../_share/components/UI/util/LoadingScreen";
 import useScrollToggle from "../_share/hooks/observe/useScrollToggle";
@@ -95,7 +94,7 @@ export default function LayoutShell(props: Props) {
                 </div>
                 <div className="hidden 2xl:block" />
             </div>
-            {<Script src="https://unpkg.com/react-scan/dist/auto.global.js" />}
+            {/*<Script src="https://unpkg.com/react-scan/dist/auto.global.js" />*/}
         </>
     );
 }
