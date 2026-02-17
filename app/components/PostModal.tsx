@@ -187,11 +187,11 @@ export default function PostModal() {
                             </div>
                             <div className="flex flex-col items-center justify-center w-full">
                                 <div className="w-full flex justify-between mb-2">
-                                    <span className="">画像を選択</span>
+                                    <span className="truncate">画像を選択</span>
 
                                     <Link
                                         href={"/camera"}
-                                        className="h-6"
+                                        className="h-6 aspect-square"
                                         onClick={() => {
                                             closePostModal();
                                             closeHamburger();

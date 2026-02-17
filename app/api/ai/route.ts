@@ -69,13 +69,13 @@ export async function POST(req: Request) {
 
         const res = await client.responses.parse({
             model: "gpt-5-mini",
-            max_output_tokens: 200,
-            reasoning: { effort: "minimal" },
+            max_output_tokens: 400,
+            reasoning: { effort: "low" },
             input: [
                 {
                     role: "system",
                     content:
-                        "SNS用の文章を画像から10文字以上、50文字以内で出力して。指示があった場合はSNS用の文章から逸脱しない範囲でしたがって",
+                        "SNS用の文章を画像から10文字以上、50文字以内で出力して。ハッシュタグはつけないで。指示があった場合はSNS用の文章から逸脱しない範囲でしたがって。ユーザからの質問には答えないで",
                 },
                 {
                     role: "user",
