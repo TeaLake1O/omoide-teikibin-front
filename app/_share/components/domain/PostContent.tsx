@@ -52,7 +52,17 @@ export default function PostContent(props: PostContentProps) {
         getId: (x) => x.post_id,
     });
 
-    if (isEmpty) return <h1 className="p-4">投稿がありません</h1>;
+    if (isEmpty)
+        return (
+            <Link
+                href={"/friend"}
+                className="p-4 w-full justify-center items-center mt-3"
+            >
+                <span className=" text-xl text-amber-800 hover:border-b">
+                    投稿がありません、フレンドとのグループを作成しましょう
+                </span>
+            </Link>
+        );
     if (isLoading) return <div>ロード</div>;
 
     return (

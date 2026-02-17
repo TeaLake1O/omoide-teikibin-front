@@ -3,11 +3,13 @@
 import useGroupsData from "@/hooks/useGroupsData";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import createPost from "../_share/api/createPost";
 import CloseButton from "../_share/components/UI/button/CloseButton";
 import GenericButton from "../_share/components/UI/button/GenericButton";
+import CameraIcon from "../_share/components/UI/Icon/CameraIcon";
 import Loader from "../_share/components/UI/util/Loader";
 import usePickImage from "../_share/hooks/util/usePickImage";
 import { usePostModal } from "../_share/provider/PostModal";
@@ -181,7 +183,17 @@ export default function PostModal() {
                                 )}
                             </div>
                             <div className="flex flex-col items-center justify-center w-full">
-                                <span className="w-full">画像を選択</span>
+                                <div className="w-full flex justify-between mb-2">
+                                    <span className="">画像を選択</span>
+
+                                    <Link
+                                        href={"/camera"}
+                                        className="h-6"
+                                        onClick={() => closePostModal()}
+                                    >
+                                        <CameraIcon />
+                                    </Link>
+                                </div>
                                 <label
                                     className="flex items-center justify-center group w-full
                                     aspect-video bg-gray-300 relative overflow-hidden"

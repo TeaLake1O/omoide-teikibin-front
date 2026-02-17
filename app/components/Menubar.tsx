@@ -19,6 +19,7 @@ type Item = {
     scale: string;
     label: string;
 };
+
 const items: Item[] = [
     {
         Icon: HomeIcon,

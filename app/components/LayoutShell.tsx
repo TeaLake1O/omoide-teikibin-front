@@ -28,6 +28,12 @@ export default function LayoutShell(props: Props) {
 
     const isMdUp = useIsMdUp();
 
+    useEffect(() => {
+        if (!("serviceWorker" in navigator)) return;
+
+        navigator.serviceWorker.register("/sw.js").catch(console.error);
+    }, []);
+
     //最低1秒はローディング画面を表示する
 
     const { schedule } = useTimeout();
