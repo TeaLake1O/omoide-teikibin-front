@@ -76,7 +76,7 @@ export default function LayoutShell(props: Props) {
                         <main
                             className={`${
                                 isMdUp ? "no-scrollbar" : "scrollbar-slim"
-                            } pb-16 md:pb-0 flex-1 min-h-0 relative ${"overflow-y-auto"}`}
+                            } pb-16 md:pb-0 pt-16 md:pt-0 flex-1 min-h-0 relative ${"overflow-y-auto"}`}
                             ref={setMainRef}
                         >
                             {props.children}

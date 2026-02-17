@@ -37,7 +37,7 @@ export default function Header(props: Props) {
               ? "h-0 opacity-0 border-b-0 pointer-events-none"
               : "h-16 opacity-100 border-b pointer-events-auto") +
           " md:h-16 md:opacity-100 md:border-b md:pointer-events-auto"
-        : "fixed top-0 left-0 right-0 z-[999] h-16 " +
+        : "fixed top-0 left-0 right-0 z-1 h-16 " +
           "bg-orange-100 border-b border-orange-200 flex items-center " +
           "duration-400 will-change-transform " +
           (props.isDown
