@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import IconImage from "../_share/components/IconImage";
 import BackButton from "../_share/components/UI/button/BackButton";
 import UserIcon from "../_share/components/UserIconImage";
+import { useIsMdUp } from "../_share/hooks/util/useIsMdUp";
 import getPageName from "../_share/util/getPageName";
 
 type Props = {
@@ -28,16 +29,24 @@ export default function Header(props: Props) {
         window.history.back();
     };
 
+    const isMdUp = useIsMdUp();
+
+    const headerClass = isMdUp
+        ? "w-full bg-orange-100 border-orange-200 overflow-hidden flex items-center transition-[height,transform] duration-400 " +
+          (props.isDown
+              ? "h-0 opacity-0 border-b-0 pointer-events-none"
+              : "h-16 opacity-100 border-b pointer-events-auto") +
+          " md:h-16 md:opacity-100 md:border-b md:pointer-events-auto"
+        : "fixed top-0 left-0 right-0 z-[999] h-16 " +
+          "bg-orange-100 border-b border-orange-200 flex items-center " +
+          "duration-400 will-change-transform " +
+          (props.isDown
+              ? "-translate-y-full pointer-events-none"
+              : "translate-y-0 pointer-events-auto") +
+          " md:translate-y-0 md:opacity-100 md:pointer-events-auto";
+
     return (
-        <header
-            className={
-                "w-full bg-orange-100 border-orange-200 overflow-hidden flex items-center transition-[height,opacity] duration-400 " +
-                (props.isDown
-                    ? "h-0 opacity-0 border-b-0 pointer-events-none"
-                    : "h-16 opacity-100 border-b pointer-events-auto") +
-                " md:h-16 md:opacity-100 md:border-b md:pointer-events-auto"
-            }
-        >
+        <header className={headerClass}>
             <div className="h-12 w-12 aspect-square rounded-full flex items-center justify-center">
                 {!hasBackButton ? (
                     <button
