@@ -188,7 +188,7 @@ function ModalWindow({
                                 />
                             </div>
 
-                            <div className="w-full mr-5 ml-5 flex justify-between items-center mt-auto">
+                            <div className="w-full mr-5 ml-5 flex justify-between items-center mt-5">
                                 <GenericButton
                                     handleOnclick={() => {
                                         close();
